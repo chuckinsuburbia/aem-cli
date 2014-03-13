@@ -1,0 +1,9 @@
+#!/usr/bin/ksh
+alert=$1
+shift
+if [[ "$3" != "Clear" && "$1" == "CTM_CTMS_ORDER" ]]; then
+	job=`echo $2 |awk -F"_" '{print $1}'`
+	wget -O - http://controlm/bip/ctmseverity.php?job=$job 2>/dev/null
+else
+	echo $3
+fi

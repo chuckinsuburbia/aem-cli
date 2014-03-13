@@ -1,0 +1,46 @@
+<?php
+$basepath="/in/AEM/";
+include($basepath."lib/aemdb.php");
+include($basepath."lib/functions.php");
+include($basepath."conf/config.php");
+include($basepath.'lib/CronParser.php');
+/*
+include("../lib/aemdb.php");
+include("../lib/functions.php");
+include("../conf/config.php");
+include('../lib/CronParser.php');
+*/
+
+$action = $argv[1];
+$alertId = $argv[2];
+$destType=false;
+switch($action){
+	case "ACK":
+		acknowlegeAlert($alertId);
+		break;
+	case "CLOSE":
+		closeAlert($alertId);
+		$destType="close";
+		break;
+	case "COMMENT":
+		addComment($alertId,$argv[3]);
+		$destType="update";
+		break;
+}
+
+
+if($destType != false){
+	$source = getSource($alertId);
+	$dPath=getDestPath($source,$destType);
+	//print_r($dPath);
+	if($debug) aemlog("running outbound steps");
+	#process each step for this path
+	foreach($dPath as $step){
+		$stepRc=runStep($alertId,$step);
+		if(!$stepRc){
+			aemlog("Destination Step Failed!");
+		}
+	}
+}
+
+?>

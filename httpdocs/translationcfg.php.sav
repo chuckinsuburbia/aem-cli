@@ -1,0 +1,257 @@
+<?php 
+include('../lib/aemdb.php');
+include('../lib/functions.php');
+
+if(isset($_GET['action'])){
+	//print_r($_GET);die();
+	switch($_GET['action']){
+		case "insert":
+			//Update the sequence for the rest
+			$sql="update aem_translation set atran_sequence = atran_sequence + 1 where atran_step = ".$_GET['step']." and atran_sequence >= ".$_GET['sequence']." order by atran_sequence desc";
+			mysql_query($sql,$aem) or die(mysql_error());			
+			$sql = "insert into aem_translation (atran_step, atran_sequence, atran_match, atran_value) VALUES (".$_GET['step'].",".$_GET['sequence'].",".GetSQLValueString($_GET['matchString'], 'text').",".GetSQLValueString($_GET['value'],'text').")";
+			//die($sql);
+			mysql_query($sql,$aem) or die(mysql_error());
+			die(json_encode(array("result" => "Inserted Successfully!")));
+			break;
+		case "update":
+			$sql = "update aem_translation set atran_match = ".GetSQLValueString($_GET['matchString'], 'text').", atran_value = ".GetSQLValueString($_GET['value'],'text')." where atran_step = ".$_GET['step']." and atran_sequence = ".$_GET['sequence'];
+			//die($sql);
+			mysql_query($sql,$aem) or die(mysql_error());
+			die(json_encode(array("result" => "Updated Successfully!")));
+			break;
+		case "updateSequence":
+			$sql="update aem_translation set atran_sequence = 0 where atran_step = ".$_GET['step']." and atran_sequence = ".$_GET['row'];
+			mysql_query($sql,$aem) or die(json_encode(array("result" => mysql_error())));	
+			if($_GET['row'] < $_GET['toRow']){ //moving down		
+				$start = $_GET['row']+1;
+				$end = $_GET['toRow'];
+				$addsub = "-";
+				$order="asc";
+			}else{ //moving up
+				$start = $_GET['toRow'];
+				$end = $_GET['row']-1;
+				$addsub = "+";
+				$order="desc";
+			}
+			$sql="update aem_translation set atran_sequence = atran_sequence".$addsub." 1 where atran_step = ".$_GET['step']." and atran_sequence between ".$start." and  ".$end." order by atran_sequence ".$order;
+			//echo $sql."<br>";
+			mysql_query($sql,$aem) or die(mysql_error());			
+			$sql="update aem_translation set atran_sequence = ".$_GET['toRow']." where atran_step = ".$_GET['step']." and atran_sequence = 0";
+			mysql_query($sql,$aem) or die(mysql_error());	
+			//echo $sql."<br>";
+			die();
+			break;
+		case "delete":
+			$sql = "delete from aem_translation where atran_step = ".$_GET['step']." and atran_sequence = ".$_GET['row'];	
+			mysql_query($sql,$aem) or die(mysql_error());			
+			//Now update the sequence for the rest
+			$sql="update aem_translation set atran_sequence = atran_sequence - 1 where atran_step = ".$_GET['step']." and atran_sequence > ".$_GET['row']." order by atran_sequence asc";
+			mysql_query($sql,$aem) or die(mysql_error());			
+			die();			
+			break;
+	}
+}
+$currentPage = $_SERVER["PHP_SELF"];
+
+$maxRows_translations = 1000;
+$pageNum_translations = 0;
+if (isset($_GET['pageNum_translations'])) {
+  $pageNum_translations = $_GET['pageNum_translations'];
+}
+$startRow_translations = $pageNum_translations * $maxRows_translations;
+
+$query_translations = "select * from aem_translation where atran_step = ".$_GET['step']." order by atran_sequence";
+
+$query_limit_translations = sprintf("%s LIMIT %d, %d", $query_translations, $startRow_translations, $maxRows_translations);
+$translations = mysql_query($query_limit_translations, $aem) or die(mysql_error());
+if(mysql_num_rows($translations) == 0){
+	$sql = "SELECT '0' `atran_id`, '".$_GET['step']."' `atran_step`, '1' `atran_sequence`, '' `atran_match`, 'Insert Config Line -->' `atran_value`";
+	$translations =  mysql_query($sql,$aem) or die(mysql_error());
+}
+
+if (isset($_GET['totalRows_translations'])) {
+  $totalRows_translations = $_GET['totalRows_translations'];
+} else {
+  $all_translations = mysql_query($query_translations);
+  $totalRows_translations = mysql_num_rows($all_translations);
+}
+$totalPages_translations = ceil($totalRows_translations/$maxRows_translations)-1;
+
+$queryString_translations = "";
+if (!empty($_SERVER['QUERY_STRING'])) {
+  $params = explode("&", $_SERVER['QUERY_STRING']);
+  $newParams = array();
+  foreach ($params as $param) {
+    if (stristr($param, "pageNum_translations") == false && 
+        stristr($param, "totalRows_translations") == false) {
+      array_push($newParams, $param);
+    }
+  }
+  if (count($newParams) != 0) {
+    $queryString_translations = "&" . htmlentities(implode("&", $newParams));
+  }
+}
+$queryString_translations = sprintf("&totalRows_translations=%d%s", $totalRows_translations, $queryString_translations);
+
+
+
+
+$sql = "SELECT at_name
+FROM aem_step_config, aem_tokens
+WHERE at_id = asc_token
+AND asc_step = ".$_GET['step']."
+ORDER BY asc_sequence";
+$config =  mysql_query($sql,$aem) or die(mysql_error());
+
+$sql = "select as_name, at_name from aem_step, aem_tokens where as_return_token = at_id and as_id = ".$_GET['step'];
+$result = mysql_query($sql, $aem) or die(mysql_error());
+$step = mysql_fetch_assoc($result);
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>AEM - Translation Config - <?php echo $step['as_name'] ?></title>
+<script type="text/javascript" src="include/tablednd.js"></script>
+<?php htmlHead(); ?>
+<script language="javascript">
+var actionUrl='<?php echo $_SERVER['PHP_SELF'] ?>';
+var numFields=<?php echo mysql_num_rows($config) ?>;
+var stepId=<?php echo $_GET['step'] ?>;
+var lockrow=false;
+var updateAction="update";
+function edit(row){
+	document.getElementById('displayRow'+row+'_edit').style.display="none";
+	document.getElementById('displayRow'+row+'_value').style.display="none";
+	for(var i=0;i<numFields;i++){
+		document.getElementById('displayRow'+row+'Field'+i).style.display="none";
+	}
+	document.getElementById('editRow'+row+'_submit').style.display="block";
+	document.getElementById('editRow'+row+'_value').style.display="block";
+	for(var i=0;i<numFields;i++){
+		document.getElementById('editRow'+row+'Field'+i).style.display="block";
+	}
+}
+function insertRow(row, copy){
+	lockrow=true;
+	var tblBody = document.getElementById('translations').tBodies[0];
+	var newRow = tblBody.rows[row].cloneNode(true);
+	var currentRow = document.getElementById(row);
+	currentRow.insertBefore(newRow);
+	if(!copy){
+		document.getElementById('row'+row+'value').value="";
+		for(var i=0;i<numFields;i++){
+			document.getElementById('row'+row+'field'+i).value=".*";
+		}
+	}
+	updateAction="insert";
+	edit(row);
+}
+</script>
+<style type="text/css">
+#error_div {
+	font-weight: bold;
+	color: #F00;
+}
+</style>
+</head>
+
+<body>
+<?php topOpg();// load top of page and links from function ?>
+<h3 align="center"><?php echo $step['as_name'] ?></h3>
+<div id="debug"></div>
+<div id="error_div"></div>
+<p align="center">Page <?php echo $pageNum_translations+1 ?> of <?php echo $totalPages_translations+1 ?></p>
+<table align="center" border="0" width="200">
+  <tr align="center">
+    <td width="25%"><?php if($pageNum_translations+1 > 1){ ?>
+      <a href="<?php printf("%s?pageNum_translations=%d%s", $currentPage, 0, $queryString_translations); ?>">First</a>
+      <?php } ?></td>
+    <td width="25%"><?php if($pageNum_translations+1 > 1){ ?>
+      <a href="<?php printf("%s?pageNum_translations=%d%s", $currentPage, max(0, $pageNum_translations - 1), $queryString_translations); ?>">Previous</a>
+      <?php } ?></td>
+    <td width="25%"><?php if($pageNum_translations < $totalPages_translations){ ?>
+      <a href="<?php printf("%s?pageNum_translations=%d%s", $currentPage, min($totalPages_translations, $pageNum_translations + 1), $queryString_translations); ?>">Next</a>
+      <?php } ?></td>
+    <td width="25%"><?php if($pageNum_translations < $totalPages_translations){ ?>
+      <a href="<?php printf("%s?pageNum_translations=%d%s", $currentPage, $totalPages_translations, $queryString_translations); ?>">Last</a>
+      <?php } ?></td>
+  </tr>
+</table>
+<br />
+<table id="translations" border="1" align="center">
+  <tr>
+    <th>Seq</th>
+    <?php while($row = mysql_fetch_assoc($config)){ $default[]="";?>
+    <th><?php echo $row['at_name'] ?></th>
+    <?php }//end while config ?>
+    <th><?php echo $step['at_name'] ?></th>
+  </tr>
+  <?php while($row = mysql_fetch_assoc($translations)){ 
+  			if(empty($row['atran_match'])){
+				$tokens=$default;
+			}else{
+				$tokens = split('\|',$row['atran_match']);
+			}
+?>
+  <tr id="<?php echo $row['atran_sequence'] ?>">
+    <td><?php echo $row['atran_sequence'] ?></td>
+    <?php $count=0;
+foreach($tokens as $token){ ?>
+    <td><span id="displayRow<?php echo $row['atran_sequence'] ?>Field<?php echo $count ?>"><?php echo str_replace(array("(",")","\\"),"",$token) ?></span><span id="editRow<?php echo $row['atran_sequence'] ?>Field<?php echo $count ?>" style="display:none">
+      <input type="text" id="row<?php echo $row['atran_sequence'] ?>field<?php echo $count ?>" value="<?php echo str_replace(array("(",")","\\"),"",$token) ?>" size="5"/>
+      </span></td>
+    <?php $count++;
+}//end foreach loop ?>
+    <td><span id="displayRow<?php echo $row['atran_sequence'] ?>_Value"><?php echo $row['atran_value'] ?></span><span id="editRow<?php echo $row['atran_sequence'] ?>_value" style="display:none">
+      <input type="text" id="row<?php echo $row['atran_sequence'] ?>value" value="<?php echo $row['atran_value'] ?>"/>
+      </span></td>
+    <td><span id="displayRow<?php echo $row['atran_sequence'] ?>_edit"><table><tr><td><a href="javascript:edit(<?php echo $row['atran_sequence'] ?>);"><img src="images/edit.gif" width="16" height="16" title="edit" border="0"/></a></td><td><a href="javascript:deleteTranslationRow(<?php echo $row['atran_sequence'] ?>);"><img src="images/delete.gif" width="16" height="16" title="delete" border="0"/></a></td><td><a href="javascript:insertRow(<?php echo $row['atran_sequence'] ?>,false);"><img src="images/insert.gif" width="16" height="16" title="insert" border="0"/></a></td><td><a href="javascript:insertRow(<?php echo $row['atran_sequence'] ?>,true);"><img src="images/copy.gif" width="16" height="16" title="copy" border="0" /></a></td></tr></table></span><span id="editRow<?php echo $row['atran_sequence'] ?>_submit" style="display:none">
+      <input type="button" onclick="updateTranslation(<?php echo $row['atran_sequence'] ?>);" value="submit" />
+      </span></tr>
+  <?php }//end while translations ?>
+</table>
+<br />
+<table align="center" border="0" width="200">
+  <tr align="center">
+    <td width="25%"><?php if($pageNum_translations+1 > 1){ ?>
+      <a href="<?php printf("%s?pageNum_translations=%d%s", $currentPage, 0, $queryString_translations); ?>">First</a>
+      <?php } ?></td>
+    <td width="25%"><?php if($pageNum_translations+1 > 1){ ?>
+      <a href="<?php printf("%s?pageNum_translations=%d%s", $currentPage, max(0, $pageNum_translations - 1), $queryString_translations); ?>">Previous</a>
+      <?php } ?></td>
+    <td width="25%"><?php if($pageNum_translations < $totalPages_translations){ ?>
+      <a href="<?php printf("%s?pageNum_translations=%d%s", $currentPage, min($totalPages_translations, $pageNum_translations + 1), $queryString_translations); ?>">Next</a>
+      <?php } ?></td>
+    <td width="25%"><?php if($pageNum_translations < $totalPages_translations){ ?>
+      <a href="<?php printf("%s?pageNum_translations=%d%s", $currentPage, $totalPages_translations, $queryString_translations); ?>">Last</a>
+      <?php } ?></td>
+  </tr>
+</table>
+<p align="center">&nbsp;</p>
+<script type="text/javascript">
+var table = document.getElementById('translations');
+var tableDnD = new TableDnD();
+tableDnD.init(table);
+// Redefine the onDrop so that we can display something
+tableDnD.onDrop = function(table, row) {
+    var rows = this.table.tBodies[0].rows;
+    for (var i=0; i<rows.length; i++) {
+        if(rows[i].id == row.id){
+			break;
+		}
+    }
+	if(row.id != i && !lockrow){
+		if(confirm("Are you sure you want to move row "+row.id+" to "+i+"?")){
+		    document.getElementById('debug').innerHTML = 'row['+row.id+'] dropped to '+i;
+			updateTranslationSequence(row.id,i);
+		}else{
+			document.location.href = actionUrl+"?step="+stepId;
+		}
+	}
+}
+  </script>
+<?php bottomOpg(); ?></body>
+</html>

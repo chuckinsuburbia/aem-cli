@@ -1,0 +1,158 @@
+<?php
+$basePath="/in/AEM";
+require_once($basePath."/lib/aemdb.php");
+require_once($basePath."/lib/webservice_functions.php");
+require_once($basePath."/conf/config.php");
+require_once($basePath.'/lib/nusoap/lib/nusoap.php');
+/*
+require_once("../../lib/aemdb.php");
+require_once("../../lib/webservice_functions.php");
+require_once("../../conf/config.php");
+require_once('../../lib/nusoap/lib/nusoap.php');
+*/
+// Create the server instance
+$server = new soap_server;
+// Initialize WSDL support
+$server->configureWSDL('aemticket', 'urn:aemticket');
+#require_once('../includes/pem_functions.php');
+$server->wsdl->addComplexType("ArrayOfString", 
+                 "complexType", 
+                 "array", 
+                 "", 
+                 "SOAP-ENC:Array", 
+                 array(), 
+                 array(array("ref"=>"SOAP-ENC:arrayType","wsdl:arrayType"=>"xsd:string[]")), 
+                 "xsd:string");  
+$server->wsdl->addComplexType("Alert", 
+                 "complexType", 
+                 "struct", 
+                 "all", 
+                 "", 
+                 array(
+				 "currentOperator" => array('name' =>'currentOperator','type'=>'xsd:string'),
+				 "alertId" => array('name' =>'alertId','type'=>'xsd:string'),
+				 "CaseNo" => array('name' =>'CaseNo','type'=>'xsd:string'),
+				 "OSISeverity" => array('name' =>'OSISeverity','type'=>'xsd:string'),
+				 "timeReceived" => array('name' =>'timeReceived','type'=>'xsd:string'),
+				 "_service" => array('name' =>'_service','type'=>'xsd:string'),
+				 "text" => array('name' =>'text','type'=>'xsd:string'),
+				 "timeAcknowledged" => array('name' =>'timeAcknowledged','type'=>'xsd:string'),
+				 "alarmpoint" => array('name' =>'alarmpoint','type'=>'xsd:boolean'),
+				 "occurrences" => array('name' =>'occurrences','type'=>'xsd:string'))
+				);
+
+$server->wsdl->addComplexType(
+    'AlertArray',
+    'complexType',
+    'array',
+    '',
+    'SOAP-ENC:Array',
+    array(),
+    array(
+        array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType'=>'tns:Product[]')
+    ),
+    'tns:Alert'
+);
+
+
+$server->wsdl->addComplexType("AlertDetail", 
+                 "complexType", 
+                 "struct", 
+                 "all", 
+                 "", 
+                 array(
+				 "CaseNo" => array('name' =>'CaseNo','type'=>'xsd:string'),
+				 "_service" => array('name' =>'_service','type'=>'xsd:string'),
+				 "_originEventClass" => array('name' =>'_originEventClass','type'=>'xsd:string'),
+				 "_origin" => array('name' =>'_origin','type'=>'xsd:string'),
+				 "_objectLocation" => array('name' =>'_objectLocation','type'=>'xsd:string'),
+				 "_objectClass" => array('name' =>'_objectClass','type'=>'xsd:string'),
+				 "_object" => array('name' =>'_object','type'=>'xsd:string'),
+				 "_domainClass" => array('name' =>'_domainClass','type'=>'xsd:string'),
+				 "_domain" => array('name' =>'_domain','type'=>'xsd:string'),
+				 "_parameterName" => array('name' =>'_parameterName','type'=>'xsd:string'),
+				 "_origin" => array('name' =>'_origin','type'=>'xsd:string'),
+				 "_eventType" => array('name' =>'_eventType','type'=>'xsd:string'),
+				 "timeReceived" => array('name' =>'timeReceived','type'=>'xsd:string'),
+				 "timeAssigned" => array('name' =>'timeAssigned','type'=>'xsd:string'),
+				 "timeClosed" => array('name' =>'timeClosed','type'=>'xsd:string'),
+				 "timeAcknowledged" => array('name' =>'timeAcknowledged','type'=>'xsd:string'),
+				 "text" => array('name' =>'text','type'=>'xsd:string'),
+				 "OISeverity" => array('name' =>'OSISeverity','type'=>'xsd:string')
+				 ));  
+
+$server->register('openTicket',	
+    array('origin' => 'xsd:string',
+	  'domainClass' => 'xsd:string',
+	  'domain' => 'xsd:string',
+	  'objectClass' => 'xsd:string',
+	  'object' => 'xsd:string',
+	  'parameterName' => 'xsd:string',
+	  'parameterValue' => 'xsd:string',
+	  'freeText' => 'xsd:string',
+	  'severity' => 'xsd:string'),        // input parameters
+    array('return' => 'xsd:string'),      // output parameters
+    'urn:aemticket',                      // namespace
+    'urn:aemticket#openTicket',                // soapaction
+    'rpc',                                // style
+    'encoded',                            // use
+    'Opens an AEM ticket with the supplied parameters'            // documentation
+);
+$server->register('closeTicket',
+    array('alertId' => 'xsd:string'),      // input parameters
+    array('return' => 'xsd:string'),      // output parameters
+    'urn:aemticket',                      // namespace
+    'urn:aemticket#closeTicket',                // soapaction
+    'rpc',                                // style
+    'encoded',                            // use
+    'Closes an AEM ticket with the supplied alertId'            // documentation
+);
+$server->register('getAlertDetails',
+    array('alertId' => 'xsd:string'),      // input parameters
+    array('return' => 'tns:AlertDetail'),      // output parameters
+    'urn:aemticket',                      // namespace
+    'urn:aemticket#getAlertDetails',                // soapaction
+    'rpc',                                // style
+    'encoded',                            // use
+    'Retruns details for the supplied alertId'            // documentation
+);
+$server->register('getActiveAlerts',
+    array('orderBy' => 'xsd:string'),      // input parameters
+    array('return' => 'tns:AlertArray'),      // output parameters
+    'urn:aemticket',                      // namespace
+    'urn:aemticket#getActiveAlerts',                // soapaction
+    'rpc',                                // style
+    'encoded',                            // use
+    'Retruns active alerts'            // documentation
+);
+$server->register('searchAlerts',
+    array('alert' => 'tns:Alert',
+		  'activeOnly' => 'xsd:boolean',
+		  'orderBy' => 'xsd:string'),      // input parameters
+    array('return' => 'tns:AlertArray'),      // output parameters
+    'urn:aemticket',                      // namespace
+    'urn:aemticket#searchAlerts',                // soapaction
+    'rpc',                                // style
+    'encoded',                            // use
+    'searches alerts'            // documentation
+);
+
+// Register the method to expose
+$server->register('hello',
+    array('name' => 'xsd:string'),
+    array('return' => 'xsd:string'),      // output parameters
+    'urn:aemticket',                      // namespace
+    'urn:aemticket#hello',                // soapaction
+    'rpc',                                // style
+    'encoded',                            // use
+    'Hello Sample web service to verify web service is working'            // documentation
+);
+// Define the method as a PHP function
+function hello($name) {
+    return 'Hello, ' . $name;
+}
+// Use the request to (try to) invoke the service
+$HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
+$server->service($HTTP_RAW_POST_DATA);
+?>
+

@@ -1,0 +1,1 @@
+export AEMBASE="/in/AEM"
