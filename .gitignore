@@ -1,4 +1,5 @@
 home/*
+*.swp
 
 APAgent/.activemq-data/*
 

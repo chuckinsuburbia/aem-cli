@@ -53,7 +53,9 @@ function msgProcess($structure) {
 			return;
 		case (strstr($structure->headers['subject'],"EMS Alarm")):
 			logmsg("Received EMS Alarm");
-			//emsAlarmProcess($structure);
+			require_once "functionsDanfoss.php";
+			$newbody=emsAlarmProcess($body,$structure->headers['subject']);
+			$body = $newbody;
 			break;
 		case (strstr(strtolower($structure->headers['subject']),"device manager device error")):
 			logmsg("Received Kronos Device Error");
