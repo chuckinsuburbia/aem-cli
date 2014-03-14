@@ -8,7 +8,8 @@ $pwd = dirname($_SERVER['PHP_SELF']);
 require_once $pwd.'/includes/Mbox.php';
 require_once $pwd.'/includes/mimeDecode.php';
 
-$logfile = $pwd."/logs/email".date('Ymd').".log";
+//$logfile = $pwd."/logs/email".date('Ymd').".log";
+$logfile = $aembase."/logs/emailHandler.log";
 
 $mboxPath = getenv('MAIL');
 
@@ -108,6 +109,7 @@ function msgProcess($structure) {
 				plumProcess($structure->headers['subject']);
 				return;
 			} else {
+				$body.=",O=PLUM";
 				logmsg("Passing alert to AEM");
 			}
 			break;

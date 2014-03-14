@@ -1,7 +1,7 @@
 <?php
 function narrowProcess() {
 	global $aembase;
-	$file = $aembase."/mail/rdw/RDWreport.rec";
+	$file = $aembase."/rdw/RDWreport.rec";
 
 	if (!$fp = fopen($file,'a')) {
 		logmsg("Unable to open file ".$file);

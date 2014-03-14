@@ -5,7 +5,7 @@ function elertProcess($body) {
 	$ticket = $matches[0];
 
 	global $aembase;
-	$file = $aembase."/mail/elerts/".$ticket;
+	$file = $aembase."/elerts/".$ticket;
 	logmsg("Touch ".$file);
 	touch($file);
 }
