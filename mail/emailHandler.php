@@ -4,11 +4,9 @@
 date_default_timezone_set('America/New_York');
 $aembase = getenv('AEMBASE');
 require_once $aembase.'/conf/config.php';
-$pwd = dirname($_SERVER['PHP_SELF']);
-require_once $pwd.'/includes/Mbox.php';
-require_once $pwd.'/includes/mimeDecode.php';
+require_once $aembase.'/lib/Mbox.php';
+require_once $aembase.'/lib/mimeDecode.php';
 
-//$logfile = $pwd."/logs/email".date('Ymd').".log";
 $logfile = $aembase."/logs/emailHandler.log";
 
 $mboxPath = getenv('MAIL');
