@@ -74,9 +74,12 @@ function msgProcess($structure) {
 			$newbody=qflexProcess($body);
 			$body=$newbody;
 			break;
-		case (strstr(strtolower($structure->headers['from']),"tbstat@")):
+		case (strstr(strtolower($structure->headers['from']),"rdbf@")):
+		case (strstr(strtolower($structure->headers['subject']),"isp tbstat")):
 			logmsg("Received TBStat Message");
-			//tbstatProcess($structure);
+			//require_once "functionsIsp.php";
+			//tbstatProcess($body,$structure->headers['from'],$structure->headers['subject']);
+			//return;
 			break;
 		case (strstr(strtolower($structure->headers['subject']),"ctm_condition")):
 			logmsg("Received CTM_CONDITION");
@@ -101,7 +104,7 @@ function msgProcess($structure) {
 			logmsg("Received Expired PLUM Batches");
 			if (date('H') < 9) {
 				logmsg("Prior to 9am, emailing store");
-				require_once("functionsPlum.php");
+				require_once("functionsIsp.php");
 				plumProcess($structure->headers['subject']);
 				return;
 			} else {

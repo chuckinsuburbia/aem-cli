@@ -15,4 +15,7 @@ function plumProcess($subject) {
 	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 	mail($mailto,$subj,$body,$headers);
 }
+function tbstatProcess($body,$from,$subject) {
+	return;
+}
 ?>
