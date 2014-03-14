@@ -24,8 +24,7 @@ $MAP[21]="Text";
 $MAP[22]="IT Mgmt Layer";
 $MAP[23]="Comment";
 
-
-$to = 'collishc@aptea.com, castellc@aptea.com';
+$to = 'collishc@aptea.com';
 $subject = "AEM Alert";
 $subject .= isset($argv[1]) ? " - ".$MAP[1].": ".$argv[1] : "";
 $subject .= isset($argv[21]) ? " - ".$argv[21] : "";

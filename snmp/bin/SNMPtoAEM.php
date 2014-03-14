@@ -2,9 +2,8 @@
 <?php
 
 //Load environment
-$basePath="/in/AEM";
-require_once($basePath."/snmp/conf/aem_snmp_conf.php");
-require_once($basePath."/lib/aemdb.php");
+$basePath=getenv("AEMBASE");
+require_once($basePath."/conf/config.php");
 
 //Output file name
 do {
@@ -55,7 +54,7 @@ $xml = array('<?xml version="1.0" encoding="UTF-8"?>');
 $xml[] = '<alerts>';
 $xml[] = '<alert>';
 foreach($tokens as $k => $v) {
-	$xml[] = "\t<".$k.'>'.$v.'</'.$k.'>';
+	$xml[] = "\t<".$k.'>'.htmlspecialchars($v).'</'.$k.'>';
 }
 $xml[] = '</alert>';
 $xml[] = '</alerts>';

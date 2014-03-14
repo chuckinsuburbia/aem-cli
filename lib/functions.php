@@ -1,68 +1,4 @@
 <?php
-/* handle login */
-if(!isset($local)){
-	if(isset($_SERVER['REMOTE_ADDR']) && !isset($_SESSION)) session_start();
-	if(isset($_REQUEST['username'])){
-		$ldapconfig['host'] = 'moncorpdc1';
-		$ldapconfig['port'] = NULL;
-		$ldapconfig['basedn'] = 'dc=corp,dc=gaptea,dc=com';
-		$ldapconfig['authrealm'] = 'aptea';
-		
-		function ldap_authenticate($user,$pass) {
-			global $ldapconfig;
-		//	echo $user." ".$pass;    
-			if ($user != "" && $pass != "") {
-				$ds=@ldap_connect($ldapconfig['host'],$ldapconfig['port']);
-				@ldap_bind($ds, "aptea\pem", "2hard4U");
-				$r = @ldap_search( $ds, $ldapconfig['basedn'], 'sAMAccountname=' . $user);
-				if ($r) {
-					//foreach($r as $key => $value){
-					//	print $key."=".$value;
-					//}
-				   $result = @ldap_get_entries( $ds, $r);
-				   //print_r($result);
-					if ($result[0]) {
-					   if (@ldap_bind( $ds, $result[0]['dn'], $pass) ) {
-							return $result[0];
-						}
-					}
-			   }
-			}
-			return NULL;
-		}	
-		if (($result = ldap_authenticate($_REQUEST['username'],$_REQUEST['password'])) == NULL) {
-			die('Authorization Failed');
-		} 
-		require_once('aemdb.php');
-                $sql="select * from aem_user where au_name='".$_REQUEST['username']."'";
-                $res=mysql_query($sql,$aem) or die(mysql_error());
-		$aemuser=mysql_fetch_assoc($res);
-		if ($aemuser['au_admin'] == 'true') {
-			$_SESSION['adminUser'] = true;
-			die("SUCCESS");	
-		} else {
-			die($_REQUEST['username']." is not an AEM admin user.");
-		}
-		//print_r($result);
-	}
-	if(isset($_REQUEST['action']) && $_REQUEST['action'] == "logout"){
-		$_SESSION['adminUser'] = false;
-		die("SUCCESS");	
-	}
-	
-	if(isset($_SESSION['adminUser']) && $_SESSION['adminUser'] == true){
-		$adminUser=true;
-	}else{
-		//print($_SERVER['PHP_SELF']);
-		if($_SERVER['PHP_SELF'] != "/index.php")
-			header("Location: /index.php");
-	}
-}
-/*end of login stuff */
-
-if(isset($_GET['phpinfo'])) phpinfo();
-
-
 function aemlog($string){
 	global $mainlog;
 	file_put_contents($mainlog,date("Y-m-d H:i:s")." - ".$string."\n",FILE_APPEND);
@@ -230,7 +166,13 @@ function runStep($alertId,$step){
 		foreach($stepConfig as $token){
 			$tokenValues .= isset($tokens[$token]) ? '"'.$tokens[$token].'" ' : '"" ';
 		}
-		$cmd = $stepInfo['as_action']." ".$alertId." ".$tokenValues;
+		if(strstr($stepInfo['as_action'],'{$')) {
+			$var = substr($stepInfo['as_action'],strpos($stepInfo['as_action'],'{')+1,(strpos($stepInfo['as_action'],'}')-strpos($stepInfo['as_action'],'{'))-1);
+			eval("global ".$var."; \$cmd = \"".$stepInfo['as_action']."\";");
+			$cmd .= " ".$alertId." ".$tokenValues;
+		} else {
+			$cmd = $stepInfo['as_action']." ".$alertId." ".$tokenValues;
+		}
 		if($debug) aemlog($cmd);
 		$returnToken = exec($cmd,$sysout,$rc);
 	}

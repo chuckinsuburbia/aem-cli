@@ -1,6 +1,8 @@
 home/*
 *.swp
 
+lost+found/
+
 APAgent/.activemq-data/*
 
 */logs/*

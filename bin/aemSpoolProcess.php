@@ -1,12 +1,11 @@
 #!/usr/bin/php
 <?php
-$basepath="/in/AEM/";
-include($basepath."lib/aemdb.php");
-include($basepath."lib/functions.php");
-include($basepath."conf/config.php");
-include($basepath.'lib/CronParser.php');
+$basepath=getenv("AEMBASE");
+include($basepath."/conf/config.php");
+include($basepath."/lib/functions.php");
+include($basepath.'/lib/CronParser.php');
 
-$spooldir = $basepath."spool";
+$spooldir = $basepath."/spool";
 $files = scandir($spooldir);
 foreach($files as $file) {
 	$file = $spooldir."/".$file;

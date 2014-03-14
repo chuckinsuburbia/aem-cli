@@ -2,17 +2,11 @@
 <?php
 # Example command line
 # aemopen.php source=SNMP object="blah" objectClass="blah"
-$basepath="/in/AEM/";
-include($basepath."lib/aemdb.php");
-include($basepath."lib/functions.php");
-include($basepath."conf/config.php");
-include($basepath.'lib/CronParser.php');
-/*
-include("../lib/aemdb.php");
-include("../lib/functions.php");
-include("../conf/config.php");
-include('../lib/CronParser.php');
-*/
+$basepath=getenv("AEMBASE");
+require_once($basepath."conf/config.php");
+require_once($basepath."lib/functions.php");
+require_once($basepath.'lib/CronParser.php');
+
 array_shift($argv);
 //$source=array_shift($argv);
 if($debug) aemlog("Received Alert from ".$tokens['source']);

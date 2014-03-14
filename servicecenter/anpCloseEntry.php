@@ -8,7 +8,11 @@ function sclog($logfile,$string) {
  fclose($handle);
 }
 
-$logfile = "/in/AEM/sc/logs/anpCloseEntry.log";
+$basepath = getenv("AEMBASE");
+require_once($basepath.'/lib/nusoap/lib/nusoap.php');
+require_once($basepath.'/conf/config.php');
+
+$logfile = $basepath."/logs/anpCloseEntry.log";
 sclog($logfile,implode(" ",$argv));
 
 $MAP[1] = "aemid";            //AEM Incident ID
@@ -28,13 +32,9 @@ foreach ($MAP as $k => $v)
 
 #print_r($arguments);
 
-require_once('/in/AEM/lib/nusoap/lib/nusoap.php');
-require_once('/in/AEM/sc/conf/sc_connection.php');
 
-#$client = new nusoap_client('http://'.$arguments['scserver'].':12671/IncidentManagement?wsdl', 'wsdl','','','','');
-#$client = new nusoap_client('http://monsvcctrdr1:12671/IncidentManagement?wsdl', 'wsdl','','','','');
 
-$err = $client->getError();
+$err = $sc_client->getError();
 if ($err) {
 	die( '<h2>Constructor error</h2><pre>' . $err . '</pre>');
 }
@@ -54,16 +54,16 @@ $instance = new soapval("instance","IncidentInstanceType",array($Resolution,$Res
 $model = new soapval("model", "IncidentModelType",array($keys,$instance),null,"http://servicecenter.peregrine.com/PWS");	
 $UpdateIncidentRequest = new soapval("UpdateIncidentRequest","UpdateIncidentRequestType",$model,"http://servicecenter.peregrine.com/PWS");
 $CloseIncidentRequest = new soapval("CloseIncidentRequest","CloseIncidentRequestType",$model,"http://servicecenter.peregrine.com/PWS");
-$client->setCredentials('pem', 'Pemspassword');
-$result = $client->call('CloseIncident',$CloseIncidentRequest->serialize('literal'),"http://servicecenter.peregrine.com/PWS");//, 
+$sc_client->setCredentials('pem', 'Pemspassword');
+$result = $sc_client->call('CloseIncident',$CloseIncidentRequest->serialize('literal'),"http://servicecenter.peregrine.com/PWS");//, 
 // Check for a fault
-if ($client->fault) {
+if ($sc_client->fault) {
 	echo '<h2>Update Fault</h2><pre>';
 	print_r($result);
 	echo '</pre>';
 } else {
 	// Check for errors
-	$err = $client->getError();
+	$err = $sc_client->getError();
 	if ($err) {
 		// Display the error
 		echo '<h2>Create Error</h2><pre>' . $err . '</pre>';

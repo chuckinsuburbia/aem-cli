@@ -1,8 +1,10 @@
 #!/usr/bin/php
 <?php
 $local=true;
-include("../lib/functions.php");
-include("../lib/aemdb.php");
+$basepath=getenv("AEMBASE");
+require_once($basepath."/lib/functions.php");
+require_once($basepath."/conf/config.php");
+
 $type=$argv[1];
 $file=$argv[2];
 $lines = file($file);
