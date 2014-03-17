@@ -41,7 +41,6 @@ start() {
 	local curruser=$(id -u -n)
 	for p in "${progpath[@]}" ; do
 		local prog=$(basename $p)
-		local pidfile="/var/run/${prog}.pid"
 
 		# make sure full path to executable binary is found
 		! [ -x $p ] && echo "$p: executable not found" && exit 1
@@ -69,9 +68,6 @@ start() {
 				;;
 		esac
 
-		# save pid to file if you want
-		echo $! > $pidfile
-
 		# check again if running
 		pgrep $prog >/dev/null 2>&1
 		eval_cmd $?
@@ -81,7 +77,6 @@ start() {
 stop() {
 	for p in "${progpath[@]}" ; do
 		local prog=$(basename $p)
-		local pidfile="/var/run/${prog}.pid"
 
 		# see if running
 		local pgid=$(ps -eo pgid,comm | grep -v grep | grep $prog | awk '{print $1}')
@@ -91,7 +86,6 @@ stop() {
 			continue
 		fi
 		printf "%-50s%s" "Stopping $prog: " ''
-		rm -f $pidfile
 		kill -9 -$pgid
 		eval_cmd $?
 	done
