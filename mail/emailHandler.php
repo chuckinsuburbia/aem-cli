@@ -142,7 +142,7 @@ function msgProcess($structure) {
 		//print_r($tokens);
 
 		//If valid Alert, create XML output from tokens
-		if($tokens['origin'] != ""  && $tokens['objectClass'] != "" && $tokens['domain'] != "" {
+		if($tokens['origin'] != ""  && $tokens['objectClass'] != "" && $tokens['domain'] != "") {
 			$validAlert++;
 			global $xml;
 			if (!isset($xml)) {
