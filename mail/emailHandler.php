@@ -29,77 +29,75 @@ function msgProcess($structure) {
 	$body = isset($structure->body) ? $structure->body : $structure->parts[0]->body;
 
 	switch(true) {
-		case (strstr(strtoupper($structure->headers['subject']),"TESTTESTTESTTEST")):
+		case (strstr(strtoupper($body),"SUBJECT: TESTTESTTESTTEST")):
 			logmsg("Received Test Message");
 			//testProcess($structure);
 			break;
-		case (strstr(strtolower($structure->headers['from']),"emergency alert")):
-		case (strstr(strtolower($structure->headers['from']),"elerts@aptea.com")):
+		case (strstr(strtolower($body),"from: emergency alert")):
 			logmsg("Received ELert");
 			require_once "functionsElert.php";
 			elertProcess($body);
 			return;	
-		case (strstr(strtolower($structure->headers['subject']),"t-log store transactions")):
+		case (strstr(strtolower($body),"subject: t-log store transactions")):
 			logmsg("Received T-Log Store Transactions");
 			require_once "functionsTlog.php";
 			tlogProcess($body);
 			return;
-		case (strstr(strtolower($structure->headers['from']),"narrowcast administrator")):
-		case (strstr(strtolower($structure->headers['from']),"narrowca@aptea.com")):
+		case (strstr(strtolower($body),"from: narrowcast administrator")):
 			logmsg("Received Narrowcast Report");
 			require_once "functionsRDW.php";
 			narrowProcess();
 			return;
-		case (strstr($structure->headers['subject'],"EMS Alarm")):
+		case (strstr($body,"Subject: EMS Alarm")):
 			logmsg("Received EMS Alarm");
 			require_once "functionsDanfoss.php";
 			$newbody=emsAlarmProcess($body,$structure->headers['subject']);
 			$body = $newbody;
 			break;
-		case (strstr(strtolower($structure->headers['subject']),"device manager device error")):
+		case (strstr(strtolower($body),"subject: device manager device error")):
 			logmsg("Received Kronos Device Error");
 			require_once "functionsKronos.php";
 			$newbody=kronosClockProcess($body);
 			if ($newbody == "") return;
 			$body = $newbody;
 			break;
-		case (strstr(strtolower($structure->headers['subject']),"alarmpoint message")):
+		case (strstr(strtolower($body),"subject: alarmpoint message")):
 			logmsg("Received AlarmPoint Message");
 			//alarmpointProcess($structure);
 			break;
-		case (strstr(strtolower($structure->headers['from']),"qflex@")):
+		case (strstr(strtolower($body),"from: qflex@")):
 			logmsg("Received QFlex Message");
 			require_once "functionsQflex.php";
 			$newbody=qflexProcess($body);
 			$body=$newbody;
 			break;
-		case (strstr(strtolower($structure->headers['from']),"rdbf@")):
-		case (strstr(strtolower($structure->headers['subject']),"isp tbstat")):
+		case (strstr(strtolower($body),"from: rdbf@")):
+		case (strstr(strtolower($body),"subject: isp tbstat")):
 			logmsg("Received TBStat Message");
 			//require_once "functionsIsp.php";
 			//tbstatProcess($body,$structure->headers['from'],$structure->headers['subject']);
 			//return;
 			break;
-		case (strstr(strtolower($structure->headers['subject']),"ctm_condition")):
+		case (strstr(strtolower($body),"subject: ctm_condition")):
 			logmsg("Received CTM_CONDITION");
 			//ctmCondProcess($structure);
 			break;
-		case (strstr(strtolower($structure->headers['subject']),"ctm_order")):
+		case (strstr(strtolower($body),"subject: ctm_order")):
 			logmsg("Received CTM_ORDER");
 			//ctmOrderProcess($structure);
 			break;
-		case (strstr(strtolower($structure->headers['from']),"storage_manager")):
+		case (strstr(strtolower($body),"from: storage_manager")):
 			logmsg("Received SAN Storage Manager message");
 			require_once "functionsSan.php";
 			$newbody=sanErrorProcess($body);
 			$body=$newbody;
 			break;
-		case (strstr(strtolower($structure->headers['from']),"google voice")):
+		case (strstr(strtolower($body),"from: google voice")):
 			logmsg("Received Google Voice message");
 			require_once "functionsGoogle.php";
 			googleVoiceProcess();
 			return;
-		case (strstr(strtolower($structure->headers['subject']),"expired plum batches found")):
+		case (strstr(strtolower($body),"subject: expired plum batches found")):
 			logmsg("Received Expired PLUM Batches");
 			if (date('H') < 9) {
 				logmsg("Prior to 9am, emailing store");

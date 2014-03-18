@@ -5,8 +5,8 @@ function kronosClockProcess($body) {
 
 	$newbody = "";
 
-	//$pattern = "Device has not communicated since the last server restart.";
-	$pattern = "Device communication delay.";
+	$pattern = "Device has not communicated since the last server restart.";
+	//$pattern = "Device communication delay.";
 	if(substr_count($body,$pattern) > 10) {
 		$newbody="OR=KRONOS,S=70,DC=TIMECLOCK,D=MASSIVE,ET=KRONOS,O=CLOCKDOWN,OC=TIMECLOCK,PN=COMMUNICATION,PV=DOWN";
 	} else {

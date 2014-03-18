@@ -5,16 +5,19 @@ function emsAlarmProcess($body,$subject) {
 	$conv_body = iconv("ISO-8859-1", "UTF=8//TRANSLIT", $body);
 
 	$lines = explode("\n",$conv_body);
+	foreach($lines as $k => $v) {
+		if(strstr($v,"Subject: ")) { $i = $k; }
+	}
 
 	$severity	= "70";
 	$domain		= "DanFoss";
-	$domainClass	= $subject;
-	$origin		= trim(substr($lines[0],0,strpos($lines[0]," ")));
-	$objectClass	= trim($lines[1]);
-	$object		= trim($lines[2]);
-	$paramName	= trim(substr($lines[3],4));
-	$paramValue	= trim($lines[5]);
-	$freeText	= trim($lines[6]);
+	$domainClass	= trim(substr($lines[$i],9));
+	$origin		= trim(substr($lines[$i+2],0,strpos($lines[$i+2]," ")));
+	$objectClass	= trim($lines[$i+3]);
+	$object		= trim($lines[$i+4]);
+	$paramName	= trim(substr($lines[$i+5],4));
+	$paramValue	= trim($lines[$i+7]);
+	$freeText	= trim($lines[$i+8]);
 
 	$newbody = "OR=".$origin.",DC=".$domainClass.",D=".$domain.",OC=".$objectClass.",O=".$object.",PN=".$paramName.",PV=".$paramValue.",S=".$severity.",FT=".$freeText;
 
