@@ -5,6 +5,7 @@ lost+found/
 
 APAgent/.activemq-data/*
 
+logs/
 */logs/*
 */log/*
 *log

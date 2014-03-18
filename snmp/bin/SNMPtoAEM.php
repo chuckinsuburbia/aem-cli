@@ -2,8 +2,11 @@
 <?php
 
 //Load environment
-$basePath=getenv("AEMBASE");
-require_once($basePath."/conf/config.php");
+//$basePath=getenv("AEMBASE");
+$basePath="/in/AEM";
+require_once($basePath."/snmp/conf/config.php");
+
+file_put_contents($snmplog,"Begin Processing...\n",FILE_APPEND);
 
 //Output file name
 do {
@@ -44,7 +47,7 @@ foreach($oidValues as $key=>$val){
 $tokens['source'] = "SNMP";
 $tokens['enterprise'] = substr($key,0,strpos($key, "."));
 
-//if($debug) file_put_contents($snmplog,"TOKENS = ".$tokens."\n",FILE_APPEND);
+if($debug) file_put_contents($snmplog,"TOKENS = ".print_r($tokens,TRUE)."\n",FILE_APPEND);
 
 //exec($aemopen." SNMP ".$tokens." 2>>$snmplog >>$snmplog");
 //exec($aemopen." source=SNMP ".$tokens." 2>>$snmplog >>$snmplog");
@@ -54,10 +57,11 @@ $xml = array('<?xml version="1.0" encoding="UTF-8"?>');
 $xml[] = '<alerts>';
 $xml[] = '<alert>';
 foreach($tokens as $k => $v) {
-	$xml[] = "\t<".$k.'>'.htmlspecialchars($v).'</'.$k.'>';
+	$xml[] = "\t<".$k.'>'.htmlspecialchars(trim($v)).'</'.$k.'>';
 }
 $xml[] = '</alert>';
 $xml[] = '</alerts>';
+if($debug) file_put_contents($snmplog,"XML = ".print_r($xml,TRUE)."\n",FILE_APPEND);
 foreach($xml as $l) file_put_contents($outfile,$l."\n",FILE_APPEND);
 
 ?>
