@@ -115,7 +115,7 @@ function msgProcess($structure) {
 	global $fieldMap, $defaults;
 	$validAlert=0;
 	foreach(explode("\n",$body) as $line) {
-		if(preg_match("/=/",$line) === FALSE) continue;
+		if(!preg_match("/=/",$line)) continue;
 		foreach(explode(",",$line) as $pair) {
 			if(strstr($pair,"=")) {
 				list($k,$v) = explode("=",$pair);
@@ -142,7 +142,7 @@ function msgProcess($structure) {
 		//print_r($tokens);
 
 		//If valid Alert, create XML output from tokens
-		if($tokens['object'] != ""  && $tokens['objectClass'] != "" && $tokens['domain'] != "" && $tokens['domainClass'] != "") {
+		if($tokens['origin'] != ""  && $tokens['objectClass'] != "" && $tokens['domain'] != "" {
 			$validAlert++;
 			global $xml;
 			if (!isset($xml)) {
