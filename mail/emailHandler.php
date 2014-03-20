@@ -151,7 +151,7 @@ function msgProcess($structure) {
 			}
 			$xml[] = '<alert>';
 			foreach($tokens as $k => $v) {
-				$xml[] = "\t<".$k.">".$v."</".$k.">";
+				$xml[] = "\t<".$k.">".htmlspecialchars($v)."</".$k.">";
 			}
 			$xml[] = '</alert>';
 		}

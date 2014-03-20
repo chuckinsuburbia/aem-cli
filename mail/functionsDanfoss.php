@@ -12,12 +12,12 @@ function emsAlarmProcess($body,$subject) {
 	$severity	= "70";
 	$domain		= "DanFoss";
 	$domainClass	= trim(substr($lines[$i],13,20));
-	$origin		= trim(substr($lines[$i+3],0,strpos($lines[$i+3]," ")));
-	$objectClass	= trim($lines[$i+4]);
-	$object		= trim($lines[$i+5]);
-	$paramName	= trim(substr($lines[$i+6],4));
-	$paramValue	= trim($lines[$i+8]);
-	$freeText	= trim($lines[$i+9]);
+	$origin		= trim(substr($lines[$i+2],0,strpos($lines[$i+2]," ")));
+	$objectClass	= trim($lines[$i+3]);
+	$object		= trim($lines[$i+4]);
+	$paramName	= trim(substr($lines[$i+5],strpos($lines[$i+5],"SI: ")+4));
+	$paramValue	= trim($lines[$i+7]);
+	$freeText	= trim($lines[$i+8]);
 
 	$newbody = "OR=".$origin.",DC=".$domainClass.",D=".$domain.",OC=".$objectClass.",O=".$object.",PN=".$paramName.",PV=".$paramValue.",S=".$severity.",FT=".$freeText;
 
