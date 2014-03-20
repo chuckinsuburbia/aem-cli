@@ -168,7 +168,7 @@ function msgProcess($structure) {
 		$headers  = 'MIME-Version: 1.0' . "\r\n";
 		$headers .= 'Content-type: text/plain; charset=iso-8859-1' . "\r\n";
 
-		mail($fwdInvalid,"Fwd: ".$structure->headers['subject'],$fwdBody,$headers);
+		mail($fwdInvalid,"Unknown Message Structure: ".$structure->headers['subject'],$fwdBody,$headers);
 	}
 }
 
