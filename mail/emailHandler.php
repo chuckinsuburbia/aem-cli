@@ -109,6 +109,12 @@ function msgProcess($structure) {
 				logmsg("Passing alert to AEM");
 			}
 			break;
+		case (strstr(strtolower($body),"subject: consecutive backup failures (isp")):
+			logmsg("Received consecutive backup failures message");
+			require_once("functionsIsp.php");
+			$newbody=backupFailureProcess($body);
+			$body=$newbody;
+                        break;
 	}
 
 	//Parse Email body into tokens
@@ -150,7 +156,7 @@ function msgProcess($structure) {
 		//logmsg(print_r($tokens,TRUE));
 
 		//If valid Alert, create XML output from tokens
-		if($tokens['origin'] != ""  && $tokens['objectClass'] != "" && $tokens['domain'] != "") {
+		if($tokens['origin'] != ""  && $tokens['objectClass'] != "") {
 			$validAlert++;
 			global $xml;
 			if (!isset($xml)) {

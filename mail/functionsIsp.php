@@ -15,7 +15,12 @@ function plumProcess($subject) {
 	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 	mail($mailto,$subj,$body,$headers);
 }
-function tbstatProcess($body,$from,$subject) {
-	return;
+
+function backupFailureProcess($body) {
+	foreach(explode("\n",$body) as $line) {
+		if(preg_match("/=/",$line)) $lines[] = $line;
+	}
+	$newbody = implode(",",$lines);
+	return($newbody);
 }
 ?>
