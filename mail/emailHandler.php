@@ -112,7 +112,7 @@ function msgProcess($structure) {
 	}
 
 	//Parse Email body into tokens
-	global $fieldMap, $defaults;
+	global $fieldMap, $fieldPem, $defaults;
 	$validAlert=0;
 	foreach(explode("\n",$body) as $line) {
 		if(!preg_match("/=/",$line)) continue;
@@ -122,6 +122,7 @@ function msgProcess($structure) {
 				$pairs[trim($k)]=trim($v);
 			}
 		}
+		//logmsg(print_r($pairs,TRUE));
 		foreach($fieldMap as $k => $v) {
 			if(isset($pairs[$k])) {
 				$tokens[$k] = $pairs[$k];
@@ -131,6 +132,13 @@ function msgProcess($structure) {
 				$tokens[$k] = $pairs[$v];
 				continue;
 			}
+			if(isset($fieldPem[$k])) {
+				$p = $fieldPem[$k];
+				if(isset($pairs[$p])) {
+					$tokens[$k] = $pairs[$p];
+					continue;
+				}
+			}
 			if(isset($defaults[$k])) {
 				$tokens[$k] = $defaults[$k];
 				continue;
@@ -139,7 +147,7 @@ function msgProcess($structure) {
 		}
 		$tokens['source'] = "email";
 		$tokens['enterprise'] = "1031";
-		//print_r($tokens);
+		//logmsg(print_r($tokens,TRUE));
 
 		//If valid Alert, create XML output from tokens
 		if($tokens['origin'] != ""  && $tokens['objectClass'] != "" && $tokens['domain'] != "") {
