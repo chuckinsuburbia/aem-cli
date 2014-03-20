@@ -11,8 +11,8 @@ function emsAlarmProcess($body,$subject) {
 
 	$severity	= "70";
 	$domain		= "DanFoss";
-	$domainClass	= trim(substr($lines[$i],14,20));
-	$origin		= trim(substr($lines[$i+3],0,strpos($lines[$i+2]," ")));
+	$domainClass	= trim(substr($lines[$i],13,20));
+	$origin		= trim(substr($lines[$i+3],0,strpos($lines[$i+3]," ")));
 	$objectClass	= trim($lines[$i+4]);
 	$object		= trim($lines[$i+5]);
 	$paramName	= trim(substr($lines[$i+6],4));
