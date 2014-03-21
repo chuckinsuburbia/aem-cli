@@ -128,7 +128,7 @@ function msgProcess($structure) {
 				$pairs[trim($k)]=trim($v);
 			}
 		}
-		//logmsg(print_r($pairs,TRUE));
+		if($debug) logmsg(print_r($pairs,TRUE));
 		foreach($fieldMap as $k => $v) {
 			if(isset($pairs[$k])) {
 				$tokens[$k] = $pairs[$k];
@@ -153,7 +153,7 @@ function msgProcess($structure) {
 		}
 		$tokens['source'] = "email";
 		$tokens['enterprise'] = "1031";
-		//logmsg(print_r($tokens,TRUE));
+		if($debug) logmsg(print_r($tokens,TRUE));
 
 		//If valid Alert, create XML output from tokens
 		if($tokens['origin'] != ""  && $tokens['objectClass'] != "") {
