@@ -3,6 +3,7 @@ function emsAlarmProcess($body,$subject) {
 	//ini_set('mbstring.substitute_character', "none");
   	//$conv_body= mb_convert_encoding($body, 'UTF-8', 'UTF-8'); 
 	$conv_body = iconv("ISO-8859-1", "UTF=8//TRANSLIT", $body);
+	$body=preg_replace('/[\n]+/',"\n",$body);
 
 	$lines = explode("\n",$conv_body);
 	foreach($lines as $k => $v) {
