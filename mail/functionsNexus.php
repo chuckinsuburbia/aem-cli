@@ -1,7 +1,7 @@
 <?php
 function nexusProcess($structure) {
-	global $basePath;
-
+	global $basePath,$debug;
+	//logmsg(print_r($structure,TRUE));
 	//Save attachments to flat files
 	if($structure->ctype_primary == "multipart") {
 		foreach($structure->parts as $part) {

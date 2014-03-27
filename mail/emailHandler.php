@@ -29,12 +29,12 @@ function msgProcess($structure) {
 	$body = isset($structure->body) ? $structure->body : $structure->parts[0]->body;
 
 	switch(true) {
-		case (strstr(strtolower($body),"subject: testtesttesttest")):
+		case (strstr(strtolower($body),"testtesttesttest")):
 			logmsg("Received Test Message");
 			require_once "functionsTest.php";
 			testProcess($structure);
 			return;
-		case (strstr(strtolower($body),"to: data.nexus@aptea.com")):
+		case (strstr(strtolower($structure->headers['from']),"datanex@aptea.com")):
 			logmsg("Received Data Nexus message");
 			require_once "functionsNexus.php";
 			nexusProcess($structure);
