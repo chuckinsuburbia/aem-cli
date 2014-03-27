@@ -1,8 +1,8 @@
 #!/usr/bin/php
 <?php
 $basepath=getenv("AEMBASE");
-require_once($basepath."conf/config.php");
-require_once($basepath."lib/functions.php");
+require_once($basepath."/conf/config.php");
+require_once($basepath."/lib/functions.php");
 
 $db_tbl_trans="aem_translation";
 $db_tbl_stage="aem_translation_stage";
