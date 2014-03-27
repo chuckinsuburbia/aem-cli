@@ -1,11 +1,20 @@
 home/*
-*.swp
 
 lost+found/
 
-APAgent/.activemq-data/*
-
+# Log files
 logs/
 */logs/*
 */log/*
 *log
+
+# Files that are symlinks
+APAgent/APOpen.sh
+APAgent/conf/IAConfig.xml
+conf/config.php
+snmp/conf/config.php
+
+# Files that change regularly
+APAgent/lib/mule-1.4.3/bin/.apia.pid
+APAgent/.activemq-data/*
+*.swp
