@@ -1,0 +1,788 @@
+#
+#------------------------------------------------------
+# Event Enrichment: Text Translation Configuration File
+#------------------------------------------------------
+# 
+#  See the bottom of this file for documentation
+#
+#
+#
+# The column format is as follows... 
+#==========================================================================================================================##
+# objectClass 		 | object | parameter	 	| parameterValue | domain |  originEventClass |  eventText 
+#==========================================================================================================================##
+#TEST
+CTM			 | CTM	  | *			|	*	 | CTM	  | * 		   | [T:itMgmtLayer]
+TEST			 | *	  | *				| *		 | SJG	  | *		      |	This is a test. This is only a test. 
+TEST			 | *	  | *				| *		 | SJG2	  | *		      |	This is a test. This is only a test. 
+
+#==========================================================================================================================##
+#	Blackberry Monitoring Server											 
+#==========================================================================================================================##
+*		  	 | * 	 |*  			 	|  *	  	| *	  | snmptrapd.3530* 		| Blackberry Enterprise Server ([T:domain]) is alerting [T:parameter] 
+
+#==========================================================================================================================##
+#	SOFTGROCER Translation (sgpr*)											 
+#==========================================================================================================================##
+SOFT*		  	 | * 	 |*  			 	|  *	  	| sg*	  | snmptrapd.1031* 		| [T:itMgmtLayer] 
+SGQA*		  	 | * 	 |*  			 	|  *	  	| *	  | snmptrapd.1031* 		| [T:itMgmtLayer] 
+SGPR*		  	 | * 	 |*  			 	|  *	  	| *	  | snmptrapd.1031* 		| [T:itMgmtLayer] 
+
+## This is a temporary rule until we can get the "before" vs. "after" sustained connection issue resolved.
+ *		  	 |  *	 |  *			 	|  *	  	| CLOSE_CONNECTION | * 		| Connection to Patrol Agent is lost on [T:domain] 
+
+###========================================================================================================================##
+#	OUTPUT MANAGEMENT ENHANCEMENTS										#	
+# -------------------------------------------------------------------------------------------------------------------------##
+# objectClass 		 | object | parameter	 	| parameterValue | domain |  originEventClass |  eventText #
+###========================================================================================================================##
+
+ *		  	 |  *	 |  prStatus		 	|  8	  |  *	 | * 		| The printer [T:object] is pending deletion. 
+ *		 	 |  *	 |  prStatus		 	|  9	  |  *	 | * 		| The printer [T:object] is paused.
+ *		 	 |  *	 |  prStatus		 	|  10	  |  *	 | * 		| The printer [T:object] is has a stalled job.
+ *		 	 |  *	 |  prStatus		 	|  11	  |  *	 | * 		| The printer [T:object] is has a stalled job.
+ *		 	 |  *	 |  prStatus		 	|  12	  |  *	 | * 		| The printer [T:object] is reporting an error
+ *		 	 |  *	 |  prStatus		 	|  13	  |  *	 | * 		| The printer [T:object] is off line.
+ *		 	 |  *	 |  prStatus		 	|  14	  |  *	 | * 		| The printer [T:object] is reporting server unknow error.
+ *		 	 |  *	 |  prStatus		 	|  15	  |  *	 | * 		| The printer [T:object] is out of paper.
+ *		 	 |  *	 |  prStatus		 	|  16	  |  *	 | * 		| The printer [T:object] has a paper jam. 
+
+###========================================================================================================================##
+#	ACTIVE DIRECTORY ENHANCEMENTS											 #
+# -------------------------------------------------------------------------------------------------------------------------##
+# objectClass 		 | object | parameter	 	| parameterValue | domain |  originEventClass |  eventText #
+###========================================================================================================================##
+
+ *		 	 |  *	 | DnSecUpdateFailRate		| * 	|  *	 | * 		| secure Update Failed on the DNS Database for [T:domain].
+ *		 	 |  *	 | AdPreplicationCollector	| * 	|  *	 | * 		| Active Directory Replication Collector on [T:domain] has failed.
+ *		 	 |  *	 | AdFsConnectivity		| * 	|  *	 | * 		| LDAP Connectivity to [T:object] [T:domain] has failed.
+
+
+###========================================================================================================================##
+#	Windows System Enhancements											 #
+# -------------------------------------------------------------------------------------------------------------------------##
+# objectClass 		 | object | parameter	 	| parameterValue | domain |  originEventClass |  eventText #
+###========================================================================================================================##
+
+ *		 	 |  *	 | ELMEvFileFreeSpacePercent	| * 	|  *	 | * 		| LPercent of free space avaliable for event log on [T:domain] is [T:parameterValue].
+ *		 	 |  *	 | EPDpdDiskTimePercent		| * 	|  *	 | * 		| [T:object] on [T:domain] is showing a busy status of [T:parameterValue]% for at least 60 minutes.
+ *		 	 |  *	 | PDpdDiskTimePercent		| * 	|  *	 | * 		| eventText={object} on {domain} is showing a busy status of {parameterValue}% for at least 60 minutes.
+ *		 	 |  *	 | LDldDiskTimePercent       	| * 	|  *	 | * 		| Logical [T:object] Drive on [T:domain] is showing a busy status of [T:parameterValue]% for at least 3 hours.
+ AGENTPING	      	 |  *	 | *			       	| * 	|  *	 | * 		| [T:object] server not reponding to Ping.
+ *			 |BlueScreen | *			| *	| *	 | *		| Blue Screen Triggered on [T:domain].				
+
+
+###========================================================================================================================##
+#	Exchange Enhancements												 #
+# -------------------------------------------------------------------------------------------------------------------------##
+# objectClass 		 | object | parameter	 	| parameterValue | domain |  originEventClass |  eventText #
+###========================================================================================================================##
+
+ MSEXCH_Roundtrip_Server|  *	 | Status  	 		|  *	 |  *	 |  *	 | RoundTrip Mail maybe down between [T:domain] and [T:object]. 
+ MSEXCH_Remote_Server   |  *	 | Status  	 		|  *	 |  *	 |  *	 | RoundTrip Mail maybe down between [T:domain] and [T:object]. 
+ MSEX* 			|  *	 | QueuedOutbound		|  *	 |  *	 |  *	 | Internet mail Queued Out Bound is at [T:parameterValue] on [T:domain].
+ MSEXCH_Queues		|  *	 | OldestMsgAge			|  *	 |  *	 |  *	 | Oldest Msg Age is [T:parameterValue] Sec on [T:domain] Possible link down.
+ MSEX* 			|  *	 | ServerStatus			|  2.0	 |  *	 |  *	 | Client connection with [T:domain] has failed.
+ NT_EVINSTS		|  NT_EVAPP_SYMANTEC*	 | *		|  *	 |  *	 |  *	 | Event Log monitoring is currently alarming on [T:domain] for SYMANTEC.
+ MSEXCH_Queues		|  *	 |  *				|  *	 |  *	 |  *	 | [T:domain] reporting [T:parameterValue] Messages queued in [T:object].
+ *			|  *	 | DbLogFiles			|  *	 |  *	 |  *	 | The Exchange log files on [T:domain] are growing and are currently at [T:parameterValue].
+ *			|  *	 | AvgDeliverTime		|  *	 |  *	 |  *	 | AvgDeliveryTime of [T:object] on [T:domain] is [T:parameterValue].
+ *			|  *	 | CheckConfiguration		|  *	 |  *	 |  *	 | Check Patrol User Permission on [T:domain].
+
+
+###========================================================================================================================##
+#	Tlog Enhancements	  											 #
+# -------------------------------------------------------------------------------------------------------------------------##
+# objectClass 		 | object | parameter	 	| parameterValue | domain |  originEventClass |  eventText #
+###========================================================================================================================##
+ *			|  ftf*	 | PROCPPCount*			|  *	 |  *	 |  *    | Process [T:object] count on [T:domain] has dropped.
+ * 			|  scd	 | PROCPPCount			|  *	 |  *	 |  *	 | Process count on [T:domain] for scd has dropped below threshold.
+ * 			|  *	 | PROCPPCount			|  *	 |  *	 |  *	 | Process count on [T:domain] has dropped below threshold.
+#####################
+##
+##  AIX enhancements
+###################################################################
+*			| *	| *				| *	| xio*	|*	| Service [T:object] is alerting on [T:domain] 
+TLOG*			| *	| *					| *	| *	| snmptrapd.1031| [T:itMgmtLayer] 
+HACMP*			| PSTPPRODDB* | *				| *	| *	| snmptrapd.1031| [T:itMgmtLayer]
+HAE*			| group_TPSAPP* | *				| *	| *	| snmptrapd.1031| [T:itMgmtLayer]
+HAE*                    | group_SSPRDB* | *                             | *     | *     | snmptrapd.1031| [T:itMgmtLayer]
+RMS*			| *	| *					| *	| *	| snmptrapd.1031| [T:itMgmtLayer] 
+ERRPT*			| *	| *					| *	| *	| snmptrapd.1031| [T:itMgmtLayer] 
+SCRIPT*			| *	| *					| *	| *	| snmptrapd.1031| [T:itMgmtLayer] 
+SECURITY*		| *	| *					| *	| *	| snmptrapd.1031| [T:itMgmtLayer] 
+ERRPT*			| *	| *					| *	| *	| snmptrapd.1031| [T:itMgmtLayer] 
+NDM*			| *	| *					| *	| *	| snmptrapd.1031| [T:itMgmtLayer] 
+HACMP*			| *	| *					| *	| *	| snmptrapd.1031| [T:domain] [T:objectClass] [T:itMgmtLayer] 
+HACMP*			| SGPRODAPP*	| *				| *	| *	| snmptrapd.1031| The SoftGrocer Application server has failed over to the secondary server. SoftGrocer should still be functioning as normal. The system administrators are being notified.
+HACMP*			| SGPRODB*	| *				| *	| *	| snmptrapd.1031| The SoftGrocer Database server has failed over to the secondary server. SoftGrocer should still be functioning as normal. The system administrators are being notified.
+AUTO_RESTART*           | AUTO* | COMM*  				| *     | *     | * | Microstrategy Auto Restart process has been initiated on [T:domain] via Contolm. This is a priority 1 notification of information, should you need to check it manually.  
+STORAGE*		| ARRAY*| *				| *	| xio*	| *	| [T:itMgmtLayer]
+SuperStore*             | *     | *                             | *     | *     | *     | [T:objectClass] [T:object] for [T:domain] errored with [T:itMgmtLayer]
+#####################
+## SAN
+#####################
+#*			| *	| *					| *	| *	| snmptrapd.4| [T:object] [T:domain] ([T:domainClass]) [T:parameter] has error code [T:parameterValue] [T:originKey]
+SAN			| *	| *					| *	| *	| snmptrapd.1031| [T:itMgmtLayer] on [T:domain] at [T:object]
+
+# -------------------------------------------------------------------------------------------------------------------------##
+# objectClass 		 | object | parameter	 	| parameterValue | domain |  originEventClass |  eventText #
+###========================================================================================================================##
+
+#####################
+## TLOG 
+#####################
+NOCLOSE*		| *	| *					| *	| *	| snmptrapd.1031| Store [T:domain] is missing a TLOG Close String
+EMETRICKLE*		| LastTrans*	| *				| *	| *	| snmptrapd.1031| Store [T:domain] is has been disconnected from EME Trickle since [T:parameterValue]
+EMETRICKLE*		| MULTISTORE*	| *				| *	| *	| snmptrapd.1031| EME [T:parameterValue] stores have not trickeled in [T:parameter]
+ROUTERTRICKLE*		| LastTrans*	| *				| *	| *	| snmptrapd.1031| Store [T:domain] is has not trickled TLOGs to the TLOG router since [T:parameterValue]
+ROUTERTRICKLE*		| MULTISTORE*	| *				| *	| *	| snmptrapd.1031| TLOG Router [T:parameterValue] stores have not trickeled in [T:parameter]
+TLOGDW*		| LastTrans*	| *				| *	| *	| snmptrapd.1031| Store [T:domain] is has not trickled TLOGs to the Data Warehouse since [T:parameterValue]
+TLOGDW*		| MULTISTORE*	| *				| *	| *	| snmptrapd.1031| TLOG Data Warehouse [T:parameterValue] stores have not trickeled in [T:parameter]
+
+#####################
+## MATRA
+#####################
+MATRA*			| *	| *					| *	| *	| snmptrapd.1031| Store [T:domain] has not trickeled since [T:parameterValue]
+MATRA*			| MULTISTORE*	| *				| *	| *	| snmptrapd.1031| MATRA [T:parameterValue] stores have not trickeled in [T:parameter]
+
+#####################
+## KRONOS
+#####################
+TIMECLOCK*		| CLOCKDOWN	| COMM*				| *	| *	| snmptrapd.1031| [T:domain] Time Clock has not communicated.
+TIMECLOCK*		| CLOCKDOWN	| COMM*				| *	| MASSIVE| snmptrapd.1031| [T:domain] Time Clock issues detected not communicating.
+
+# POS monitoring
+Disk			| *	 | *			| *		| POSLOG | *	| Store [T:domainClass] controller [T:object] has reported a fixed disk adapter error. Right Answers Solution: http://taprightweb1/portal/app/portlets/results/viewsolution.jsp?solutionid=041210214370763&isguest=true&interface=sa
+Temp			| *	 | *			| *		| POSLOG | *	| Store [T:domainClass] [T:object] controller temperature is alerting. Link to right answers: http://taprightweb1/portal/app/portlets/results/viewsolution.jsp?solutionid=041131215521409&isguest=true&interface=sa
+Keyboard		| *	 | *			| *		| POSLOG | *	| Register [T:object] at Store [T:domainClass] has alerted [T:objectClass] error.
+Program			| *	 | *			| *		| POSLOG | *	| Register [T:object] at Store [T:domainClass] has alerted [T:objectClass] error. 
+SamAbend		| * 	 | *			| *		| POSLOG | *	| Program SAMSPRTL (Sales and Labor) has ended abnormally on controller [T:object], store number [T:domainClass] http://taprightweb1/portal/app/portlets/results/viewsolution.jsp?solutionid=041202310261650&isguest=true&interface=sa
+Backup			| *	 | *			| *		| POSLOG | *	| Store number [T:domainClass], controller [T:object], has reported a failed backup. http://taprightweb1/portal/app/portlets/results/viewsolution.jsp?solutionid=041106718593112&isguest=true&interface=sa
+Checkout		| *	 | *			| *		| POSLOG | *	| Checkout Support has ended abnormally on controller [T:object] in store [T:domainClass]. http://taprightweb1/portal/app/portlets/results/viewsolution.jsp?solutionid=041202312163159&isguest=true&interface=sa
+ZvrAbend                | *      | *                    | *             | POSLOG | *    | Zvr has abended in store [T:domainClass]
+
+#=========================================================================================================
+# Store tape backup
+# objectClass 		 | object | parameter	 	| parameterValue | domain |  originEventClass |  eventText #
+#=========================================================================================================
+#MKSYSB			 | *	 | *			| *		| ISP*	  | *		| WARNING:  THE O/S BACKUP RAN BEFORE THE CAO AFTER PROCESSING BACKUP WAS COMPLETED IN THIS STORE ISP [T:domain]. THE OS BACKUP MAY NOT CONTAIN THE CURRENT CAO AFTER PROCESSING BACKUP. 
+ISP_PERF		 | CPU	 | IO			| *		| *	  | *		| Store [T:origin] is alerting high CPU. Please click this link and follow instructions http://taprightweb1/portal/app/portlets/results/viewsolution.jsp?solutionid=041131614221623&isguest=true&interface=sa
+MKSYSB			 | *	 | *			| *		| ISP*	  | *		| WARNING: The O/S backup ran before the CAO after processing backup was completed on [T:domain]. The O/S backup may not contain the current CAO after processing backup. 
+ISPAdhoc		 | *	 | *			| *		| *	  | *		| [T:parameterValue] consecutive backup failures detected for [T:object] ([T:parameter]). For more info click this link http://m001ap01/adhoc-cgi/backup_history.sh?site=[T:parameter]
+ISP			 | TAPE	 | rtc				| *		 | *	  | *	| Check the email regarding Pathmark store tape errors. This link provides documentation on how to handle. '\\monf08494hd\client_share\HD_Documentation\Store Doc\M - P\Pathmark\Pathmark Tape Drive\Pathmark Backup Tape errors, how to handle.doc' 
+ISP			 | TAPE	 | 11				| *		 | *	  | *	| Store [T:domain] backup tape is indicating error 11. There is no tape in the store server drive, or the tape has popped out. Please contact the store to check and correct. '\\monf08494hd\client_share\HD_Documentation\Store Doc\M - P\Pathmark\Pathmark Tape Drive\Pathmark Backup Tape errors, how to handle.doc' 
+ISP			 | TAPE  | 12				| *		 | *	  | *	| Store [T:domain] backup tape is showing error 12. Backup Tape was not changed or unscheduled manual backup was run on tape. Contact the store to change the tape. '\\monf08494hd\client_share\HD_Documentation\Store Doc\M - P\Pathmark\Pathmark Tape Drive\Pathmark Backup Tape errors, how to handle.doc'
+ISP			 | TAPE  | 13				| *		 | *	  | *	| Store [T:domain] has an producing an error 13. Weekly SYSBAK or APPSVG tape still in drive or the tape is new.  Please contact the store and correct if necessary. '\\monf08494hd\client_share\HD_Documentation\Store Doc\M - P\Pathmark\Pathmark Tape Drive\Pathmark Backup Tape errors, how to handle.doc'
+*			 | BACKUP  | *				| *		 | ISP*	  | *	| [T:itMgmtLayer] Helpdesk, follow link for problem/resolution steps: http://controlm/bip/redirect.php?goto=IVR
+ISP*			 | SYSLOAD*  | *			| *		 | ISP*	  | *	| [T:itMgmtLayer] http://controlm/bip/doc/isp_LoadAvg.doc
+BackupLog		 | CAO		| *			| *		 | ISP	  | *	| Pathmark CAO tape backup log results can be found at this link http://controlm/bip/pcb.php . Helpdesk should use quick code PATHMARK PRIORITY 1 STORE BACKUP REPORT to log and resolve CAO backup failures for each store listed on webpage. 
+BackupLog		 | Phar		| *			| *		 | ISP	  | *	| Pathmark Pharmacy tape backup log results, at this link http://controlm/bip/ppb.php . Procedures found here, http://controlm/bip/redirect.php?goto=pharmacyBackupdoc
+TBSTAT			 | *		| *			| 0		 | *	  | *	| RDBF database on [T:domain] has zero pages of free space.
+TBSTAT			 | *		| *			| *		 | *	  | *	| RDBF database on [T:domain] has less than 100 pages of free space.
+BACKFAIL               	 | *     | *             | *              | ISP*  | snmptrapd.1031 | The backup to tape on [T:domain]([T:origin]) has failed due to: [T:object]
+ISP*                     | TPSDOWN      | *             | *              | ISP*  | snmptrapd.1031 | TPS is down in [T:domain] ([T:origin]). Please attempt to start manually. Escalate to AIX Stores if it still will not start.
+ISP*                     | TPSBOUNC*    | *             | *              | ISP*  | snmptrapd.1031 | TPS is down in [T:domain] ([T:origin]), automatic restart is being attempted. This ticket is informational and will be autoclosed.
+#=========================================================================================================
+# Custom KM's
+#=========================================================================================================
+BMC_PING_INST		 |  *	 |  HostStatus 			 |  *	 |  *	 |  *	 |  [T:object]: host can not be pinged.
+BMC_PING_INST	         |  *	 |  AgentStatus 		 |  *	 |  *	 |  *	 |  [T:object]: PatrolAgent is down.
+
+#=========================================================================================================
+# Networker KM
+#=========================================================================================================
+#NSR_GROUP		 |  *	 |  NSRGroupFailed  		 |  *	 |  *	 |  *	 |  Networker Group [T:object] has [T:parameterValue] failed save sets 
+#NSR_SERVER		 |  *	 |  NSRMsgLogSize  		 |  *	 |  *	 |  *	 |  Networker Message Log Size is [T:parameterValue] MBytes
+#NSR_SERVER		 |  *	 |  NSRDaemLogSize  		 |  *	 |  *	 |  *	 |  Networker Daemon Message Log Size is [T:parameterValue] MBytes
+#NSR_SERVER		 |  *	 |  NSRServerStatus  		 |  *	 |  *	 |  *	 |  Networker - one of the Networker Server processes is down
+#NSR_SERVER		 |  *	 |  NSRVolRequired  		 |  *	 |  *	 |  *	 |  Networker - [T:parameterValue] volumes required.
+
+
+#=========================================================================================================
+# TSM
+# objectClass 		 | object | parameter	 	| parameterValue | domain |  originEventClass |  eventText #
+#=========================================================================================================
+TSMDRIVE	 	|  *	|  *				|  OFFLINE| * 	 |  *	 | TSM [T:object] [T:parameterValue]. http://controlm/bip/tsmdrives.php?a=d&d=[T:object]	
+TSMDRIVEERROR	 	|  *	|  *				|  *	 |  * 	 |  *	 | TSM Drive [T:domain] [T:parameterValue] http://controlm/bip/te.php?s=[T:object]	
+TSMDRIVE	 	|  *	|  *				|  *	 |  * 	 |  *	 | TSM [T:object] [T:parameterValue]. http://controlm/bip/tsmdrives.php	
+LOWCOUNT	 	|  LIB* |  *				|  *	 |  *	 |  *	 | Tape Count Low. (click link), http://controlm/bip/TSM/scrcnt.html
+LIBRARY		 	|  TAPE* | MAINTENANCE*			|  *	 |  *	 |  *	 | TSM LTO4 Tape Library needs maintenance.
+*		 	|  * 	|  *				|  *	 |  3584*	 |  snmptrapd.2*	 | [T:parameterValue]
+
+
+#=========================================================================================================
+# objectClass 		 | object | parameter	 	| parameterValue | domain |  originEventClass |  eventText #
+#==========================================================================================================
+appv			 | *	 | monu*		| *		 | user	  | snmptrapd.1031	| User [T:itMgmtLayer] has been approved for Control-M. Have the user added to [T:object] group in AppV and scheduled for installation on [T:parameter]. 
+GTW			 | opens*|  status			| hanging	 | *     | snmptrapd.1031 | Potential Gateway issue, check the link. https://scweb.aptea.com/jd.php?j=UCMMNCGTWY
+CTM_GATEWAY		 | *	 |  *				| *	 	 | *     | snmptrapd.1031 | Control-m Gateway Alert:  [T:itMgmtLayer]
+ BAT			 | PHONE |  *				|  *	 |  OPS  | *	 | Please contact [T:parameter] from Operations at 201-571-4090 as soon as possible. Thank you.
+ *			 |  *	 |  TOOMANY*			|  *	 |  *    |  *	 |  CTM "Status Directory" Alert. Contact "Control-M Service Support". (no link)
+ CTM_CTMA		 |  *	 |  *				|  *	 |  *	 |  *	 |  Control-M Agent Process on [T:object] is down
+ CTM_CTMS		 |  *	 |  CTMCTMSStatus		|  *	 |  *	 |  *	 |  Control-M Server is down
+ CTM_CTMS		 |  *	 |  *				|  *	 |  *	 |  *	 |  Control-M Database Server is down
+ CTM_CTMS_PROCESS	 |  *	 |  *				|  *	 |  *	 |  *	 |  Control-M [T:object] is down
+ CTM_ECS_Orbix		 |  *	 |  *				|  *	 |  *	 |  *	 |  Control-M [T:object] is down
+ CTM_ECS_GATEWAY	 |  *	 |  *				|  *	 |  *	 |  *	 |  Control-M [T:object] gateway is down
+ CTM_ECS_GCS 		 |  *	 |  *				|  *	 |  *	 |  *	 |  Control-M [T:object] is down
+ CTM_ECS_DBSERVER	 |  *	 |  *				|  *	 |  *	 |  *	 |  Control-M [T:object] is down
+ CTM_ECS_GUIServer	 |  *	 |  *				|  *	 |  *	 |  *	 |  Control-M [T:object] is down
+ CTM_ECS_ALERTS		 |  *	 |  *				|  *	 |  *	 |  *	 | *
+ CTM_CTMS_ORDER		 | *	 |  *				|  *	 |  *	 |  *	 | Batch job [T:object] has failed, https://scweb.aptea.com/jd.php?j=[T:object]
+ *	 		 | *	 |  BLUE			|  *	 |  *	 |  *	 | [T:domain] is not responding to Control-M ping. Escalate to Control-M Service Support.
+ *	 		 | *	 |  WAS_BLUE			|  *	 |  *	 |  *	 | [T:domain] was not responding to Control-M ping and is now available.
+ *	 		 | *	 |  BOX				|  *	 |  *	 |  *	 | [T:domain] is not available. Control-M Agent may need to be checked
+ CTM_CTMS_ORDER		 | *	 |  *				|  13*	 |  *	 |  *	 | Batch Job [T:object] is in BLUE status, https://scweb.aptea.com/jd.php?j=[T:object]
+ CTM_CTMS_ORDER		 | *	 |  *				|  7*	 |  *	 |  *	 | Job [T:object] logging DISAPPEARED, https://scweb.aptea.com/jd.php?j=[T:object]
+ CTM_CTMS_ORDER*	 | *	 |  LATE			| *	 |  *	 |  *  	 | Batch job [T:object] has not run on time, https://scweb.aptea.com/jd.php?j=[T:object]
+ CTM_CTMS_ORDER*	 | *	 |  EXEC			| *	 |  *	 |  *  	 | Batch job [T:object] is running long, https://scweb.aptea.com/jd.php?j=[T:object]
+ CTM_CTMS_ORDER*	 | *	 |  SUB				| *	 |  *	 |  *  	 | Batch job [T:object] not started by scheduled time, https://scweb.aptea.com/jd.php?j=[T:object]
+ CTM_CTMS_ORDER*	 | *	 |  NOTOK 			| *	 |  *	 |  *  	 | Batch job [T:object] has failed, https://scweb.aptea.com/jd.php?j=[T:object]
+ CTM_CTMS_ORDER*	 | *	 |  BYTE			| *	 |  *	 |  *  	 | Batch job [T:object] has '0' byte file. https://scweb.aptea.com/jd.php?j=[T:object]
+ CTM_CTMS_ORDER*	 | WCSDBDNT*	 |  EXEC		| *	 |  *	 |  *  	 | Batch job [T:object] for PA WIC is running long, https://scweb.aptea.com/jd.php?j=[T:object]
+ *			 | *	 |  LATE			| *	 |  *	 |  *  	 | Batch job [T:object] has not run on time, https://scweb.aptea.com/jd.php?j=[T:object]
+ *			 | *	 |  EXEC			| *	 |  *	 |  *  	 | Batch job [T:object] is running long, https://scweb.aptea.com/jd.php?j=[T:object]
+ *			 | *	 |  SUB				| *	 |  *	 |  *  	 | Batch job [T:object] not started by scheduled time, https://scweb.aptea.com/jd.php?j=[T:object]
+ *			 | *	 |  NOTOK 			| *	 |  *	 |  *  	 | Batch job [T:object] has failed, https://scweb.aptea.com/jd.php?j=[T:object]
+ *			 | *	 |  BYTE			| *	 |  *	 |  *  	 | Batch job [T:object] has '0' byte file. https://scweb.aptea.com/jd.php?j=[T:object]
+ *			 | WCSDBDNT*	 |  EXEC		| *	 |  *	 |  *  	 | Batch job [T:object] for PA WIC is running long, https://scweb.aptea.com/jd.php?j=[T:object]
+ *			 | UCMRPD7SCR* |  *				| *	 | UCMRPD7SCR |  *	 | Condition(s) will not be posted for a job. Check http://controlm/bip/7scr.php   
+NDS_CTMA		 |  *	 |  NDSCtmaStatus  		 |  *	 |  *	 |  *	 |  Control-M Agent Process is down
+NDS_CTMS		 |  *	 |  NDSCTMSDBStatus  		 |  *	 |  *	 |  *	 |  Control-M Database Server is down
+NDS_CTMS		 |  *	 |  NDSCTMSStatus  		 |  *	 |  *	 |  *	 |  Control-M Server is down
+NDS_CTMS_PROCESS	 |  *	 |  NDSProcStatus  		 |  *	 |  *	 |  *	 |  Control-M Server process [T:object] is down
+NDS_ECS_ALERTS		 |  *	 |  NDSNumAlerts	  	 |  *	 |  *	 |  *	 |  Control-M - Number of Alerts is [T:parameterValue]
+NDS_ECS_DDSERVER	 |  *	 |  NDSEcsDbStatus  		 |  *	 |  *	 |  *	 |  Control-M/CS - Database Server is down
+NDS_ECS_GCS		 |  *	 |  NDSGcsStatus		 |  *	 |  *	 |  *	 |  Control-M  - Global Condition Server is down
+
+#=========================================================================================================
+##  MQ ENHANCEMENTS
+# objectClass 		 | object | parameter	 	| parameterValue | domain |  originEventClass |  eventText
+#=========================================================================================================
+
+AMQ*			|  *	 |  *				|  *	 |  *	 |  *	 | Contact MQ group, Patrol alert on [T:object] for [T:parameter] 
+Monitoring		| fsSize |  *				|  *	 |  MQ*	 |  *	 | File [T:itMgmtLayer] found sitting in [T:parameter] for more then 2hrs on the MQ production hub. 
+ *			| WBI.EICS2*	 |  *			|  *	 |  *	 |  *	 | Patrol is currently alarming on [T:object] for [T:parameter]
+
+
+#=========================================================================================================
+# QFLEX
+#=========================================================================================================
+
+*			|  *	 |  *Queue Depth*	|  *	 |  *	 |  *	 | [T:itMgmtLayer] Queue Depth is [T:parameterValue].
+Queue Depth*		|  *	 |  *		|  *	 |  MONEDIP1*	 |  *	 | [T:objectClass] Queue Depth Exceded
+
+#=========================================================================================================
+##  TIVMON ENHANCEMENTS
+# objectClass            | object | parameter           | parameterValue | domain |  originEventClass |  eventText
+#=========================================================================================================
+TIVMON*                  | * | *                       | *         | *      | *                 | [T:itMgmtLayer]
+
+#=========================================================================================================
+# Unix KM
+#=========================================================================================================
+CPU			 |  *	 |  CPUCpuUtil 			 |  *	 |  *	 |  *	 |  CPU Utilization is at [T:parameterValue]% on [T:domain]
+CPU			 |  *	 |  CPUUserTime 		 |  *	 |  *	 |  *	 |  User CPU Utilization is at [T:parameterValue]% on [T:domain]
+CPU			 |  *	 |  CPUSysTime 			 |  *	 |  *	 |  *	 |  System CPU Utilization is at [T:parameterValue]% on [T:domain]
+CPU			 |  *	 |  CPUWio 			 |  *	 |  *	 |  *	 |  CPU IO wait time is [T:parameterValue]% on [T:domain]
+DCM			 |  *	 |  DCM_Alert 			 |  *	 |  *	 |  *	 |  PATROL UNIX monitoring is stopped on [T:domain]
+FILESYSTEM		 |  *	 |  FSCapacity 			 |  *	 |  *	 |  *	 |  Filesystem [T:object] is [T:parameterValue] full on [T:domain]
+FILESYSTEM		 |  *	 |  FSInodesUsedPercent 	 |  *	 |  *	 |  *	 |  [T:object] Inodes are [T:parameterValue]% utilised on [T:domain]
+KERNEL			 |  *	 |  KERFileUsedPercent 		 |  *	 |  *	 |  *	 |  Kernel file slots are [T:parameterValue]% utlilized on [T:domain]
+KERNEL			 |  *	 |  KERGNodeUsedPercent 	 |  *	 |  *	 |  *	 |  Kernel Gnodes are [T:parameterValue]% utlilized on [T:domain]
+KERNEL			 |  *	 |  KERINodeUsedPercent 	 |  *	 |  *	 |  *	 |  Kernel Inodes are [T:parameterValue]% utlilized on [T:domain]
+KERNEL			 |  *	 |  KERLockUsedPercent 		 |  *	 |  *	 |  *	 |  Kernel locks are [T:parameterValue]% utlilized on [T:domain]
+KERNEL			 |  *	 |  KERProcUsedPercent 		 |  *	 |  *	 |  *	 |  Kernel processes are [T:parameterValue]% utlilized on [T:domain]
+KERNEL			 |  *	 |  KERSemOps 			 |  *	 |  *	 |  *	 |  [T:parameterValue] semephores used on [T:domain]
+LOGTEMP			 |  *	 |  LOGErrLvl 			 |  *	 |  *	 |  *	 |  Error string detected in [T:object] log file on [T:domain]
+MEMORY			 |  *	 |  MEMFreeMem 			 |  *	 |  *	 |  *	 |  [T:parameterValue] KB of available memory remains on [T:domain]
+MEMORY			 |  *	 |  MEMWCache 			 |  *	 |  *	 |  *	 |  [T:parameterValue]% write cache hit ratio on [T:domain]
+MEMORY			 |  *	 |  MEMPageOut 			 |  *	 |  *	 |  *	 |  [T:parameterValue]/sec memory pages swapped out on [T:domain]
+NFS			 |  *	 |  NFSBadCall 			 |  *	 |  *	 |  *	 |  [T:parameterValue]% NFS client calls failed on [T:domain]
+NFS			 |  *	 |  NFSCRpcBadCall 		 |  *	 |  *	 |  *	 |  [T:parameterValue]% NFS RPC client calls failed on [T:domain]
+NFS			 |  *	 |  NFSCRpcTimeOut 		 |  *	 |  *	 |  *	 |  [T:parameterValue]% NFS RPC client calls timed out on [T:domain]
+NFS			 |  *	 |  NFSSRpcBadCall 		 |  *	 |  *	 |  *	 |  [T:parameterValue]% NFS RPC server requests failed on [T:domain]
+PATROLAGENT		 |  *	 |  PAHistoryIndexSize 		 |  *	 |  *	 |  *	 |  The PATROL index file is [T:parameterValue] Bytes on [T:domain]
+PATROLAGENT		 |  *	 |  PATotalErrors 		 |  *	 |  *	 |  *	 |  [T:parameterValue] total errors in PATROL error log on [T:domain]
+PATROLAGENT		 |  *	 |  PAWorkRateExecsMin 		 |  *	 |  *	 |  0:11 |  PATROL Agent execs per minute is [T:parameterValue] has failed on [T:domain]
+SWAP			 |  *	 |  SWPTotSwapUsedPercent 	 |  *	 |  *	 |  *	 |  [T:parameterValue]% total swap space utilised on [T:domain]
+
+
+#=========================================================================================================
+# NT KM
+#=========================================================================================================
+NT_CACHE		 |  *	 |  CACcachCopyReadHitsPercent	 |  *	 |  *	 |  *	 |  [T:parameterValue]% cache copy read hits on [T:domain]
+NT_COMPOSITES		 |  *	 |  CPARMResult 		 |  *	 |  *	 |  *	 |  [T:parameterValue] Composite Parameter on [T:domain]
+NT_CPU			 |  *	 |  CPUprcrProcessorTimePercent	 |  *	 |  *	 |  *	 |  CPU Utilization is at [T:parameterValue]% on [T:domain]
+NT_CPU			 |  *	 |  CPUprcrUserTimePercent 	 |  *	 |  *	 |  *	 |  User CPU Utilization is at [T:parameterValue]% on [T:domain]
+NT_CPU			 |  *	 |  CPUprcrPrivTimePercent 	 |  *	 |  *	 |  *	 |  System CPU Utilization is at [T:parameterValue]% on [T:domain]
+NT_EVINSTS		 |  *	 |  ELMError 			 |  *	 |  *	 |  *	 |  [T:parameterValue] 'Errors' in the NT event log ([T:object]) on [T:domain]
+NT_EVINSTS		 |  *	 |  ELMWarning 			 |  *	 |  *	 |  *	 |  [T:parameterValue] 'Warnings' in the NT event log ([T:object]) on [T:domain]
+NT_EVINSTS		 |  *	 |  ELMStatus 			 |  *	 |  *	 |  *	 |  [T:parameterValue] 'Warnings' in the NT event log ([T:object]) on [T:domain]
+NT_EVINSTS		 |  *	 |  ELMFailureAudit 		 |  *	 |  *	 |  *	 |  [T:parameterValue] audit failures in NT event log ([T:object]) on [T:domain]
+NT_EVLOGFILES		 |  *	 |  ELMEvFileFreeSpacePercent 	 |  *	 |  *	 |  *	 |  [T:parameterValue]% NT event log space remains ([T:object]) on [T:domain]
+NT_LOGICAL_DISKS	 |  *	 |  LDldFreeSpacePercent 	 |  *	 |  *	 |  *	 |  Drive [T:object] has [T:parameterValue]% space left on [T:domain]
+PATROL_NT		 |  *	 |  PAWorkRateExecsMin	 	 |  *	 |  *	 |  0:11 |  PATROL Agent execs per minute is [T:parameterValue] on [T:domain]
+NT_PHYSICAL_DISKS	 |  *	 |  PDpdDiskTimePercent 	 |  *	 |  *	 |  *	 |  Disk [T:object] is [T:parameterValue]% busy on [T:domain]
+NT_PHYSICAL_DISKS	 |  *	 |  PDpdDiskQueueLength 	 |  *	 |  *	 |  *	 |  Disk [T:object] queue is [T:parameterValue] long on [T:domain]
+NT_MEMORY		 |  *	 |  MEMmemPagesPerSecond 	 |  *	 |  *	 |  *	 |  [T:parameterValue] memory pages per second on [T:domain]
+NT_MEMORY		 |  *	 |  MEMmemAvailableBytes 	 |  *	 |  *	 |  *	 |  Available  memory on [T:domain] is below threshold.
+NT_PAGEFILE		 |  *	 |  PAGEpgUsagePercent 		 |  *	 |  *	 |  *	 |  Page file is [T:parameterValue]% used on [T:domain]
+NT_PROCESS		 |  *	 |  PROCStatus 			 |  *	 |  *	 |  *	 |  Process [T:object]  is down on [T:domain]
+NT_PROCESS		 |  *	 |  PROCDown 			 |  *	 |  *	 |  *	 |  Process [T:object] is down on [T:domain]
+NT_PROCESS		 |  *	 |  PROCRunning 		 |  *	 |  *	 |  *	 |  Process [T:object] is running on [T:domain]
+NT_REGISTRY		 |  *	 |  RegQuotaInUsePercent 	 |  *	 |  *	 |  *	 |  The registry is [T:parameterValue]% of quota on [T:domain]
+NT_SERVICES		 |  *	 |  SvcPaused 			 |  *	 |  *	 |  *	 |  Service [T:object] paused on [T:domain]
+NT_SERVICES		 |  *	 |  SvcPausePending 		 |  *	 |  *	 |  *	 |  Service [T:object] pause pending on [T:domain]
+NT_SERVICES		 |  *	 |  SvcStartPending 		 |  *	 |  *	 |  *	 |  Service [T:object] start pending on [T:domain]
+NT_SERVICES		 |  *	 |  SvcDown 			 |  *	 |  *	 |  *	 |  Service [T:object] down on [T:domain]
+NT_SERVICES		 |  *	 |  SvcRunning 			 |  *	 |  *	 |  *	 |  Service [T:object] running on [T:domain]
+NT_SERVICES		 |  *	 |  SvcStopPending 		 |  *	 |  *	 |  *	 |  Service [T:object] stop pending on [T:domain]
+NT_SERVICES		 |  *	 |  SvcStatus 			 |  *	 |  *	 |  *	 |  Service [T:object] stop pending on [T:domain]
+NT_SERVICES		 |  *	 |  ServiceStatus 		 |  *	 |  *	 |  *	 |  Service [T:object] is down on [T:domain]
+NT_SYSTEM		 |  *	 |  SYSsysProcessorQueueLength	 |  *	 |  *	 |  *	 |  System Processor Queue Length is [T:parameterValue] on [T:domain]
+NT_SYSTEM		 |  *	 |  SYSsysContextSwitchesPerSec	 |  *	 |  *	 |  *	 |  System Context Switch Rate is [T:parameterValue] switches per second on [T:domain]
+
+
+#=========================================================================================================
+# ISDN 
+#=========================================================================================================
+# objectClass 	 	| object				| parameter | parameterValue| domain 	| originEventClass 	|  eventText	 #
+Network*			|  Interface Oper*		| BRI0*:0		| *		| *		| snmptrapd.1031	| [T:originKey] ISDN Circuit [T:domain] is up, http://controlm/bip/nd.php?ip=ISDN_UP
+#Network*			|  Interface Oper*		| *		| *		| 10.19.*.*		| snmptrapd.1031	| [T:originKey] ISDN Circuit [T:domain] is up, http://controlm/bip/nd.php?ip=ISDN_UP
+#Network*			|  Interface Oper*		| *		| *		| 147.*.*.2		| snmptrapd.1031	| [T:originKey] ISDN Circuit [T:domain] is up, http://controlm/bip/nd.php?ip=ISDN_UP
+#Network*			|  Interface Oper*		| *		| *		| 10.97.254.94		| snmptrapd.1031	| [T:originKey] ISDN Circuit [T:domain] is up, http://controlm/bip/nd.php?ip=ISDN_UP
+Network*			|  Interface Oper*		| *Physical	| *		| *			| snmptrapd.1031	| [T:originKey] ISDN Physical layer [T:domain] is down, http://controlm/bip/nd.php?ip=ISDN_DOWN
+PEMISDN*		|  ISDN*				| *		| *		| *			| snmptrapd.1031	| ISDN Circuit [T:domain] has been up for 2 hours, http://controlm/bip/nd.php?ip=ISDN_UP
+
+#================================================================================================================================
+# objectClass 		 | object		 | parameter| parameterValue | domain |  originEventClass |  eventText
+#================================================================================================================================
+# Portal 
+#=========================================================================================================
+SMTP Server		| *			 |*		|  *		| *		|snmptrapd.1031	| Internet Mail Server [T:domain] is down.
+*			| Available Space*	 |*		|  *		| *		|snmptrapd.1031	| [T:domain] Drive [T:parameter] Low Disk Space
+*			| *Memory*      	 |*		|  *		| *		|snmptrapd.1031	| Low Memory on [T:domain]
+Process*		| Process Up Time* 	 |*		|  *		| monkron7*	|snmptrapd.1031	| Kronos Reporting Process hung on [T:domain]
+Standalone*             | Availability*          |*             |  *            | monkron7*     |snmptrapd.1031 | Jboss WFC Application is unavailable
+*			| *Process Physical Memory Usage*  |*	|  *		| *		|snmptrapd.1031	| Process Physical Memory Usage is High on [T:domain]
+*			| Process Status*  	 |*		|  *		| *		|snmptrapd.1031	| [T:itMgmtLayer] is down on [T:domain]
+*			| Interface Oper*  	 |*		|  *		| *		|snmptrapd.1031	| Interface State is down on [T:domain]
+*			| Active Thread Count* 	 |*		|  *		| *		|snmptrapd.1031	| Active Thread Count is below threshold on [T:domain]
+*			| Process ID Changed* 	 |*		|  *		| *		|snmptrapd.1031	| RSM Processed ID Changes on [T:domain]
+*			| Application Collection Status |*	|  *		| *		|snmptrapd.1031	| [T:objectClass] Application Collector on [T:domain] is down
+Network Service Port	| Port Responding        |*	        |  *		| *		|snmptrapd.1031	| [T:parameter] is not responding on [T:domain]
+*			| Remote element is up*	 |*		|  *		| *		|snmptrapd.1031	| [T:domain] is not responding to ping. 
+*			| Ping Resp*		 |*		|  *		| *		|snmptrapd.1031 | [T:domain] has a slow ping response time.
+*			| Ping Resp*		 |*		|  *		| 10.*.164	|snmptrapd.1031 | [T:domain] has a slow ping response time. http://controlm/bip/nd.php?ip=[T:domain]
+Windows Service*	| Status		 |* 		|  *		| *		|snmptrapd.1031 | [T:parameter] Service is down on [T:domain] 
+#*			| Status		 |*		|  *		| *		|snmptrapd.1031 | Portal lost connection to [T:domain] 
+Process			| Status		 |*		|  *		| *		|snmptrapd.1031 | Process [T:parameter] is down [T:domain]
+*			| Log Con*		 |*		|  *		| *		|snmptrapd.1031 | Error [T:parameter] found on [T:domain].
+*			| Pagefile Fault Rate	 |*		|  *		| *		|snmptrapd.1031 | Page Fault Rate is above 6000 on [T:domain]
+*			| *CPU Usage		 |*		|  *		| *		|snmptrapd.1031 | CPU Utilization Threshold Exceeded on [T:domain]
+*			| *clock skew		 |*		|  *		| *		|snmptrapd.1031 | clock skew Threshold Exceeded on [T:domain]
+*			| File System Percent Ut* |*		|  *		| *		|snmptrapd.1031 | FileSystem [T:parameter] on [T:domain] is [T:parameterValue] utilized
+*			| File System Percent Av* |*		|  *		| *		|snmptrapd.1031 | FileSystem [T:parameter] on [T:domain] has [T:parameterValue] Available  
+Swap*			| Swap Space Percent Available* |*	|  *		| *		|snmptrapd.1031 | Swap Space on [T:domain] has [T:parameterValue] Percent Available  
+
+
+#========================================================================================================================
+# Portal Hardware Monitoring
+#========================================================================================================================
+
+CPU*			| Status*		 |*		|  *		| *		|snmptrapd.1031 | [T:parameter] Status on [T:domain] is down.
+Memory*			| Status*		 |*		|  *		| *		|snmptrapd.1031 | [T:parameter] Status on [T:domain] is down.
+Network Interface*	| Status*		 |*		|  *		| *		|snmptrapd.1031 | [T:parameter] Status on [T:domain] is down.
+
+
+*			|  *	  		 |*		|  *		| *		|snmptrapd.1031	| [T:domain] [T:domain] [T:originSeverity] [T:parameter] [T:object]		
+
+
+#=========================================================================================================================##
+# objectClass 		 | object		 | parameter| parameterValue | domain |  originEventClass |  eventText
+#=========================================================================================================
+# IBM Director
+#=========================================================================================================
+*			| *			| *		| *		| *  	|snmptrapd.2	| [T:domain] [T:originClass]
+
+#=========================================================================================================
+# Dell IT Assistant 
+#=========================================================================================================
+*			| *			| *		| *		| DELL_ITA*  	| *	| [T:parameterValue] on [T:object]
+*			| *			| *		| System is down*	| DELL_ITA*  	| *	| [T:parameterValue]
+
+#=========================================================================================================
+# CICS
+#=========================================================================================================
+*			| *			| EFT STORE*		| *		| CICS*  	|snmptrapd.1031	| [T:domain] [T:parameter] ([T:objectClass]) is alerting., http://controlm/bip/nd.php?ip=[T:domain]STORE
+#*			| *			| *		| *		| CICSHUNG*  	|snmptrapd.1031	| Testing 1.2.3
+*			| *			| *		| *		| CICSHUNG*  	|snmptrapd.1031	| CICSEFT locked all stores have been recycled. Check Store Status. 
+*			| *			| *		| *		| CICS*  	|snmptrapd.1031	| [T:domain] [T:object] ([T:objectClass]) is alerting., http://controlm/bip/nd.php?ip=[T:domain]
+*			| *			| *		| *		| SCIC5RUN*  	|snmptrapd.1031	| CICS Massive Terminal Errors. Check NETVIEW for details!
+CICS*			| CONNECT*		| UNAVAILABLE*	| *		| *  	|snmptrapd.1031	| Unable to connect to CICS! Please validate and escalate as necessary.
+#=========================================================================================================
+# VSAT
+#=========================================================================================================
+*                       | Remote element is up*                 | *             | *             | 10*.7           |snmptrapd.1031 | VSAT [T:domain] is down., http://controlm/bip/nd.php?ip=[T:domain]
+*rtfor                       | Remote element is up*                 | *             | *             | 10*.133         |snmptrapd.1031 | VSAT [T:domain] is down., http://controlm/bip/nd.php?ip=[T:domain]
+*                       | Remote element is up*                 | *             | *             | 172.20.170.*    |snmptrapd.1031 | DSL Tunnel [T:originKey] is down., http://controlm/bip/nd.php?ip=[T:domain]
+*                       | Remote element is up*                 | *             | *             | 172.23.170.*    |snmptrapd.1031 | DSL Tunnel [T:originKey] is down., http://controlm/bip/nd.php?ip=[T:domain]
+*                       | Remote element is up*                 | *             | *             | 172.20.224.*    |snmptrapd.1031 | DSL Tunnel [T:originKey] is down., http://controlm/bip/nd.php?ip=[T:domain]
+*                       | Remote element is up*                 | *             | *             | 172.23.224.*    |snmptrapd.1031 | DSL Tunnel [T:originKey] is down., http://controlm/bip/nd.php?ip=[T:domain]
+
+# objectClass 		 | object		 | parameter| parameterValue | domain |  originEventClass |  eventText
+#========================================================================================================
+# Avtech Temperature Sensors 
+#=========================================================================================================
+*			| *Temp*Sensor*			| *		| *		| 172.27.11.76*	|snmptrapd.20916	| HelpDesk Switch Room Temperature is High ([T:parameterValue]) http://controlm/bip/redirect.php?goto=opsenvdoc
+*			| *Water Sensor*			| *		| *		| 172.27.11.76*	|snmptrapd.20916	| HelpDesk Switch Room is getting wet. http://controlm/bip/redirect.php?goto=opsenvdoc
+*			| *Power Sensor*			| *		| *		| 172.27.11.76*	|snmptrapd.20916	| HelpDesk Switch Room power is out. http://controlm/bip/redirect.php?goto=opsenvdoc
+*			| *Temp*Sensor*			| *		| *		| 172.27.11.75*	|snmptrapd.20916	| HelpDesk Server Room Temperature is High ([T:parameterValue]) http://controlm/bip/redirect.php?goto=opsenvdoc
+*			| *Water Sensor*		| *		| *		| 172.27.11.75*	|snmptrapd.20916	| HelpDesk Server Room is getting wet. http://controlm/bip/redirect.php?goto=opsenvdoc
+*			| *Switch Sensor*		| *		| *		| 172.27.11.75*	|snmptrapd.20916	| HelpDesk Server Room power is out. http://controlm/bip/redirect.php?goto=opsenvdoc
+*			| High*Humidity*		| *		| *		| 172.18.223.76*	|snmptrapd.20916	| SaddleBrook Server Room Humidity is High http://controlm/bip/redirect.php?goto=opsenvdoc
+*			| *Temp*Sensor*			| *		| *		| 172.18.223.76*	|snmptrapd.20916	| SaddleBrook Server Room Temperature is High http://controlm/bip/redirect.php?goto=opsenvdoc
+*			| *AC Flood*			| *		| *		| 172.18.223.76*	|snmptrapd.20916	| SaddleBrook Server Room AC is flooding. http://controlm/bip/redirect.php?goto=opsenvdoc
+*			| *PBX Flood*			| *		| *		| 172.18.223.76*	|snmptrapd.20916	| SaddleBrook Server Room PBX is flooding. http://controlm/bip/redirect.php?goto=opsenvdoc
+*			| *Power*			| *		| *		| 172.18.223.76*	|snmptrapd.20916	| SaddleBrook Server Room power is out. http://controlm/bip/redirect.php?goto=opsenvdoc
+*			| High*Humidity*		| *		| *		| 172.20.53.69* 	|snmptrapd.20916	| Montvale UPS Room Humidity is High http://controlm/bip/redirect.php?goto=opsenvdoc
+*			| *Temp*Sensor*			| *		| *		| 172.20.53.69* 	|snmptrapd.20916	| Montvale UPS Room Temperature is High http://controlm/bip/redirect.php?goto=opsenvdoc
+*			| *AC Flood*			| *		| *		| 172.20.53.69*		|snmptrapd.20916	| Montvale UPS Room AC is flooding. http://controlm/bip/redirect.php?goto=opsenvdoc
+*			| *PBX Flood*			| *		| *		| 172.20.53.69*		|snmptrapd.20916	| Montvale UPS Room PBX is flooding. http://controlm/bip/redirect.php?goto=opsenvdoc
+*			| *Power*			| *		| *		| 172.20.76.20*         |snmptrapd.20916	| Hartford PBX Room power is out. http://controlm/bip/redirect.php?goto=opsenvdoc
+*                       | High*Humidity*                | *             | *             | 172.20.76.20*         |snmptrapd.20916        | Hartford PBX Room Humidity is High http://controlm/bip/redirect.php?goto=opsenvdoc
+*                       | *Temp*Sensor*                 | *             | *             | 172.20.76.20*         |snmptrapd.20916        | Hartford PBX Room Temperature is High http://controlm/bip/redirect.php?goto=opsenvdoc
+*                       | *AC Flood*                    | *             | *             | 172.20.76.20*         |snmptrapd.20916        | Hartford PBX Room AC is flooding. http://controlm/bip/redirect.php?goto=opsenvdoc
+*                       | *PBX Flood*                   | *             | *             | 172.20.76.20*         |snmptrapd.20916        | Hartford PBX Room PBX is flooding. http://controlm/bip/redirect.php?goto=opsenvdoc
+*                       | *Power*                       | *             | *             | 172.20.76.20*         |snmptrapd.20916        | Hartford PBX Room power is out. http://controlm/bip/redirect.php?goto=opsenvdoc
+
+#=========================================================================================================
+# DanFoss Temperature Sensors in the Data Center
+#=========================================================================================================
+*			| *			| *		| *		| DanFoss*		|snmptrapd.1031 	| DanFoss [T:domainClass] [T:parameterValue] on [T:parameter] 
+#*			| *			| *		| *		| DanFoss*		|snmptrapd.1031 	| [T:text]
+
+#========================================================================================================
+#========================================================================================================
+# UPS Monitoring
+#=========================================================================================================
+*			| *			| *		| *		| *		|snmptrapd.534 	| [T:text] 
+*	|.1.3.6.1.2.1.33.1.6.3.1|*|*|*|snmptrapd.33|		upsAlarmBatteryBad			        
+*	|.1.3.6.1.2.1.33.1.6.3.10|*|*|*|snmptrapd.33|			upsAlarmBypassBad			        
+*	|.1.3.6.1.2.1.33.1.6.3.11|*|*|*|snmptrapd.33|			upsAlarmOutputOffAsRequested	
+*	|.1.3.6.1.2.1.33.1.6.3.12|*|*|*|snmptrapd.33|			upsAlarmUpsOffAsRequested			
+*	|.1.3.6.1.2.1.33.1.6.3.13|*|*|*|snmptrapd.33|			upsAlarmChargerFailed			    
+*	|.1.3.6.1.2.1.33.1.6.3.14|*|*|*|snmptrapd.33|			upsAlarmUpsOutputOff			    
+*	|.1.3.6.1.2.1.33.1.6.3.15|*|*|*|snmptrapd.33|			upsAlarmUpsSystemOff			    
+*	|.1.3.6.1.2.1.33.1.6.3.16|*|*|*|snmptrapd.33|			upsAlarmFanFailure			      
+*	|.1.3.6.1.2.1.33.1.6.3.17|*|*|*|snmptrapd.33|			upsAlarmFuseFailure			      
+*	|.1.3.6.1.2.1.33.1.6.3.18|*|*|*|snmptrapd.33|			upsAlarmGeneralFault			    
+*	|.1.3.6.1.2.1.33.1.6.3.19|*|*|*|snmptrapd.33|			upsAlarmDiagnosticTestFailed	
+*	|.1.3.6.1.2.1.33.1.6.3.2|*|*|*|snmptrapd.33|		upsAlarmOnBattery			          
+*	|.1.3.6.1.2.1.33.1.6.3.20|*|*|*|snmptrapd.33|			upsAlarmCommunicationsLost		
+*	|.1.3.6.1.2.1.33.1.6.3.21|*|*|*|snmptrapd.33|			upsAlarmAwaitingPower			    
+*	|.1.3.6.1.2.1.33.1.6.3.22|*|*|*|snmptrapd.33|			upsAlarmShutdownPending			  
+*	|.1.3.6.1.2.1.33.1.6.3.23|*|*|*|snmptrapd.33|			upsAlarmShutdownImminent			
+*	|.1.3.6.1.2.1.33.1.6.3.24|*|*|*|snmptrapd.33|			upsAlarmTestInProgress			  
+*	|.1.3.6.1.2.1.33.1.6.3.3|*|*|*|snmptrapd.33|		upsAlarmLowBattery			        
+*	|.1.3.6.1.2.1.33.1.6.3.4|*|*|*|snmptrapd.33|		upsAlarmDepletedBattery			    
+*	|.1.3.6.1.2.1.33.1.6.3.5|*|*|*|snmptrapd.33|		upsAlarmTempBad			            
+*	|.1.3.6.1.2.1.33.1.6.3.6|*|*|*|snmptrapd.33|		upsAlarmInputBad			          
+*	|.1.3.6.1.2.1.33.1.6.3.7|*|*|*|snmptrapd.33|		upsAlarmOutputBad			          
+*	|.1.3.6.1.2.1.33.1.6.3.8|*|*|*|snmptrapd.33|		upsAlarmOutputOverload			    
+*	|.1.3.6.1.2.1.33.1.6.3.9|*|*|*|snmptrapd.33|		upsAlarmOnBypass			          
+*			|*			| *		| *		| *		|snmptrapd.33|	UPS is alerting, error unknown please investigate.
+
+#=======================================================================================================
+# UPS Monitoring for Montvale 172.20.53.70
+#=========================================================================================================
+*	| *			 |*|*|172.20.53.70|snmptrapd.534 	|Montvale [T:text] 
+*	|.1.3.6.1.2.1.33.1.6.3.1 |*|*|172.20.53.70|snmptrapd.33|Montvale upsAlarmBatteryBad			        
+*	|.1.3.6.1.2.1.33.1.6.3.10|*|*|172.20.53.70|snmptrapd.33|Montvale upsAlarmBypassBad			        
+*	|.1.3.6.1.2.1.33.1.6.3.11|*|*|172.20.53.70|snmptrapd.33|Montvale upsAlarmOutputOffAsRequested	
+*	|.1.3.6.1.2.1.33.1.6.3.12|*|*|172.20.53.70|snmptrapd.33|Montvale upsAlarmUpsOffAsRequested			
+*	|.1.3.6.1.2.1.33.1.6.3.13|*|*|172.20.53.70|snmptrapd.33|Montvale upsAlarmChargerFailed			    
+*	|.1.3.6.1.2.1.33.1.6.3.14|*|*|172.20.53.70|snmptrapd.33|Montvale upsAlarmUpsOutputOff			    
+*	|.1.3.6.1.2.1.33.1.6.3.15|*|*|172.20.53.70|snmptrapd.33|Montvale upsAlarmUpsSystemOff			    
+*	|.1.3.6.1.2.1.33.1.6.3.16|*|*|172.20.53.70|snmptrapd.33|Montvale upsAlarmFanFailure			      
+*	|.1.3.6.1.2.1.33.1.6.3.17|*|*|172.20.53.70|snmptrapd.33|Montvale upsAlarmFuseFailure			      
+*	|.1.3.6.1.2.1.33.1.6.3.18|*|*|172.20.53.70|snmptrapd.33|Montvale upsAlarmGeneralFault			    
+*	|.1.3.6.1.2.1.33.1.6.3.19|*|*|172.20.53.70|snmptrapd.33|Montvale upsAlarmDiagnosticTestFailed	
+*	|.1.3.6.1.2.1.33.1.6.3.2 |*|*|172.20.53.70|snmptrapd.33|Montvale upsAlarmOnBattery			          
+*	|.1.3.6.1.2.1.33.1.6.3.20|*|*|172.20.53.70|snmptrapd.33|Montvale upsAlarmCommunicationsLost		
+*	|.1.3.6.1.2.1.33.1.6.3.21|*|*|172.20.53.70|snmptrapd.33|Montvale upsAlarmAwaitingPower			    
+*	|.1.3.6.1.2.1.33.1.6.3.22|*|*|172.20.53.70|snmptrapd.33|Montvale upsAlarmShutdownPending			  
+*	|.1.3.6.1.2.1.33.1.6.3.23|*|*|172.20.53.70|snmptrapd.33|Montvale upsAlarmShutdownImminent			
+*	|.1.3.6.1.2.1.33.1.6.3.24|*|*|172.20.53.70|snmptrapd.33|Montvale upsAlarmTestInProgress			  
+*	|.1.3.6.1.2.1.33.1.6.3.3 |*|*|172.20.53.70|snmptrapd.33|Montvale upsAlarmLowBattery			        
+*	|.1.3.6.1.2.1.33.1.6.3.4 |*|*|172.20.53.70|snmptrapd.33|Montvale upsAlarmDepletedBattery			    
+*	|.1.3.6.1.2.1.33.1.6.3.5 |*|*|172.20.53.70|snmptrapd.33|Montvale upsAlarmTempBad			            
+*	|.1.3.6.1.2.1.33.1.6.3.6 |*|*|172.20.53.70|snmptrapd.33|Montvale upsAlarmInputBad			          
+*	|.1.3.6.1.2.1.33.1.6.3.7 |*|*|172.20.53.70|snmptrapd.33|Montvale upsAlarmOutputBad			          
+*	|.1.3.6.1.2.1.33.1.6.3.8 |*|*|172.20.53.70|snmptrapd.33|Montvale upsAlarmOutputOverload			    
+*	|.1.3.6.1.2.1.33.1.6.3.9 |*|*|172.20.53.70|snmptrapd.33|Montvale upsAlarmOnBypass			          
+*	|*		         |*|*|172.20.53.70|snmptrapd.33|Montvale UPS is alerting, error unknown please investigate.
+
+
+#=======================================================================================================
+# UPS Monitoring for SaddleBrook 172.18.223.75 
+#=========================================================================================================
+*		| *			| *		| *		| 172.18.223.75	|snmptrapd.534 	|SaddleBrook [T:text] 
+*	|.1.3.6.1.2.1.33.1.6.3.1 |*|*|172.18.223.75|snmptrapd.33|SaddleBrook upsAlarmBatteryBad			        
+*	|.1.3.6.1.2.1.33.1.6.3.10|*|*|172.18.223.75|snmptrapd.33|SaddleBrook upsAlarmBypassBad			        
+*	|.1.3.6.1.2.1.33.1.6.3.11|*|*|172.18.223.75|snmptrapd.33|SaddleBrook upsAlarmOutputOffAsRequested	
+*	|.1.3.6.1.2.1.33.1.6.3.12|*|*|172.18.223.75|snmptrapd.33|SaddleBrook upsAlarmUpsOffAsRequested			
+*	|.1.3.6.1.2.1.33.1.6.3.13|*|*|172.18.223.75|snmptrapd.33|SaddleBrook upsAlarmChargerFailed			    
+*	|.1.3.6.1.2.1.33.1.6.3.14|*|*|172.18.223.75|snmptrapd.33|SaddleBrook upsAlarmUpsOutputOff			    
+*	|.1.3.6.1.2.1.33.1.6.3.15|*|*|172.18.223.75|snmptrapd.33|SaddleBrook upsAlarmUpsSystemOff			    
+*	|.1.3.6.1.2.1.33.1.6.3.16|*|*|172.18.223.75|snmptrapd.33|SaddleBrook upsAlarmFanFailure			      
+*	|.1.3.6.1.2.1.33.1.6.3.17|*|*|172.18.223.75|snmptrapd.33|SaddleBrook upsAlarmFuseFailure			      
+*	|.1.3.6.1.2.1.33.1.6.3.18|*|*|172.18.223.75|snmptrapd.33|SaddleBrook upsAlarmGeneralFault			    
+*	|.1.3.6.1.2.1.33.1.6.3.19|*|*|172.18.223.75|snmptrapd.33|SaddleBrook upsAlarmDiagnosticTestFailed	
+*	|.1.3.6.1.2.1.33.1.6.3.2 |*|*|172.18.223.75|snmptrapd.33|SaddleBrook upsAlarmOnBattery			          
+*	|.1.3.6.1.2.1.33.1.6.3.20|*|*|172.18.223.75|snmptrapd.33|SaddleBrook upsAlarmCommunicationsLost		
+*	|.1.3.6.1.2.1.33.1.6.3.21|*|*|172.18.223.75|snmptrapd.33|SaddleBrook upsAlarmAwaitingPower			    
+*	|.1.3.6.1.2.1.33.1.6.3.22|*|*|172.18.223.75|snmptrapd.33|SaddleBrook upsAlarmShutdownPending			  
+*	|.1.3.6.1.2.1.33.1.6.3.23|*|*|172.18.223.75|snmptrapd.33|SaddleBrook upsAlarmShutdownImminent			
+#*	|.1.3.6.1.2.1.33.1.6.3.24|*|*|172.18.223.75|snmptrapd.33|SaddleBrook upsAlarmTestInProgress
+*	|.1.3.6.1.2.1.33.1.6.3.24|*|*|172.18.223.75|snmptrapd.33|SaddleBrook UPS Battery Test In Prorgress
+*	|.1.3.6.1.2.1.33.1.6.3.3 |*|*|172.18.223.75|snmptrapd.33|SaddleBrook upsAlarmLowBattery			        
+*	|.1.3.6.1.2.1.33.1.6.3.4 |*|*|172.18.223.75|snmptrapd.33|SaddleBrook upsAlarmDepletedBattery			    
+*	|.1.3.6.1.2.1.33.1.6.3.5 |*|*|172.18.223.75|snmptrapd.33|SaddleBrook upsAlarmTempBad			            
+*	|.1.3.6.1.2.1.33.1.6.3.6 |*|*|172.18.223.75|snmptrapd.33|SaddleBrook upsAlarmInputBad			          
+*	|.1.3.6.1.2.1.33.1.6.3.7 |*|*|172.18.223.75|snmptrapd.33|SaddleBrook upsAlarmOutputBad			          
+*	|.1.3.6.1.2.1.33.1.6.3.8 |*|*|172.18.223.75|snmptrapd.33|SaddleBrook upsAlarmOutputOverload			    
+*	|.1.3.6.1.2.1.33.1.6.3.9 |*|*|172.18.223.75|snmptrapd.33|SaddleBrook upsAlarmOnBypass			          
+*	|N/A		         |*|*|172.18.223.75|snmptrapd.33|SaddleBrook UPS previous condition no longer exists.
+*	|*		         |*|*|172.18.223.75|snmptrapd.33|SaddleBrook UPS is alerting, error unknown please investigate.
+
+
+#=========================================================================================================
+# Voice Ops - BCM, PBX, etc...
+#=========================================================================================================
+# objectClass 		 | object		 | parameter| parameterValue | domain |  originEventClass |  eventText
+#====================================================================================================================
+*			| Remote element is up*		| *		| *		| 10.*.164	| snmptrapd.1031| BCM [T:domain] is not responding to ping http://controlm/bip/nd.php?ip=[T:domain]
+*			| *			| *		| *		| *		| snmptrapd.562	| [T:parameterValue]
+41*			| *			| *		| *		| *		| snmptrapd.562	| Loss of Signal http://controlm/bip/nd.php?ip=[T:domain]
+45*			| *			| *		| *		| *		| snmptrapd.562	| Loss of Signal http://controlm/bip/nd.php?ip=[T:domain]
+42*			| *			| *		| *		| *		| snmptrapd.562	| Loss of Frame http://controlm/bip/nd.php?ip=[T:domain]
+43*			| *			| *		| *		| *		| snmptrapd.562	| Alarm Indication Signal http://controlm/bip/nd.php?ip=[T:domain]
+46*			| *			| *		| *		| *		| snmptrapd.562	| Alarm Indication Signal http://controlm/bip/nd.php?ip=[T:domain]
+47*			| *			| *		| *		| *		| snmptrapd.562	| Remote Alarm Indication http://controlm/bip/nd.php?ip=[T:domain]
+44*			| *			| *		| *		| *		| snmptrapd.562	| Remote Alarm Indication http://controlm/bip/nd.php?ip=[T:domain]
+75*			| *			| *		| *		| *		| snmptrapd.562	| Digital Trunking Clock In Free Run http://controlm/bip/nd.php?ip=[T:domain]
+ 
+#=========================================================================================================
+# Pathmark Scales Ping
+#=========================================================================================================
+PATHMARK*			| SCALE*	| *		| *		| *		| snmptrapd.1031| Pathmark scale [T:domainClass] [T:domain] ([T:parameter]) is down.
+PATHMARK*			| ROUTER*	| *		| *		| *		| snmptrapd.1031| Pathmark [T:domain] Access Point is Unreachable. 
+BATCH_SEQ*			| *		| *		| *		| PATHMARK*	| snmptrapd.1031| Batch Sequence issue for [T:parameterValue] stores. http://feops1/ddmbatchsequence.txt
+DRIVE*			| CLEAN*		| *		| Yes*		| *		| snmptrapd.1031| [T:origin] ([T:domain]) tape drive has not been cleaned in [T:originKey] hrs. Drive indicator is on.
+DRIVE*			| CLEAN*		| *		| No*		| *		| snmptrapd.1031| [T:origin] ([T:domain]) tape drive has not been cleaned in [T:originKey] hrs. Drive indicator is not on.
+PHARMACY*			| PDX*		| UTD*		| DOWN*		| *		| snmptrapd.1031| PDX UTD Processes are down on [T:origin]. Pathmark Pharmacies are not available. 
+PLUM			| FEED			| BOSS		| *		| ISP*		| * | PLUM-to-BOSS Transmission Failure. Host=[T:domain] rc=[T:parameterValue]
+PLUM                    | FEED                  | BOSS          | *             | clus*         | * | PLUM-to-BOSS Transmission Failure. Host=[T:domain] rc=[T:parameterValue]
+StoreISP		| * 			| *		| *		| *		| snmptrapd.1031 | Expired PLUM batches found in store [T:origin]
+#=========================================================================================================
+# ISDN 
+#=========================================================================================================
+*			| *			| Mis*		| *		| *		| snmptrapd.149	| [T:domain] has [T:parameter]., http://controlm/bip/nd.php?ip=[T:objectClass]
+#==============
+# RX
+#==============
+*HOST			| *			| *		| *		| RELA*	  | snmptrapd.20006	| Site [T:domain] ([T:object]) is down
+#=========================================================================================================
+# NAGIOS
+#=========================================================================================================
+# objectClass 		| object		| parameter	| parameterValue| domain  |  originEventClass 	|  eventText
+#====================================================================================================================
+*Scales*		| Scales		| *		| *		| *	  | snmptrapd.20006	| [T:domain] has scales down, http://nagios/scales/nagios/cgi-bin/status.cgi?host=[T:origin]
+*			| F_Drive_Status	| *		| *		| *	  | snmptrapd.20006	| Problem with [T:object] on [T:domain]
+*			| linux*		| *		| *		| *	  | snmptrapd.20006	| [T:domain] [T:object] [T:parameterValue] 
+*			| aix*			| *		| *		| *	  | snmptrapd.20006	| [T:domain] [T:object] [T:parameterValue] 
+*                       | aix_file*             | *             | *             | *       | snmptrapd.20006     | [T:domain] file system [T:object] is full with error [T:parameterValue]
+*			| *			| *		| *		| *	  | snmptrapd.20006	| [T:domain] [T:object] is down, http://controlm/bip/nd.php?key=[T:originKey]-[T:domain]-[T:object] 
+*HOST			| *			| *		| *		| ERX*	  | snmptrapd.20006	| Cannot connect to [T:domain] from [T:object] http://controlm/bip/nd.php?key=[T:originKey]-[T:domain]-HOST
+*HOST			| *			| *		| *		| m*	  | snmptrapd.20006	| Server [T:domain] is down
+*HOST			| *			| *		| *		| n*	  | snmptrapd.20006	| Server [T:domain] is down
+*HOST			| *			| *		| *		| p*	  | snmptrapd.20006	| Server [T:domain] is down
+*HOST			| *			| *		| *		| s*	  | snmptrapd.20006	| Server [T:domain] is down
+*HOST			| *			| *		| *		| *	  | snmptrapd.20006	| Site [T:domain] ([T:object]) is down, http://controlm/bip/nd.php?key=[T:originKey]-[T:domain]-HOST
+*                       | windows_service*       | *             | *             | *       | snmptrapd.20006     | [T:object] is down on [T:domain] [T:parameterValue]
+*                       | windows_ram*           | *             | *             | *       | snmptrapd.20006     | [T:domain] is alerting on ram available [T:parameterValue]
+*                       | windows_total_cpu*     | *             | *             | *       | snmptrapd.20006     | [T:domain] is alerting on cpu percentage [T:parameterValue]
+*                       | windows_memory*        | *             | *             | *       | snmptrapd.20006     | [T:domain] is alerting on disk space remaining [T:parameterValue]
+*                       | windows_disk_space*    | *             | *             | *       | snmptrapd.20006     | [T:domain] is alerting on disk space available [T:parameterValue]
+*			| *			| 2		| *		| *	  | snmptrapd.20006	| [T:domain] [T:object] is flapping, http://controlm/bip/nd.php?key=[T:originKey]-[T:domain]-[T:object]-FLAP 
+*HOST			| *			| 2		| *		| *	  | snmptrapd.20006	| Site [T:domain] ([T:object]) is down, http://controlm/bip/nd.php?key=[T:originKey]-[T:domain]-HOST_FLAP
+*			| ISP_Ping*		| *		| *		| *	  | snmptrapd.20006	| ISP [T:domain] ([T:origin]) is down
+Groundwork*		| LastUpdate*		| *		| *		| m072lp01*  | snmptrapd.1031	| [T:itMgmtLayer]
+
+#=========================================================================================================
+# Concord
+#=========================================================================================================
+# objectClass 		 | object		 | parameter| parameterValue | domain |  originEventClass |  eventText
+#====================================================================================================================
+*			| *			| *		| *		| *		| snmptrapd.149	| [T:domain] has [T:parameter]., http://controlm/bip/nd.php?ip=[T:objectClass]
+*			| *			| Bad*		| *		| *		| snmptrapd.149	| [T:domain] has [T:parameter]., http://controlm/bip/nd.php?ip=[T:objectClass]
+*			| *			| *		| *		| *		| snmptrapd.149	| [T:domain] has [T:parameter] alerting., http://controlm/bip/nd.php?ip=[T:objectClass]
+*			| *			| *		| *		| OPM*		| *	| [T:parameterValue]., http://controlm/bip/nd.php?ip=[T:objectClass]
+EHEALTH*		| POLLER*		| DOWN*		| 15Min*	| *		| *	| Concord has not polled in 15 minutes
+#=========================================================================================================
+# Sybase KM
+#=========================================================================================================
+SYBASE_AVAILABILITY	 |  *	 |  BackupErrorLogUpdates 	 |  *	 |  *	 |  *	 |  [T:object]: error in backup server log
+SYBASE_AVAILABILITY	 |  *	 |  BackupServerStatus 		 |  *	 |  *	 |  *	 |  [T:object]: backup server is down
+SYBASE_AVAILABILITY	 |  *	 |  BlockerProcs 		 |  *	 |  *	 |  *	 |  [T:object]: blocker proc detected
+SYBASE_AVAILABILITY	 |  *	 |  ErrorLogUpdates 		 |  *	 |  *	 |  *	 |  [T:object]: error in server log
+SYBASE_AVAILABILITY	 |  *	 |  NumBlockerProcs 		 |  *	 |  *	 |  *	 |  [T:object]: blocker procs detected
+SYBASE_AVAILABILITY	 |  *	 |  SQLServerStatus 		 |  *	 |  *	 |  *	 |  [T:object]: server is down
+SYBASE_AVAILABILITY	 |  *	 |  SuspectDatabases 		 |  *	 |  *	 |  *	 |  [T:object]: [T:parameterValue] suspect databases detected
+SYBASE_AVAILABILITY	 |  *	 |  VwErrorLogUpdates 		 |  *	 |  *	 |  *	 |  [T:object]: errors in PATROL SQL Viewer log
+SYBASE_AVAILABILITY	 |  *	 |  VwServerStatus 		 |  *	 |  *	 |  *	 |  [T:object]: PATROL SQL Viewer is down
+SYBASE_CAPACITY		 |  *	 |  ConnectionsRemaining 	 |  *	 |  *	 |  *	 |  [T:object]: [T:parameterValue] connections remaining
+SYBASE_CAPACITY		 |  *	 |  LocksRemaining 		 |  *	 |  *	 |  *	 |  [T:object]: [T:parameterValue] locks remain
+SYBASE_DATABASE		 |  *	 |  ExpansionSpacePCT 		 |  *	 |  *	 |  0:11	 |  [T:object]: [T:parameterValue]% expansion space remains
+SYBASE_DATABASE		 |  *	 |  SegSpace 			 |  *	 |  *	 |  0:11	 |  [T:object]: worst segment [T:parameterValue]% full
+# SYBASE_DATABASE	 |  *	 |  SegSpace 			 |  *	 |  *	 |  SYBASE_DATABASE:SegSpace	 |  [T:object]: critical segment in database
+SYBASE_DATABASE		 |  *	 |  SuspectIndex 		 |  *	 |  *	 |  0:11	 |  [T:object]: [T:parameterValue] suspect index detected
+SYBASE_DATABASE		 |  *	 |  TransactionLogSpace 	 |  *	 |  *	 |  0:11	 |  [T:object]: [T:parameterValue]% transaction log space remains
+SYBASE_DISK_STD		 |  *	 |  DiskIoErrs 			 |  *	 |  *	 |  *	 |  [T:object]: [T:parameterValue] disk IO error detected
+SYBASE_NETWORK_STD	 |  *	 |  PacketErrs 			 |  *	 |  *	 |  *	 |  [T:object]: [T:parameterValue] packet errors detected
+SYBRS_LTM	         |  *	 |  LTMErrorLogUpdates 		 |  *	 |  *	 |  *	 |  [T:object]: error in LTM log
+SYBRS_LTM		 |  *	 |  LTMErrorLogUpdatesFatal 	 |  *	 |  *	 |  *	 |  [T:object]: fatal error in LTM log
+SYBRS_LTM		 |  *	 |  LTMServerStatus 		 |  *	 |  *	 |  *	 |  [T:object]: LTM is down
+SYBRS_SERVER		 |  *	 |  RepServerStatus 		 |  *	 |  *	 |  *	 |  [T:object]: RS is down
+SYBRS_SERVER		 |  *	 |  RSErrorLogUpdates 		 |  *	 |  *	 |  *	 |  [T:object]: error in RS log
+SYBRS_SERVER		 |  *	 |  RSErrorLogUpdatesFatal 	 |  *	 |  *	 |  *	 |  [T:object]: fatal error in RS log
+SYBRS_SERVER		 |  *	 |  RSPartitionSpaceUsed 	 |  *	 |  *	 |  *	 |  [T:object]: [T:parameterValue]% partition space used
+SYBRS_SERVER		 |  *	 |  RSThreadsDownDSI 		 |  *	 |  *	 |  *	 |  [T:object]: [T:parameterValue] DSI threads down
+SYBRS_SERVER		 |  *	 |  RSThreadsDownLTM 		 |  *	 |  *	 |  *	 |  [T:object]: [T:parameterValue] LTM threads down
+SYBRS_SERVER		 |  *	 |  RSThreadsDownRSI 		 |  *	 |  *	 |  *	 |  [T:object]: [T:parameterValue] RSI threads down
+SYBRS_SERVER		 |  *	 |  RSThreadsDownSQM 		 |  *	 |  *	 |  *	 |  [T:object]: [T:parameterValue] SQM threads down
+SYBRS_SERVER		 |  *	 |  RSThreadsDownSQT 		 |  *	 |  *	 |  *	 |  [T:object]: [T:parameterValue] SQT threads down
+
+
+#=========================================================================================================
+# Internet (ISM) KM
+#=========================================================================================================
+INET_Chat_Server	 |  *	 |  ircDownTime 		 |  *	 |  *	 |  *	 |  Chat server down for [T:parameterValue] secs
+INET_Chat_Server	 |  *	 |  remoteDnsStatus 		 |  *	 |  *	 |  *	 |  Remote DNS service is down 
+INET_Dns_Remote		 |  *	 |  remoteDnsDownTime 		 |  *	 |  *	 |  *	 |  Remote DNS service is down for [T:parameterValue] secs
+INET_Dns_Server		 |  *	 |  dnsDownTime 		 |  *	 |  *	 |  *	 |  NS server downtime is [T:parameterValue] secs
+INET_Dns_Server		 |  *	 |  dnsMonitor 			 |  *	 |  *	 |  *	 |  DNS monitor is in [T:domain]
+INET_Dns_Server		 |  *	 |  dnsStatsMonitor 		 |  *	 |  *	 |  *	 |  DNS stats monitor is in [T:domain]
+INET_Dns_Server		 |  *	 |  dnsStatus 			 |  *	 |  *	 |  *	 |  DNS server is down 
+INET_Ftp_Server		 |  *	 |  ftpDownTime 		 |  *	 |  *	 |  *	 |  FTP server downtime is [T:parameterValue] secs
+INET_Imap_Server	 |  *	 |  imapDownTime 		 |  *	 |  *	 |  *	 |  IMAP server downtime is [T:parameterValue] secs
+INET_Ldap_Server	 |  *	 |  ldapDownTime 		 |  *	 |  *	 |  *	 |  LDAP server downtime is [T:parameterValue] secs
+INET_Mail_Server	 |  *	 |  smtpDownTime 		 |  *	 |  *	 |  *	 |  SMTP server downtime is [T:parameterValue] secs
+INET_Mail_Server	 |  *	 |  smtpMonitor 		 |  *	 |  *	 |  *	 |  SMTP monitor is in [T:domain]
+INET_News_Server	 |  *	 |  nntpDownTime 		 |  *	 |  *	 |  *	 |  News server downtime is [T:parameterValue] secs
+INET_Pop3_Server	 |  *	 |  pop3DownTime 		 |  *	 |  *	 |  *	 |  POP3 server downtime is [T:parameterValue] secs
+INET_Protocol_Tcp	 |  *	 |  tcpMonitor 			 |  *	 |  *	 |  *	 |  TCP monitor is in [T:domain]
+INET_Proxy_Server	 |  *	 |  httpDownTime 		 |  *	 |  *	 |  *	 |  Proxy server downtime is [T:parameterValue] secs
+INET_Web_ VirtualServer	 |  *	 |  requestsPeakPercent 	 |  *	 |  *	 |  *	 |  Web Server [T:parameterValue]% request rate
+INET_Web_AcctLogStat	 |  *	 |  requestsPeakPercent 	 |  *	 |  *	 |  *	 |  WEB server is busy at [T:parameterValue]% reqest rate
+INET_Web_AcctLogStat	 |  *	 |  responseSizePercent 	 |  *	 |  *	 |  *	 |  High WEB server load at [T:parameterValue]% response size
+INET_Web_Application	 |  *	 |  badLinks 			 |  *	 |  *	 |  *	 |  [T:parameterValue] bad links detected
+INET_Web_Application	 |  *	 |  httpDownTime 		 |  *	 |  *	 |  *	 |  Down time for URL is [T:parameterValue] secs
+INET_Web_Application	 |  *	 |  linkMonitor 		 |  *	 |  *	 |  *	 |  URL link is down URL
+INET_Web_ClientHost	 |  *	 |  requestsPeakPercent 	 |  *	 |  *	 |  *	 |  [T:parameterValue]% reqest rate
+INET_Web_ClientHost	 |  *	 |  responseSizePeakPercent 	 |  *	 |  *	 |  *	 |  [T:parameterValue]% response size
+INET_Web_Server		 |  *	 |  httpDownTime 			 |  *	 |  *	 |  *	 |  Down time for HTTP Server is [T:parameterValue] secs
+INET_Web_Url		 |  *	 |  requestsPeakPercent 	 |  *	 |  *	 |  *	 |  [T:parameterValue]% reqest rate
+INET_Web_Url		 |  *	 |  responseSizePeakPercent 	 |  *	 |  *	 |  *	 |  [T:parameterValue]% response size
+INET_Web_User		 |  *	 |  requestsPeakPercent 	 |  *	 |  *	 |  *	 |  [T:parameterValue]% reqest rate
+INET_Web_User		 |  *	 |  responseSizePeakPercent 	 |  *	 |  *	 |  *	 |  [T:parameterValue]% response size
+INET_Web_VirtualServer	 |  *	 |  responseSizePeakPercent	 |  *	 |  *	 |  *	 |  [T:parameterValue]% response size
+
+
+#=========================================================================================================
+# Windows Terminal Server KM
+#=========================================================================================================
+WTS_SESSION		 |  *	 |  SeCpuUtilization		 |  *	 |  *	 |  *	 |  CPU Utilization is at [T:parameterValue]% for [T:object] on [T:domain].
+
+#=========================================================================================================
+# ETE Event KM
+#=========================================================================================================
+ *			 |  *	 |  *				 |  *	 |  *	 |  *:EteAlarm	 |  [T:parameter] = [T:parameterValue] for service [T:service] on [T:domain].
+
+#=========================================================================================================
+# SLMAlarm4 Event KM
+#=========================================================================================================
+ *			 |  *	 |  *				 |  *	 |  *	 |  *:SLMAlarm4	 |  [T:parameter] = [T:parameterValue] for service [T:service] on [T:domain].
+
+#=========================================================================================================
+# Default Definition for all 0:11 (Warning/Alarm) and 0:39 (out of range) event classes
+#=========================================================================================================
+# *		 	 |  *	 |  * 			 	|  *	  |  *	 |  0:11	 |  Parameter /[T:objectClass]/[T:object]/[T:parameter] is in [T:domain]. Value is: [T:parameterValue] on [T:domain]
+#### commented out 12/1/03 so we can see PING messages
+# *			 |  *	 |  * 			 	|  *	  |  *	 |  0:39	 |  Parameter /[T:objectClass]/[T:object]/[T:parameter] Out of range [T:domain]. Value is: [T:parameterValue] on [T:domain]
+
+
+#=========================================================================================================
+# objectClass 		 | object		 | parameter| parameterValue | domain |  originEventClass |  eventText
+#=========================================================================================================
+#=========================================================================================================
+# ASN, Email coming from scripts to alert ASN Warehopuse issues
+#=========================================================================================================
+ASN*                     | *                   | *              | *     | *       | *                   | Missing ASN for store [T:object] for the [T:domainClass] PO number [T:domain] with Poll Time Stamp [T:parameter] delivery time stamp [T:parameterValue] PO line items [T:itMgmtLayer] and PO Case count [T:originKey]
+
+#=========================================================================================================
+# BOOMI, Email coming from scripts to alert WBI-DEV
+#=========================================================================================================
+ BOOMI			| *			| *		| *	| m059lp01| *			| [T:itMgmtLayer]
+ BOOMI			| *|AanP Purchase Order Send to Mckesso*| *	| m059lp01| *			| Boomi Exception While excuting AS2 Send to Mckesson.
+
+#=========================================================================================================
+#  Default Changes to PATROL Messages That Do Not Match The Above Special Cases
+#--------------------------------------------------------------------------------------------------------------------------##
+# objectClass 		 | object | parameter	 	| parameterValue | domain |  originEventClass |  eventText
+#=========================================================================================================
+ *			 |  *	 |  * 			 	|  *	  |  *	 |  *	 |  DEFAULT TEXT: [T:domain]/[T:objectClass]/[T:object]/[T:parameter]/[T:parameterValue]
+
+
+########################################################################################################################
+# Description:
+# This file contains numerous formatting templates for the incoming
+# messages that we want to modify. This is particularly useful for
+# incoming messages from PATROL Agents where the message text only
+# indicates that a parameter has gone into alarm state. Based upon
+# these rules, a more meaningful message can be constructed.
+#
+# This does not just apply to PATROL Agent events, but to any other
+# message stream that this transformer can recognise.
+#
+#
+# The event text can be reformatted using any of the tokens available 
+# through the incoming source type (ie. BMCCEF/BMCEMF formats etc.)
+#
+# Some Examples: 
+#     [T:domain]         - Hostname
+#     [T:domain]      - Event type e.g. ALARM, WARNING
+#     [T:iTMgmtProcess]  - The Service type affected by this event
+#     [T:object]         - Object or instance name
+#     [T:objectClass]    - Application Class
+#     [T:objectStaff]    - Staff responsible for this event
+#     [T:parameter]  - Parameter Name
+#     [T:parameterValue] - Parameter Value
+#          ...
+#          ...
+#
+#
+# Wildcards can be set by using an asterisk (*)
+#
+# Many thanks to Doug Connell and team for the initial work on many 
+# of these event definitions :-)
+# 
+# 
+# History: 
+# 31-Oct-2001  Michael Nyhuis    First Version
+# 16-Feb-2002  John Davies       Changed parameterName to parameter(CEF210 standard)
+# 11-19-2003 Tim Bocardo	Added fields for A&P: object, parameterValue, and domain
+#

@@ -1,0 +1,701 @@
+
+#----------------------------------------------------------------
+# Event Enrichment: Service and Contact Groups Configuration File
+#----------------------------------------------------------------
+##########################################################################
+##########################################################################
+##
+## TO MODIFY THIS FILE MODIFY THE TEMPLATE ON M022AP01 IN:
+## /in/BIP/batch/ServiceContact.cfg.temp
+##
+##########################################################################
+##########################################################################
+#
+# See documentation at the bottom of this file.
+#
+#
+#   -------------------------  Selection Criteria -------------------------------------------- ||| notification info
+#
+#==============================================================================================================================
+# DomainClass	| Domain	| ObjectClass	| Object	|eventType	| parameter	|itMgmtLayer| NotifyGroup	| PhPt	| trash
+#==============================================================================================================================
+Unix Test*	| *		| *		| *		| *		| *		|*| AIXgrp	| N | .
+CTM		| OPS		| BAT		| PHONE		| *		| *		|*| ENSC	| D | .
+*		| MONFTEST*	| *		| *		| *		| *		|*| AUTONET	| D | .
+*		| SJG*		| *		| *		| *		| *		|*| pemgrp	| D | .
+### These rules are for pem connecting to an agent###
+#---------------------------------------------------#
+*		| MQPRHUB1*	| *		| *		| CLOSE_CONNECTION | *		|*| pemgrp	| N | .
+*		| *		| *		| *		| OPEN_CONNECTION | *		|*| pemgrp	| N | .
+*		| *		| *		| *		| CLOSE_CONNECTION | *		|*| pemgrp	| Y | .
+ALL*		| *		| *		| *		| OPEN_CONNECTION | *		|*| pemgrp	| N | .
+ALL*		| *		| *		| *		| CLOSE_CONNECTION | *		|*| pemgrp	| Y | .
+NT		| *		| Host*		| *		| OPEN_CONNECTION | *		|*| pemgrp	| N | .
+NT		| *		| Host*		| *		| CLOSE_CONNECTION | *		|*| pemgrp	| Y | .
+### SMTP Servers (SMTP port monitor on IMC) ###
+#------------#
+*               | *             | SMTP Server   | *             | *             | *             |*| OprSup    | Y | .
+### Store Backup Alerting ###
+*		| *		| ISPAdhoc	| *		| Backup	| *		|*| StoreHelp	| D | .
+### Pathmark Scales ###
+#------------#
+*               | *             | PATHMARK*   | SCALE*             | *             | *            |*| StoreHelp  | D | .
+*               | *             | PATHMARK*   | ROUTER*            | *             | *            |*| StoreHelp  | D | .
+*               | PATHMARK*     | BATCH_SEQ*  | *                  | *             | *            |*| StoreHelp  | D | .
+*               | *             | PHARMACY*   | PDX*               | *             | UTD*         |*| PharPDX    | D | .
+### Process Monitoring ####
+#
+*		| *	 	|*		| ftf*		| *		| *		|*| MQgrp		| D | .
+### BOOMI ###
+#------------#
+AIX               | m059lp01      | BOOMI*         | *             | *             | *             |*| WBIDEV        | D | .
+#============================================================================================================================
+# DomainClass	| Domain	| ObjectClass	| Object	|eventType	| parameter|itMgmtLayer	| NotifyGroup	| PhPt	| trash
+#============================================================================================================================
+############
+# SoftGrocer
+############
+#*		| sgpr*		| *		| *		| *		| corphub*	| pemgrp	| D | .
+#*		| sgpr*		| *		| *		| *		| rdexmgr*	| pemgrp	| D | .
+#*		| sgpr*		| *		| *		| *		| ctserver*	| pemgrp	| D | .
+#*		| sgpr*		| *		| *		| *		| sgpm*		| pemgrp	| D | .
+#*		| sgpr*		| *		| *		| *		| sterrlog*	| pemgrp	| D | .
+#*		| sgpr*		| *		| *		| *		| ghhts*	| pemgrp	| D | .
+#*		| sgpr*		| *		| *		| *		| hhts*		| pemgrp	| D | .
+Unix*		| sgpr*		| Process*	| *		| *		| *		|*| softgr	| D | .
+Unix*		| m032ap01*	| Process*	| *		| *		| *		|*| softgr	| D | .
+Unix*		| m030ap01*	| Process*	| *		| *		| *		|*| softgr	| D | .
+AIX*		| sgpr*		| SOFT*		| *		| *		| *		|*| pemgrp	| D | .
+AIX*		| *		| SGQA*		| *		| *		| *		|*| DBASTORES	| D | .
+AIX*		| *		| SGPR*		| *		| *		| *		|*| DBASTORES	| D | .
+Unix*           | m085lp01*     | Process*      | *             | *             | *             |*| pemgrp      | D | .
+Unix*           | m085lp01*     | Micro*        | *             | *             | *             |*| pemgrp      | D | .
+Unix*           | m078lp01*     | Process*      | Process*      | *             | *             |*| BIDWFE      | D | .
+Unix*           | mv00lp13*     | Process*      | Process*      | *             | *             |*| BIDWFE      | D | .
+APTEA*          | *             | Window*       | Status*       | *             |Micro*         |*| BIDWFE      | D | .
+####################
+# Avtech Env Sensors
+###################
+*		| 172.27.11.75*	| *		| Clear*	| *		| *		|*| OprSup	| N | .
+*		| 172.27.11.75*	| *		| *		| *		| *		|*| OprSup	| D | .
+*		| 172.27.11.76*	| *		| Clear*	| *		| *		|*| OprSup	| N | .
+*		| 172.27.11.76*	| *		| *		| *		| *		|*| OprSup	| D | .
+*		| 172.18.223.76*| *		| Clear*	| *		| *		|*| OprSup	| N | .
+*		| 172.18.223.76*| *		| *		| *		| *		|*| OprSup	| D | .
+*		| 172.20.53.69* | *		| Clear*	| *		| *		|*| OprSup	| N | .
+*		| 172.20.53.69* | *		| *		| *		| *		|*| OprSup	| D | .
+*               | 172.20.76.20* | *             | Clear*        | *             | *             |*| OprSup      | N | .
+*               | 172.20.76.20* | *             | *             | *             | *             |*| OprSup      | D | .
+############
+# DanFoss
+############
+*		| DanFoss	| *		| Test*		| *		| *		|*| pemgrp	| D | .
+*		| DanFoss	| *		| *		| *		| *		|*| OprSup	| D | .
+##########
+# MATRA
+##########
+*		| *		| MATRA*	| *		| *		| *		|*| MATRA 	| D | .
+##########
+# AIX alerts via script
+##########
+*		| *		| *		| *		| *		| *		|vsftp|AIXgrp	| D | .
+AIX             | *             | HACMP         | PSTPPRODDB    | *             | *             |*| AIXgrp      | D | .
+LINUX           | *             | HAE           | group_TPSAPP  | *             | *             |*| AIXgrp      | D | .
+AIX*		| *		| TLOG*		| *		| *		| *		|*| TLOG  	| D | .
+AIX*		| *		| RMS*		| *		| *		| *		|*| RETKDBA  	| D | .
+AIX*		| *		| ERRPT*	| *		| *		| *		|*| AIXgrp  	| D | .
+AIX*		| *		| SCRIPT*	| *		| *		| *		|*| AIXgrp  	| D | .
+AIX*		| *		| NDM*		| *		| *		| *		|*| OprSup  	| D | .
+AIXSTORE*	| *		| *		| *		| *		| *		|*| AIXSTORE  	| D | .
+AIX*            | ISP*          | MKSYSB*       | *             | *             | *             |*| OprSup      | D | .
+ISP*            | *             | DRIVE*        | CLEAN*        | *             | NEEDED*       |*| StoreHelp     | D | .
+ISP*            | *             | *  		| BACKUP*       | *             | *      	|*| StoreHelp     | D | .
+ISP*            | *             | ISP*          | SYSLOAD*      | *             | *             |*| StoreHelp     | D | .
+PM*             | *             | ISP           | TAPE          | *             | *             |*| StoreHelp     | D | .
+PM*             | *             | Back*         | Phar          | *             | *             |*| StoreHelp     | D | .
+PM*             | *             | Back*         | CAO           | *             | *             |*| StoreHelp     | D | .
+ISP*            | *             | TBSTAT        | *             | *             | *             |*| ISPCAOSUP     | D | .
+ISP*            | ISP*          | BACKFAIL      | *             | *             | *             |*| StoreHelp   | D | .
+ISP*            | ISP*          | ISP           | TPSDOWN       | *             | *             |*| OprSup      | D | .
+ISP*            | ISP*          | ISP           | TPSBOUNCE     | *             | *             |*| OprSup      | D | .
+*               | *             | *             | 2210_Ping     | *             | *             |*| NetServ     | D | .
+SAN             | *             | *             | *             | *             | *             |*| AIXgrp      | N | .
+*               | *             | SAN           | *             | *             | *             |*| AIXgrp      | N | .
+#============================================================================================================================
+# DomainClass	| Domain	| ObjectClass	| Object	|eventType	| parameter|itMgmtLayer| NotifyGroup	| PhPt	| trash
+#============================================================================================================================
+#############
+#QFLEX
+#############
+MQ              | MQprod        | Monitoring    | fsSize        | *             | *             |*| tchsvcdm    | D | .
+MONMQSP*        |SYSTEM         | *INITIATION.QUEUE |*          | *             | Queue*        |*| tchsvcdm    | D | .
+MONMQSP*	|*		| *		| Queue*	| *		| Queue*	|*| WBIDEV	| D | .
+MONMQSP*	|FTR.EME*	| *		| Queue*	| *		| Queue*	|*| tchsvcdm	| D | .
+### TSM ###
+#---------------#
+*		| 3584*	| .1.3.6.1.4.1.2.6.*	| *		| *		| *		|*| tsmgrp	| D | .
+TSM*		| *		| *		| LIB*		| *		| *		|*| tsmgrp	| D | .
+TSM*		| *		| *		| TAPE*		| *		| *		|*| tsmgrp	| D | .
+*		| *		| TSMDRIVE*	| *		| *		| *		|*| OprSup	| D | .
+TSM*            | m000ap01*     | *             | sm*           | *             | *             |*| tsmgrp      | D | .
+TSM*            | m000ap01*     | *             | rm*           | *             | *             |*| tsmgrp      | D | .
+##########
+# Enterprise RX
+##########
+*		| *		| *		| UPHDBDTX10*	| *		| SUB		|*| PharConv  	| D | .
+#============================================================================================================================
+# DomainClass	| Domain	| ObjectClass	| Object	|eventType	| parameter|itMgmtLayer| NotifyGroup|Phpt| trash
+#============================================================================================================================
+*               | *		| *             | C*            | *             | *             |*| ENSC          |  N | .
+*               | *		| *             | M*            | *             | *             |*| ENSC          |  N | .
+*               | *		| *             | U*            | *             | *             |*| ENSC          |  N | .
+*               | *		| *             | W*            | *             | *             |*| ENSC          |  N | .
+*		| 7SCR*		| * 		| 7SCR*		| *		| *		|*| OprSup	| D | .
+*               | *             | nfm*          | *             | *             | LATE          |*| OprSup        | D | .
+*               | *             | nfm*          | *             | *             | EXEC          |*| OprSup        | D | .
+*               | *             | nfm*          | *             | *             | SUB           |*| OprSup        | D | .
+*               | *             | COLC          | *             | *             | LATE          |*| OprSup        | D | .
+*               | *             | COLC          | *             | *             | EXEC          |*| OprSup        | D | .
+*               | *             | COLC          | *             | *             | SUB           |*| OprSup        | D | .
+*               | *             | COLC          | *             | *             | *             |*| ENSC		| N | .
+*               | *             | MONA          | *             | *             | LATE          |*| OprSup        | D | .
+*               | *             | MONA          | *             | *             | EXEC          |*| OprSup        | D | .
+*               | *             | MONA          | *             | *             | SUB           |*| OprSup        | D | .
+*		| *		| MONA 		| *		| *		| *		|*| ENSC		| N | .
+*		| *		| *		| *		| *		| TOOMANY	|*| CTMGRP	| D | .
+*		| *		| *		| *		| *		| *BLUE		|*| CTMGRP	| D | .
+*		| *		| *		| *		| *		| BOX		|*| CTMGRP	| D | .
+*		| *		| CTM_GATEWAY*	| *		| *		| *		|*| CTMGRP	| D | .
+CTM		| CTMserver	| GTW		| opensystem	| CTMmon*	| status 	|*| CTMGRP	| D | .
+#==============================================================================================================================
+# DomainClass	| Domain	| ObjectClass	| Object	|eventType	| parameter|itMgmtLayer| NotifyGroup|Phpt| trash
+#==============================================================================================================================
+# IBM Director windows boxes
+*               | monf* | .1.3.6.1.4.1.2*       | *            | *             | *              |*| ntgrp	| D | .
+#=============================================================
+# Standard NT Services
+#=============================================================
+NT		| *		| NT_SERVICES	| RpcSs		| *		| *		|*| ntgrp	| D | .
+NT		| *		| NT_SERVICES	| W3SVC		| *		| *		|*| ntgrp	| D | .
+NT		| *		| NT_SERVICES	| NMSSvc	| *		| *		|*| ntgrp	| D | .
+NT		| *		| NT_SERVICES	| Norton*	| *		| *		|*| ntgrp	| D | .
+NT		| *		| NT_SERVICES	| Netlogon*	| *		| *		|*| ntgrp	| D | .
+NT		| *		| NT_SERVICES	| Lanman*	| *		| *		|*| ntgrp	| D | .
+#=============================================================
+# HelpDesk Servers
+#=============================================================
+#APTEA               | monf09797hd*  | *     | Remote element is up*  | *             | *             |*| HDADMIN | D | .
+APTEA               | monf06782hd*  | *     | Remote element is up*  | *             | *             |*| HDADMIN | D | .
+APTEA               | sbrf06732hd*  | *     | Remote element is up*  | *             | *             |*| HDADMIN | D | .
+#APTEA               | MONF09797HD*  | *     | Remote element is up*  | *             | *             |*| HDADMIN | D | .
+APTEA               | MONF06782HD*  | *     | Remote element is up*  | *             | *             |*| HDADMIN | D | .
+APTEA               | SBRF06732HD*  | *     | Remote element is up*  | *             | *             |*| HDADMIN | D | .
+#=============================================================
+# SAM Servers
+#=============================================================
+*               | MONF06111APP | *     | Remote element is up*  | *             | *             |*| ntgrp         | Y | .
+### Exchange Server ###
+#---------------------#
+*               | monf05863msg  | *              | *            | *             | *              |*| ntgrp	| D | .
+*               | monf05703msg  | *              | *            | *             | *              |*| ntgrp	| D | .
+*               | monf05943msg  | *              | *            | *             | *              |*| ntgrp	| D | .
+*               | monf06781msg  | *              | *            | *             | *              |*| ntgrp	| D | .
+*               | monf06254msg  | *              | *            | *             | *              |*| ntgrp	| D | .
+*               | monf06111app  | *              | *            | *             | *              |*| ntgrp	| D | .
+*               | monf05815imc  | *              | *            | *             | *              |*| ntgrp	| D | .
+*               | MONF05815IMC  | *              | *            | *             | *              |*| ntgrp	| D | .
+*               | monf07264msg  | *              | *            | *             | *              |*| ntgrp	| D | .
+*               | monf07391msg  | *              | *            | *             | *              |*| ntgrp	| D | .
+*               | monf06255msg  | *              | *            | *             | *              |*| ntgrp	| D | .
+*               | monf06827app  | *              | *            | *             | *              |*| ntgrp	| D | .
+*               | monf04924web  | *              | *            | *             | *              |*| ntgrp	| D | .
+*               | MONF07264MSG  | *              | *            | *             | *              |*| ntgrp	| D | .
+*               | *             | *              | *            | *             | CheckConfig*   |*| pemgrp	| N | .
+#===========================================================================================================================
+#Portal Alerts set by Samir
+#======================================
+APTEA		|*		| *		| *		| *		| *		|*| ntgrp		| D | .
+STORE		|*		| *		| *		| *		| *		|*| ntgrp		| D | .
+Store Exchange	|*		| *		| *		| *		| *		|*| ntgrp		| D | .
+Exchange	|*		| *		| *		| *		| *		|*| ntgrp		| D | .
+Citrix		|*		| *		| *		| *		| *		|*| ntgrp		| D | .
+GAPTEA		|*		| *		| *		| *		| *		|*| ntgrp		| D | .
+#===========================================================================================================================
+#Web Port Monitoring
+#======================================
+*               | *             | *             | *             | *             | Network Service Port 8*    |*| ntgrp  | D | .
+*               | *             | *             | *             | *             | NLB Web Port* |*| ntgrp         | D | .
+*               | rxmail.aptea.com* | *         | *             | *             | *		|*| ntgrp         | D | .
+###FileSystems#######
+#==============================================================================================================================
+# DomainClass	| Domain	| ObjectClass	| Object	|eventType	| parameter|itMgmtLayer| NotifyGroup|Phpt| trash
+#==============================================================================================================================
+Unix*            | *             | File System     | *     | *   | *Tmp*                         |*| AIXgrp        | D | .
+Unix*            | *             | File System     | *     | *   | *tmp*                         |*| AIXgrp        | D | .
+Unix*            | *             | File System     | *     | *   | *TMP*                         |*| AIXgrp        | D | .
+Unix*            | *             | File System     | *     | *   | *FTR*                         |*| WBIDEV        | D | .
+Unix*            | *             | File System     | *     | *   | *FTP*                         |*| WBIDEV        | D | .
+Unix*            | *             | File System     | *     | *   | /db/ARF*                      |*| ACCTREQ       | D | .
+Unix*            | *             | File System     | *     | *   | /db/EME10*                    |*| EMEDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/EME20*                    |*| EMEDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/EME90*                    |*| EMEDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/GPPR*                     |*| oragrp        | D | .
+Unix*            | *             | File System     | *     | *   | /db/MEDPRD*                   |*| DBASTORES     | D | .
+Unix*            | *             | File System     | *     | *   | /db/MOPP*                     |*| RETKDBA       | D | .
+Unix*            | *             | File System     | *     | *   | /db/MQSI*                     |*| DBASTORES     | D | .
+Unix*            | *             | File System     | *     | *   | /db/OAAP*                     |*| oragrp        | D | .
+Unix*            | *             | File System     | *     | *   | /db/OADM*                     |*| oragrp        | D | .
+Unix*            | *             | File System     | *     | *   | /db/OADV*                     |*| oragrp        | D | .
+Unix*            | *             | File System     | *     | *   | /db/OAHI*                     |*| oragrp        | D | .
+Unix*            | *             | File System     | *     | *   | /db/OAMU*                     |*| oragrp        | D | .
+Unix*            | *             | File System     | *     | *   | /db/OAPC*                     |*| oragrp        | D | .
+Unix*            | *             | File System     | *     | *   | /db/OAPR*                     |*| oragrp        | D | .
+Unix*            | *             | File System     | *     | *   | /db/OAQA*                     |*| oragrp        | D | .
+Unix*            | *             | File System     | *     | *   | /db/OAUA*                     |*| oragrp        | D | .
+Unix*            | *             | File System     | *     | *   | /db/PLHDVUS*                  |*| SCALEMGRH     | D | .
+Unix*            | *             | File System     | *     | *   | /db/PLHPDUS*                  |*| SCALEMGRH     | D | .
+Unix*            | *             | File System     | *     | *   | /db/PSAP*                     |*| RETKDBA       | D | .
+Unix*            | *             | File System     | *     | *   | /db/PSAQ*                     |*| RETKDBA       | D | .
+Unix*            | *             | File System     | *     | *   | /db/PSAT*                     |*| RETKDBA       | D | .
+Unix*            | *             | File System     | *     | *   | /db/PSDV*                     |*| RETKDBA       | D | .
+Unix*            | *             | File System     | *     | *   | /db/PSTP*                     |*| RETKDBA       | D | .
+Unix*            | *             | File System     | *     | *   | /db/PSTQ*                     |*| RETKDBA       | D | .
+Unix*            | *             | File System     | *     | *   | /db/PSTR*                     |*| RETKDBA       | D | .
+Unix*            | *             | File System     | *     | *   | /db/PSTT*                     |*| RETKDBA       | D | .
+Unix*            | *             | File System     | *     | *   | /db/RDD1*                     |*| RDWDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/RDD2*                     |*| RDWDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/RDPR*                     |*| RDWDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/RDSC*                     |*| RDWDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/RDSP*                     |*| RDWDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/RDUA*                     |*| RDWDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/RMD1*                     |*| RETKDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/RMD2*                     |*| RETKDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/RMD3*                     |*| RETKDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/RMHP*                     |*| RETKDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/RMPR*                     |*| RETKDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/RMIT*                     |*| RETKDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/RMSC*                     |*| RETKDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/RMSP*                     |*| RETKDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/RMUA*                     |*| RETKDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/RPPR*                     |*| oragrp        | D | .
+Unix*            | *             | File System     | *     | *   | /db/SGDV*                     |*| DBASTORES     | D | .
+Unix*            | *             | File System     | *     | *   | /db/SGPR*                     |*| DBASTORES     | D | .
+Unix*            | *             | File System     | *     | *   | /db/STPR*                     |*| RDWDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/STSC*                     |*| RDWDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/STSP*                     |*| RDWDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/STUA*                     |*| RDWDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/TAXD*                     |*| RETKDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/TLPM*                     |*| RETKDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/TLPR*                     |*| RETKDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/VPRD*                     |*| RETKDBA        | D | .
+Unix*            | *             | File System     | *     | *   | /db/TSM*                      |*| tsmgrp        | D | .
+Unix*            | *             | File System     | *     | *   | /in/TSM*                      |*| tsmgrp        | D | .
+Unix*            | *             | File System     | *     | *   | /in/CONTROLM*                 |*| CTMGRP        | D | .
+Unix*            | *             | File System     | *     | *   | /in/CTMAGENT*                 |*| CTMGRP        | D | .
+Unix*            | *             | File System     | *     | *   | /in/CTMEM*                    |*| CTMGRP        | D | .
+Unix*            | *             | File System     | *     | *   | /in/SGPR/sg*                  |*| softgr        | D | .
+Unix*            | *             | File System     | *     | *   | /in/SGPR/hhts*                |*| softgr        | D | .
+Unix*            | *             | File System     | *     | *   | /in/SGPR/ghhts*               |*| softgr        | D | .
+Unix*            | *             | File System     | *     | *   | /in/SGPR/oci*                 |*| softdb        | D | .
+Unix*            | *             | File System     | *     | *   | /in/MQM*                      |*| MQgrp         | D | .
+Unix*            | *             | File System     | *     | *   | /in/APACHE*                   |*| AIXgrp        | D | .
+Unix*            | *             | File System     | *     | *   | /work                         |*| PharPDX       | D | .
+Unix*            | *             | File System     | *     | *   | /in/QFLEX                     |*| AUTOA         | D | .
+Unix*            | *             | File System     | *     | *   | /in/ALRMPT                    |*| AUTOA         | D | .
+Unix*		 | *		 | File System	   | *	   | *	 | *PATROL*	                 |*| pemgrp        | D | .
+Unix*            | *             | File System     | *     | *   | /in/TIVMON                    |*| AUTOA         | D | .
+### Scales Group ###
+#AnP		| ISP*		| StoreISP	| *			| ShellScript | * 	|*| StoreHelp	| D | .
+#Pmk		| ISP*		| StoreISP	| *			| ShellScript | * 	|*| StoreHelp	| D | .
+*		| ISP*		| PLUM		| FEED			| *	| BOSS		|*| PLUMFEED	| D | .
+*		| *		| File System	| *anp-db-PLHPD*	| *	| *		|*| Scales	| D | .  ### MQ Group ###
+#==============================================================================================================================
+# DomainClass	| Domain	| ObjectClass	| Object	|eventType	| parameter|itMgmtLayer| NotifyGroup|Phpt| trash
+#==============================================================================================================================
+## 06.20.2005 - Jay Shancey, changed the Domain listing of hostnames to * not knowing where the alert is truly coming from.
+*		| *		|AMQ_QLOCAL 	| *ABS*RDS*HOLD* 	| *    	| *		|*| WBIDEV 	| D | .
+*		| *	 	|AMQ_QLOCAL 	| *ABS*RDS*ERROR* 	| *    	| *		|*| WBIDEV 	| D | .
+*               | *		|AMQ*		|*MONMQSP1_824XU!F*	|*       | *		|*| Gentran_EDI  | D | .
+*               | * 		|AMQ*		|*MONMQSP1_855UU!F*	|*       | *		|*| Gentran_EDI  | D | .
+*               | *		|AMQ*		|*MONMQSP1_855VC!F*	|*       | *		|*| Gentran_EDI  | D | .
+*               | *		|AMQ*		|*MONMQSP1_888UU!F*	|*       | *		|*| Gentran_EDI  | D | .
+*               | *		|AMQ*		|*MONMQSP1_894US!F*	|*       | *		|*| Gentran_EDI  | D | .
+*               | *		|AMQ*		|*MONMQSP1_879UU!F*	|*       | *		|*| Gentran_EDI  | D | .
+*               | *		|AMQ*		|*MONMQSP1_880UU!F*	|*       | *		|*| Gentran_EDI  | D | .
+*               | *		|AMQ*		|*MONMQSP1_880UB!F*	|*       | *		|*| Gentran_EDI  | D | .
+*               | *		|AMQ*		|*MONMQSP1_810VC!F*	|*       | *		|*| Gentran_EDI  | D | .
+*               | *		|AMQ*		|*MONMQSP1_810UU!F*	|*       | *		|*| WBIDEV       | D | .
+*               | *		|AMQ*		|*MONMQSP1_832VC!F*	|*       | *		|*| Gentran_EDI  | D | .
+*               | *		|AMQ*		|*MONMQSP1_820XU!F*	|*       | *		|*| Gentran_EDI  | D | .
+*               | *		|AMQ*		|*MONMQSP1_831U!F* 	|*       | *		|*| Gentran_EDI  | D | .
+*               | *		|AMQ*		|*MONMQSP1_850VC!F*	|*       | *		|*| Gentran_EDI  | D | .
+*               | *		|AMQ*		|*MONMQSP1_875UU!F*	|*       | *		|*| Gentran_EDI  | D | .
+*               | *		|AMQ*		|*MONMQSP1_894UU!F*	|*       | *		|*| Gentran_EDI  | D | .
+*               | *		|AMQ*		|*MONMQSP1_852UU!F*	|*       | *		|*| Gentran_EDI  | D | .
+*               | *		|AMQ*		|*EDIP1_WDI!FAILURE!Q 	|*       | *		|*| Gentran_EDI  | D | .
+*               | *		|AMQ*		|*MONEDIP1_820*  	|*       | *		|*| Gentran_EDI  | D | .
+*               | *		|AMQ*		|*MONEDIP1_831*  	|*       | *		|*| Gentran_EDI  | D | .
+*               | *		|AMQ*		|*MONEDIP1_EDI*  	|*       | *		|*| WBIDEV	| D | .
+*               | *		|AMQ*		|*COLEDIT1_820*  	|*       | *		|*| Gentran_EDI  | D | .
+*		| *	 	|AMQ_QLOCAL 	| *MONMQSP1_STORE!DATA* | *    	| *		|*| WBIDEV 	| D | .
+*		| *	 	|AMQ_QLOCAL 	| *MONMQSP1_INVOICE!XML*| *    	| *		|*| WBIDEV 	| D | .
+*		| *	 	|AMQ_QLOCAL 	| *MONMQSP1_INVOICE!DEL*| *    	| *		|*| WBIDEV 	| D | .
+*		| *	 	|AMQ_QLOCAL 	| *MONMQSP1_THREEPL* 	| *    	| *		|*| WBIDEV 	| D | .
+*		| *	 	|AMQ_QLOCAL 	| *MONMQSP1_PRS!DATA!F* | *    	| *		|*| WBIDEV 	| D | .
+*		| *		|AMQ_QLOCAL	| *WBI!EICS2SL!OUTPUT*	| *	| *		|*| LDSMSG 	| D | .
+*		| *	 	|AMQ_QLOCAL 	| *WBI!EICS2SL!CONN* 	| *    	| *		|*| WBIDEV 	| D | .
+*		| *	 	|AMQ_QLOCAL 	| *WBI!EICS2RMS!CONN* 	| *    	| *		|*| WBIDEV 	| D | .
+*		| *	 	|AMQ_QLOCAL 	| *WBI!EICS2RMS!* 	| *    	| *		|*| ERMSSUP 	| D | .
+*		| *	 	|AMQ_QLOCAL 	| *WBI*		 	| *    	| *		|*| WBIDEV 	| D | .
+*		| *	 	|AMQ_QLOCAL 	| *DOM*		 	| *    	| *		|*| WBIDEV 	| D | .
+*		| *		|AMQ_QLOCAL	| *MANU!STOREORDER!* 	| *    	| *		|*| WBIDEV 	| D | .
+*		| *	 	|AMQ_QLOCAL 	| *MANU!ROUTE!*	 	| *    	| *		|*| WBIDEV 	| D | .
+*		| *	 	|AMQ_QLOCAL 	| *FTR!VRMSUS!CONT* 	| *    	| *		|*| MQgrp 	| D | .
+*		| *	 	|AMQ*	 	| *TLOG!*IN!ERROR 	| *    	| *		|*| WBIDEV	| D | .
+*		| *	 	|AMQ*	 	| *TLOG!*OUT!ERROR 	| *    	| *		|*| WBIDEV	| D | .
+*		| *	 	|AMQ*	 	| m012ab01_MONMQSP1_EMAIL!FAILURE!OUTPUT| * | *	|*| WBIDEV	| D | .
+*               | *             |AMQ*           | *CGO.FORCAST.FAILURE* | *     | *             |*| WBIDEV      | D | .
+*               | *             |AMQ*           | *SPO.ROUTER.FAILURE*  | *     | *             |*| WBIDEV      | D | .
+*               | *             |AMQ*           | *SPO.RETEK.FAILURE*   | *     | *             |*| WBIDEV      | D | .
+*               | *             |AMQ*           | *SPO.DB.FAILURE*      | *     | *             |*| RMS         | D | .
+#==============================================================================================================================
+# DomainClass	| Domain	| ObjectClass	| Object	|eventType	| parameter|itMgmtLayer| NotifyGroup|Phpt| trash
+#==============================================================================================================================
+#################################
+## hub was moved from spn61 to spn41 Change was made by Samir Khoury.
+#################################
+*		| ca*		| AMQ*		| *			| *	| *		|*| MQgrp		| N | .
+*		| *		| AMQ*		| *			| *	| *		|*| MQgrp		| N | .
+*		| ca*		| *		| AMQ*			| *	| *		|*| MQgrp		| N | .
+*		| *		| *		| AMQ*			| *	| *		|*| MQgrp		| N | .
+NT		| *		| AMQ*		| *			| *	| *		|*| MQgrp		| N | .
+NT		| *		| *		| AMQ*			| *	| *		|*| MQgrp		| N | .
+NT		| monf6267	| AMQ*		| *			| *	| *		|*| MQgrp		| N | .
+NT		| colf6266	| AMQ*		| *			| *	| *		|*| MQgrp		| N | .
+NT		| sbrf06791	| AMQ*		| *			| *	| *		|*| MQgrp		| N | .
+### Network Service Alarms ###
+#==============================================================================================================================
+# DomainClass	| Domain	| ObjectClass	| Object	|eventType	| parameter|itMgmtLayer| NotifyGroup|Phpt| trash
+#==============================================================================================================================
+NT		| *		| NT_SERVICES	| eHea*			| *	| *		|*| AUTONET  	| D | .
+NT		| *		| NT_SERVICES	| FLEX*			| *	| *		|*| AUTONET  	| D | .
+NT		| *		| NT_SERVICES	| OracleEH*		| *	| *		|*| AUTONET  	| D | .
+NT		| *		| NT_SERVICES	| OracleServiceEH*	| *	| *		|*| AUTONET	| D | .
+NT		| *		| NT_SERVICES	| TrapEXP*		| *	| *		|*| AUTONET  	| D | .
+NT              | *             | NT_SERVICES   | Centura*              | *     | *             |*| PRSW2C      | D | .
+routerSwitch	| *		| *		| *			| *	| *		|*| AUTONET	| D | .
+backPlane	| *		| *		| *			| *	| *		|*| AUTONET	| D | .
+lanWan		| *		| *		| *			| *	| *		|*| AUTONET	| D | .
+lanIf		| *		| *		| *			| *	| *		|*| AUTONET	| D | .
+wanIf		| *		| *		| *			| *	| *		|*| AUTONET	| D | .
+ras		| *		| *		| *			| *	| *		|*| AUTONET	| D | .
+modem		| *		| *		| *			| *	| *		|*| AUTONET	| D | .
+modemPoo*	| *		| *		| *			| *	| *		|*| AUTONET	| D | .
+*		| 10.*.164	| *		| *			| *	| *		|*| VBCMA		| N | .
+*               | 10.*.142      | *             | *                     | *     | *             |*| VBCMA               | N | .
+ISDN*           | *             | PEMISDN*      | *                     | *     | *             |*| AUTONET        | D | .
+ISDN*           | *             | *	        | *                     | *     | *Physical     |*| AUTONET        | D | .
+### Network Service Alarms ###
+#==============================================================================================================================
+# DomainClass	| Domain	| ObjectClass	| Object	|eventType	| parameter|itMgmtLayer| NotifyGroup|Phpt| trash
+#==============================================================================================================================
+Montvale_Head*	| *		| *		| *			| *	| *		|*| NetServN	| D | .
+Cisco_ACS*      | *             | *             | *                     | *     | *             |*| NetServN    | D | .
+*		| *		| *		| ISDN*			| *	| *		|*| NetServ	| D | .
+*		| *		| *		| VSAT*			| *	| *		|*| NetServ	| D | .
+*		| *		| *		| PIP*			| *	| *		|*| NetServ	| D | .
+*               | *             | *             | Site_Pin*             | *     | *             |*| NetServ     | D | .
+*		| *		| *		| TU0*			| *	| *		|*| NetServ	| D | .
+DM_Office*	| *		| *		| *			| *	| *		|*| NetServ	| N | .
+*Stores         | 94*           | *             | *                     | *     | *             |*| NetServ     | N | .
+CICS*		| CICSEFT*	| *		| VENDOR*		| *	| *		|*| OprSup 	| D | .
+CICS*		| * 		| *		| *			| *	| *		|*| StoreHelp 	| D | .
+*               | *             | CICS*         | CONNECT*              | *     | UNAVAILABLE*  |*| OprSup        | D | .
+test*           | *             | *             | *                     | *     | *             |*| pemgrp        | D | .
+*		| * 		| *		| Voice*		| *	| *		|*| AUTONET	| D | .
+### RMS Team ###
+*		| *		| *		| RMS*			| *	| *		|*| RMS		| D | .
+#==============================================================================================================================
+# DomainClass	| Domain	| ObjectClass	| Object	|eventType	| parameter|itMgmtLayer| NotifyGroup|Phpt| trash
+#==============================================================================================================================
+### Oracle
+*		| *		| *		| MFGP*			| *	| *		|*| MFGP		| D | .
+*		| *		| *		| TMPR*			| *	| *		|*| TMPR		| D | .
+*		| *		| *		| RDWPRD*		| *	| *		|*| RDWPRD	| D | .
+*		| *		| *		| RMSPRD*		| *	| *		|*| RMSPRD	| D | .
+*		| *		| *		| oragrp*		| *	| *		|*| oragrp	| D | .
+*		| *		| *		| *oragrp*		| *	| *		|*| oragrp	| D | .
+*		| *		| *		| TLPR*			| *	| *		|*| TLPR		| D | .
+*		| *		| *		| OCP*			| *	| *		|*| oragrp	| D | .
+*		| *		| *		| TRLP*			| *	| *		|*| oragrp	| D | .
+*		| *		| *		| ORA*			| *	| *		|*| oragrp	| D | .
+*		| *		| *		| OA*			| *	| *		|*| oragrp	| D | .
+NT		| *		| *		| MFGP*			| *	| *		|*| MFGP		| D | .
+NT		| *		| *		| TMPR*			| *	| *		|*| TMPR		| D | .
+NT		| *		| *		| RDWPRD*		| *	| *		|*| RDWPRD	| D | .
+NT		| *		| *		| RMSPRD*		| *	| *		|*| RMSPRD	| D | .
+NT		| *		| *		| oragrp*		| *	| *		|*| oragrp	| D | .
+NT		| *		| *		| *oragrp*		| *	| *		|*| oragrp	| D | .
+NT		| *		| *		| TLPR*			| *	| *		|*| TLPR		| D | .
+NT		| *		| *		| OCP*			| *	| *		|*| oragrp	| D | .
+NT		| *		| *		| TRLP*			| *	| *		|*| oragrp	| D | .
+NT		| *		| *		| ORA*			| *	| *		|*| oragrp	| D | .
+NT		| *		| *		| OA*			| *	| *		|*| oragrp	| D | .
+### EPOS Servers ###
+NT		| monf6267	| H*		| *			| *	| N*		|*| pemgrp	| D | .
+NT		| sbrf06791	| H*		| *			| *	| N*		|*| pemgrp	| D | .
+NT		| monf6267	| *		| *			| *	| *		|*| EPOS		| D | .
+NT		| sbrf06791	| *		| *			| *	| *		|*| EPOS		| D | .
+### Output Mangement ###
+NT		| MONF06788DB	| *		| *			| *	| *		|*| OPMgrp	| D | .
+### Patrol FilterPath HBInterval ###
+*		| AGENTC*	| PING*		| *			| *	| PING*		|*| pemgrp	| N | .
+*		| *		| HOST*		| *			| *	| *		|*| pemgrp	| D | .
+*		| *		| HOST*		| rmsprdpn		| *	| *		|*| AIXgrp	| D | .
+*		| *		| HOST*		| ma01p002		| *	| *		|*| AIXgrp	| D | .
+*		| *		| HOST*		| ma01p001		| *	| *		|*| AIXgrp	| D | .
+*		| *		| HOST*		| rmsapppn		| *	| *		|*| AIXgrp	| D | .
+*		| *		| *		| *			| *	| Address	|*| pemgrp	| D | .
+#==============================================================================================================================
+# DomainClass	| Domain	| ObjectClass	| Object	|eventType	| parameter|itMgmtLayer| NotifyGroup|Phpt| trash
+#==============================================================================================================================
+### NT Servers ###
+ctmreq          | user          | appv          | *	                | *     | *             |*| ntgrp | D | .
+NT		| *		| *		| *			| *	| *		|*| ntgrp	| D | .
+Exch*           | *             | *             | *                     | *     | *             |*| ntgrp | D | .
+exch*           | *             | *             | *                     | *     | *             |*| ntgrp | D | .
+*		| *		| Windows*	| *			| *	| *		|*| ntgrp	| D | .
+*		| *		| Ping		| *			| *	| *		|*| ntgrp | D | .
+*		| monu*		| *		| *			| *	| *		|*| pemgrp| N | .
+*		| MONU*		| *		| *			| *	| *		|*| pemgrp| N | .
+NT		| T*		| *		| *			| *	| *		|*| ntgrp| D | .
+NT		| T*		| H*		| *			| *	| *		|*| pemgrp| D | .
+NT		| t*		| *		| *			| *	| *		|*| ntgrp| D | .
+NT		| t*		| H*		| *			| *	| *		|*| pemgrp| D | .
+### ConnectSNMP ###
+*		| *		| *1.534*	| *			| *	| *		|*| OprSup| D | .
+*		| *		| *1.33*	| *			| *	| *		|*| OprSup| D | .
+*		| *		| Windows*	| PerfMon Status	| *	| *		|*| pemgrp| N | .
+*		| *		| *     	| Application Collection Status*| *	| *	|*| pemgrp| N | .
+VEEM*           | *             | Windows*      | Application Collection Status*| *     | *     |*| pemgrp| N | .
+Unix*           | *             | *             | Application Collection Status*| *     | *     |*| pemgrp| N | .
+APTEA*          | *             | *             | Application Collection Status*| *     | *     |*| pemgrp| N | .
+Citrix*         | *             | *             | Application Collection Status*| *     | *     |*| pemgrp| N | .
+Exchange*       | *             | *             | Application Collection Status*| *     | *     |*| pemgrp| N | .
+STORE*          | *             | *             | Application Collection Status*| *     | *     |*| pemgrp| N | .
+Store Exchange* | *             | *             | Application Collection Status*| *     | *     |*| pemgrp| N | .
+Voice*          | *             | *             | Application Collection Status*| *     | *     |*| pemgrp| N | .
+Unix*           | m022ap01*     | Process*      | Process Physical Memory Usage*| *     | *     |*| CTMGRP| D | .
+Unix*		| mqprhub1*	| *     	| Process Status*  	| *	| *		|*| pemgrp| N | .
+*Linux*           | *             | Ping          | *                     | *     | *             |*| AIXgrp| D | .
+Linux*           | *             | Ping          | *                     | *     | *             |*| AIXgrp| D | .
+Unix*           | *             | Ping          | *                     | *     | *             |*| AIXgrp| D | .
+*Unix*           | *             | Ping          | *                     | *     | *             |*| AIXgrp| D | .
+Unix*           | *             | Swap*         | *                     | *     | *             |*| AIXgrp| D | .
+Unix            | *             | *             | *                     | *     | *             |*| AIXgrp| D | .
+Unix Test*      | *             | *             | *                     | *     | *             |*| AIXgrp| N | .
+AIX		| *		| * 		| *			| *	| *		|*| AIXgrp| D | .
+Test		| *		| * 		| *			| *	| *		|*| pemgrp| D | .
+RSM Servers	| *		| * 		| *			| *	| *		|*| pemgrp| D | .
+Portal Server	| *		| * 		| *			| *	| *		|*| pemgrp| D | .
+### Network ###
+Network		| *		| Ping		| *			| *	| *		|*| AUTONET| N | .
+VSAT		| *		| Ping		| *			| *	| *		|*| AUTONET| N | .
+DSL		| *		| Ping		| *			| *	| *		|*| AUTONET| N | .
+### Voice Ops ###
+Voice Ops	| *		| *		| *			| *	| *		|*| VOPADM| Y | .
+Voice Ops	| 10.*164	| *		| *			| *	| *		|*| VBCMA | Y | .
+Voice Ops	| 10.*142	| *		| *			| *	| *		|*| VBCMA | Y | .
+Voice_Operati*  | *             | *             | *                     | *     | *  	        |*| VOPADM| Y | . 
+*	 	| *		| *		| BCM_Ping		| *	| *		|*| VOICEPRST | Y | .
+APTEA           | monkron7*     | Process*      | *                     | *     | *             |*| KRONOS| D | .
+## KRONOS ##
+TIMECLOCK	| *		| TIMECLOCK	| CLOCKDOWN		| *	| *		|*| pemgrp| D | .
+## NAGIOS ##
+#==============================================================================================================================
+# DomainClass	| Domain	| ObjectClass	| Object	|eventType	| parameter|itMgmtLayer| NotifyGroup|Phpt| trash
+#==============================================================================================================================
+Scales*         | *             | *             | Scales                | m07*lp01*     | *     |*| StoreHelp | D | .
+Vender_Circuits	| MyWebGrocer	| *		| SFTP_Status		| *		| *	|*| MWG	   | D | .
+Windows_Servers | *             | *             | *                     | *             | *     |*| ntgrp   | D | .
+Montvale*       | Hartford*     | *HOST         | *                     | m072lp01*     | *     |*| NetServN | Y | .
+Montvale*       | Annex*        | *HOST         | *                     | m072lp01*     | *     |*| NetServN | Y | .
+Montvale*       | SWB*          | *HOST         | *                     | m072lp01*     | *     |*| NetServN | Y | .
+Montvale*       | Hartford*     | *             | *                     | m072lp01*     | *     |*| NetServN | N | .
+Montvale*       | Annex*        | *             | *                     | m072lp01*     | *     |*| NetServN | N | .
+Montvale*       | SWB*          | *             | *                     | m072lp01*     | *     |*| NetServN | N | .
+Montvale*       | *             | *             | *                     | m072lp01*     | *     |*| NetServN | D | .
+Montvale*       | *             | *HOST         | *                     | m072lp01*     | *     |*| NetServN | Y | .
+*               | *             | *             | SW*Ping               | *             | *     |*| NetServ  | N | .
+*               | *             | *             | AP*Ping               | *             | *     |*| NetServ  | D | .
+*               | *             | *             | DM_AP*Ping               | *             | *     |*| NetServ  | D | .
+*               | *             | *             | ISP_Ping              | *             | *     |*| StoreHelp| Y | .
+*		| *		| *		| DSL_Ping		| *		| * 	|*| NetServ  | D | .
+*		| *		| *		| Cable*		| *		| * 	|*| NetServ  | D | .
+*		| *		| *		| S1_Status_IP		| *		| * 	|*| NetServ  | N | .
+Offices*        | *             | *             | *                     | m072lp01*     | *     |*| NetServN | D | .
+Offices*        | *             | *HOST         | *                     | m072lp01*     | *     |*| NetServN | Y | .
+Store ISP*      | *             | *             | *                     | m072lp01*     | *     |*| StoreHelp | D | .
+*               | *             | *             | *                     | m072lp01*     | *     |*| pemgrp | D | .
+*               | ERX*          | *             | *                     | m072lp01*     | *     |*| RXSYS  | D | .
+*               | *             | *HOST         | *                     | m072lp01*     | *     |*| NetServN | N | .
+Unix*           | *             | *             | *                     | *             | Nagios Foundation*     |*| AUTONET | D | .
+NAGIOS*         | m072lp01*     | Groundwork*   | LastUpdate*           | *             | *     |*| AUTONET | D | .
+*               | *             | *             | snmp*uptime           | *             | *     |*| NetServN  | Y | .
+Cable_gateways* | *             | *             | *                     | m072lp01*     | *     |*| NetServ | N | .
+## Blackberry Monitoring Server
+*               | monf09649bes* | _Server*      | *                     | * 		| *     |*| ntgrp  | N | .
+### Default ###
+RS6000		| *		| MEM*		| MEM*			| *	| *		|*| AIXgrp| D | .
+*		| *		| *		| *			| *	| *		|*| pemgrp| D | .
+*		| MONU*		| *		| *			| NAGIOS*	| *		|*| Perfgrp| N | .
+*		| *		| *		| *			| OPM*	| *		|*| Perfgrp| D | .
+#============================================================================================================================
+# DomainClass   | Domain        | ObjectClass   | Object        |eventType      | parameter|itMgmtLayer| NotifyGroup|Phpt| trash
+#============================================================================================================================
+*            | *             | *             | *             | AIXgrp        | *             |*| AIXgrp        | D | .
+*            | *             | *             | *             | CSOS          | *             |*| CSOS          | D | .
+*            | *             | *             | *             | pemgrp        | *             |*| pemgrp        | D | .
+*            | *             | *             | *             | Perfgrp       | *             |*| Perfgrp       | D | .
+*            | *             | *             | *             | CTMGRP        | *             |*| CTMGRP        | D | .
+*            | *             | *             | *             | SDDRETMG      | *             |*| SDDRETMG      | D | .
+*            | *             | *             | *             | SCALEMGRH     | *             |*| SCALEMGRH     | D | .
+*            | *             | *             | *             | SPMS          | *             |*| SPMS          | D | .
+*            | *             | *             | *             | PICS          | *             |*| PICS          | D | .
+*            | *             | *             | *             | RXBUS         | *             |*| RXBUS         | D | .
+*            | *             | *             | *             | Gentran_EDI   | *             |*| Gentran_EDI   | D | .
+*            | *             | *             | *             | Promo         | *             |*| Promo         | D | .
+*            | *             | *             | *             | PSKU          | *             |*| PSKU          | D | .
+*            | *             | *             | *             | HRSPC         | *             |*| HRSPC         | D | .
+*            | *             | *             | *             | ISHOPBIZ      | *             |*| ISHOPBIZ      | D | .
+*            | *             | *             | *             | ISHOPB4N      | *             |*| ISHOPB4N      | D | .
+*            | *             | *             | *             | POSDEV        | *             |*| POSDEV        | D | .
+*            | *             | *             | *             | MQgrp         | *             |*| MQgrp         | D | .
+*            | *             | *             | *             | RPM           | *             |*| RPM           | D | .
+*            | *             | *             | *             | GMDCCnS       | *             |*| GMDCCnS       | D | .
+*            | *             | *             | *             | PharPDX       | *             |*| PharPDX       | D | .
+*            | *             | *             | *             | oragrp        | *             |*| oragrp        | D | .
+*            | *             | *             | *             | OFID          | *             |*| OFID          | D | .
+*            | *             | *             | *             | SPPS          | *             |*| SPPS          | D | .
+*            | *             | *             | *             | SCALES        | *             |*| SCALES        | D | .
+*            | *             | *             | *             | pem           | *             |*| pem           | D | .
+*            | *             | *             | *             | ORAHRBEN      | *             |*| ORAHRBEN      | D | .
+*            | *             | *             | *             | ORAGPDEV      | *             |*| ORAGPDEV      | D | .
+*            | *             | *             | *             | RDW           | *             |*| RDW           | D | .
+*            | *             | *             | *             | RMS           | *             |*| RMS           | D | .
+*            | *             | *             | *             | DBA           | *             |*| DBA           | D | .
+*            | *             | *             | *             | tsmgrp        | *             |*| tsmgrp        | D | .
+*            | *             | *             | *             | UPROM         | *             |*| UPROM         | D | .
+*            | *             | *             | *             | WBIDEV        | *             |*| WBIDEV        | D | .
+*            | *             | *             | *             | POSHST        | *             |*| POSHST        | D | .
+*            | *             | *             | *             | ntgrp         | *             |*| ntgrp         | D | .
+*            | *             | *             | *             | ENSC          | *             |*| ENSC          | D | .
+*            | *             | *             | *             | POSCAS        | *             |*| POSCAS        | D | .
+*            | *             | *             | *             | MATRA         | *             |*| MATRA         | D | .
+*            | *             | *             | *             | OprSup        | *             |*| OprSup        | D | .
+*            | *             | *             | *             | RXSYS         | *             |*| RXSYS         | D | .
+*            | *             | *             | *             | HRMSPAYR      | *             |*| HRMSPAYR      | D | .
+*            | *             | *             | *             | aptst         | *             |*| aptst         | D | .
+*            | *             | *             | *             | EMETLOG       | *             |*| EMETLOG       | D | .
+*            | *             | *             | *             | ELBNKREC      | *             |*| ELBNKREC      | D | .
+*            | *             | *             | *             | CSIT          | *             |*| CSIT          | D | .
+*            | *             | *             | *             | AWAP          | *             |*| AWAP          | D | .
+*            | *             | *             | *             | DBASTORES     | *             |*| DBASTORES     | D | .
+*            | *             | *             | *             | ENTRX         | *             |*| ENTRX         | D | .
+*            | *             | *             | *             | EPOS          | *             |*| EPOS          | D | .
+*            | *             | *             | *             | grosspro      | *             |*| grosspro      | D | .
+*            | *             | *             | *             | EDTS          | *             |*| EDTS          | D | .
+*            | *             | *             | *             | EFTEBT        | *             |*| EFTEBT        | D | .
+*            | *             | *             | *             | ERMSSUP       | *             |*| ERMSSUP       | D | .
+*            | *             | *             | *             | POSHOST       | *             |*| POSHOST       | D | .
+*            | *             | *             | *             | PWIS          | *             |*| PWIS          | D | .
+*            | *             | *             | *             | OPMgrp        | *             |*| OPMgrp        | D | .
+*            | *             | *             | *             | NetServ       | *             |*| NetServ       | D | .
+*            | *             | *             | *             | NDMSWDIST     | *             |*| NDMSWDIST     | D | .
+*            | *             | *             | *             | MQPRS         | *             |*| MQPRS         | D | .
+*            | *             | *             | *             | MonComp       | *             |*| MonComp       | D | .
+*            | *             | *             | *             | MFGP          | *             |*| MFGP          | D | .
+*            | *             | *             | *             | SQLDBA        | *             |*| SQLDBA        | D | .
+*            | *             | *             | *             | isp2ndlvl     | *             |*| isp2ndlvl     | D | .
+*            | *             | *             | *             | INVSTORES     | *             |*| INVSTORES     | D | .
+*            | *             | *             | *             | INVADJSY      | *             |*| INVADJSY      | D | .
+*            | *             | *             | *             | SHADS         | *             |*| SHADS         | D | .
+*            | *             | *             | *             | SMART         | *             |*| SMART         | D | .
+*            | *             | *             | *             | STRBILNG      | *             |*| STRBILNG      | D | .
+*            | *             | *             | *             | STOREHIST     | *             |*| STOREHIST     | D | .
+*            | *             | *             | *             | GAPCOMCON     | *             |*| GAPCOMCON     | D | .
+*            | *             | *             | *             | SUNGARD       | *             |*| SUNGARD       | D | .
+*            | *             | *             | *             | DEALTRCK      | *             |*| DEALTRCK      | D | .
+*            | *             | *             | *             | TLOG          | *             |*| TLOG          | D | .
+*            | *             | *             | *             | TREC          | *             |*| TREC          | D | .
+*            | *             | *             | *             | tchsvcdm      | *             |*| tchsvcdm      | D | .
+*            | *             | *             | *             | TLPR          | *             |*| TLPR          | D | .
+#*            | *             | *             | *             | CCDgrp        | *             |*| CCDgrp        | D | .
+*            | *             | *             | *             | UPL           | *             |*| UPL           | D | .
+*            | *             | *             | *             | VRMSAPP       | *             |*| VRMSAPP       | D | .
+*            | *             | *             | *             | WESTUNRP      | *             |*| WESTUNRP      | D | .
+*            | *             | *             | *             | ORAMGRSS      | *             |*| ORAMGRSS      | D | .
+*            | *             | *             | *             | ACCTREQ       | *             |*| ACCTREQ       | D | .
+*            | *             | *             | *             | ApolloW       | *             |*| ApolloW       | D | .
+*            | *             | *             | *             | BEVMAX        | *             |*| BEVMAX        | D | .
+*            | *             | *             | *             | BASWARE       | *             |*| BASWARE       | D | .
+*            | *             | *             | *             | RETKDBA       | *             |*| RETKDBA       | D | .
+*            | *             | *             | *             | StoreHelp     | *             |*| StoreHelp     | D | .
+*            | *             | *             | *             | TMPR          | *             |*| TMPR          | D | .
+*            | *             | *             | *             | AUTOA         | *             |*| AUTOA         | D | .
+*            | *             | *             | *             | VOPADM        | *             |*| VOPADM        | D | .
+*            | *             | *             | *             | VOICEPRST     | *             |*| VOICEPRST     | D | .
+*            | *             | *             | *             | WinHard       | *             |*| WinHard       | D | .
+*            | *             | *             | *             | AHard         | *             |*| AHard         | D | .
+*            | *             | *             | *             | PharBAT       | *             |*| PharBAT       | D | .
+*            | *             | *             | *             | KRONOS        | *             |*| KRONOS        | D | .
+*            | *             | *             | *             | softdb        | *             |*| softdb        | D | .
+*            | *             | *             | *             | softgr        | *             |*| softgr        | D | .
+*            | *             | *             | *             | PharConv      | *             |*| PharConv      | D | .
+*            | *             | *             | *             | HDADMIN       | *             |*| HDADMIN       | D | .
+*            | *             | *             | *             | AUTONET       | *             |*| AUTONET       | D | .
+#
+#
+#
+# Description:
+# This file contains the definitions for notification.
+# Each of the definitions, based on the selection fields listed below, indicate the Business
+# Groups (or Services) to which they belong and the corresponding groups responsible
+# for supporting them. The details in the Contact field indicate either:
+#
+#  1. The person or group to be assinged the trouble-ticket for this alert and possibly, PhonePoint Notification
+#  2. Whether or not PhonePoint needs to contact someone.
+#
+# The following four fields are required to define each of the service views
+#
+# DomainClass: The category/class to which the domain belongs (NT)
+# Domain:      The residence of the monitored object (server1)
+# ObjectClass: The category/class to which the managed object belongs (CPU) - ApplicationClass
+# Object:      The object reporting this problem (CPU1) - Instance
+# EventType:   The event type from PATROL (usually WARNING, ERROR, ALARM, or INFORMATIONAL)
+# parameterName: The PATROL parameter name
+#
+#
+# NotifyGroup:	Defines the ServiceCenter group that this message will belong to (e.g. pemgrp).
+# PhPt:		Whether PhonePoint will be notified:   It can be Y or N or D (for default: Y for ALARM, N for WARNING)
+# TroubleTicket Code: Defines the TroubleTicket that will be opened for this message (e.g. Category+Type+Item)
+#
+# REMINDER:
+#    If NO_SVC_LOOKUP is set to 1 in the PathConfig.cfg file and the event source is sending
+#    service information the Service Name below will not be used. Instead the event source
+#    service value will be used.
+#
+# Wildcards can be set by using an asterisk (*) and the search order will be....
+#   1. Exact:		MyTestMessage
+#   2. End Wildcard:	MyTest*
+#   3. Start Wildcard:	*Test*
+#   4. Full Wildcard:	*
+#
+# Any messages that do not match this list will be set to "UNDEFINED"
+# Any other empty columns (Service, Contact, TT Code etc.) will be set to "UNDEFINED"
+#
+# History:
+# 31-Oct-2001  Michael Nyhuis    First Version
+# 26-Nov-2001  Michael Nyhuis    Added TroubleTicket Code Column
+# 11/19/03:    Tim Bocardo (BMC Services) Changed the default by adding columns: eventType and parameterName
+#			Also renamed the last two columns.
