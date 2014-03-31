@@ -93,6 +93,7 @@ function msgProcess($structure) {
 			//ctmOrderProcess($structure);
 			break;
 		case (strstr(strtolower($body),"from: storage_manager")):
+		case (strstr(strtolower($body),"from: storage_mgr_")):
 			logmsg("Received SAN Storage Manager message");
 			require_once "functionsSan.php";
 			$newbody=sanErrorProcess($body);
