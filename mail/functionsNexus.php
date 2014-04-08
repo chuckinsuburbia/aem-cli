@@ -10,6 +10,7 @@ function nexusProcess($structure) {
 				$contents = $part->body;
 				if($debug) logmsg("Saving attachment ".$file);
 				file_put_contents($file,$contents);
+				chmod($file,0660);
 			}
 		}
 	}
