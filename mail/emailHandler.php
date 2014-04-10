@@ -39,6 +39,11 @@ function msgProcess($structure) {
 			require_once "functionsNexus.php";
 			nexusProcess($structure);
 			return;
+		case (strstr(strtolower($structure->headers['from']),"einvoices@aptea.com")):
+			logmsg("Received E-Invoice message");
+			require_once "functionsEinvoices.php";
+			einvoiceProcess($structure);
+			return;
 		case (strstr(strtolower($body),"from: emergency alert")):
 			logmsg("Received ELert");
 			require_once "functionsElert.php";
