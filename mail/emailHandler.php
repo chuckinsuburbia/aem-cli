@@ -40,7 +40,6 @@ function msgProcess($structure) {
 			nexusProcess($structure);
 			return;
 		case (strstr(strtolower($structure->headers['from']),"einvoices@aptea.com")):
-		case (strstr(strtolower($structure->headers['from']),"collishc@aptea.com")):
 			logmsg("Received E-Invoice message");
 			require_once "functionsEinvoices.php";
 			einvoiceProcess($structure);
