@@ -9,7 +9,7 @@ function einvoiceProcess($structure) {
 				unset($file);
 				if (isset($part->d_parameters['filename'])){
 					if (preg_match("/.pdf$/i",$part->d_parameters['filename'])) {
-						do { $file = $basePath."/data/out/BW_".substr(md5(rand()), 0, 36)."_".date('YmdHis').".pdf.BWPDF"; while (file_exists($file));
+						do { $file = $basePath."/data/out/BW_".substr(md5(rand()), 0, 36)."_".date('YmdHis').".pdf.BWPDF"; } while (file_exists($file));
 					} elseif (preg_match("/.csv$/i",$part->d_parameters['filename']) && (preg_match("/^A\&P_FLATFILE/i",$part->d_parameters['filename']))) {
 						$file = $basePath."/data/out/".$part->d_parameters['filename'];
 					}

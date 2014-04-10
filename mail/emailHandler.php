@@ -40,6 +40,7 @@ function msgProcess($structure) {
 			nexusProcess($structure);
 			return;
 		case (strstr(strtolower($structure->headers['from']),"einvoices@aptea.com")):
+		case (strstr(strtolower($structure->headers['from']),"collishc@aptea.com")):
 			logmsg("Received E-Invoice message");
 			require_once "functionsEinvoices.php";
 			einvoiceProcess($structure);
@@ -203,6 +204,9 @@ function msgProcess($structure) {
 \******************************************************************************/
 
 //Open mailbox file & fetch messages
+if(filesize($mboxPath) == 0) {
+	die;
+}
 logmsg("Opening mailbox ".$mboxPath);
 $mbox = new Mail_Mbox($mboxPath);
 $mbox->open() or logmsg("Unable to open mailbox ".$mboxPath) && die;
