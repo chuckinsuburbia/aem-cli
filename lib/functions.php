@@ -249,7 +249,7 @@ function blackout($alertId,$step,$config){
 		$cron = new CronParser();
 		$cron->calcLastRan($blackout[0]);
 		$lastRun=$cron->getLastRanUnix();
-		if($debug) aemlog("CronParser LastRan: ".$lastrun);
+		if($debug) aemlog("CronParser LastRan: ".$lastRun);
 		if($lastRun <= $receivedTime && $lastRun + $blackout[1] >= $receivedTime){
 			$return = "true";
 			break;

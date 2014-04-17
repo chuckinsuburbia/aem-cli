@@ -1,9 +1,9 @@
 #!/usr/bin/php
 <?php
 $basepath=getenv("AEMBASE");
-include($basepath."/conf/config.php");
-include($basepath."/lib/functions.php");
-include($basepath.'/lib/CronParser.php');
+require_once($basepath."/conf/config.php");
+require_once($basepath."/lib/functions.php");
+require_once($basepath.'/lib/CronParser.php');
 
 $spooldir = $basepath."/spool";
 $files = scandir($spooldir);

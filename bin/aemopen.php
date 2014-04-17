@@ -3,9 +3,9 @@
 # Example command line
 # aemopen.php source=SNMP object="blah" objectClass="blah"
 $basepath=getenv("AEMBASE");
-require_once($basepath."conf/config.php");
-require_once($basepath."lib/functions.php");
-require_once($basepath.'lib/CronParser.php');
+require_once($basepath."/conf/config.php");
+require_once($basepath."/lib/functions.php");
+require_once($basepath.'/lib/CronParser.php');
 
 array_shift($argv);
 //$source=array_shift($argv);
