@@ -236,7 +236,7 @@ function blackout($alertId,$step,$config){
 	foreach($config as $token){
 		$tokenValues .= addslashes($tokens[$token]).'|';
 	}
-	$tokenValues = substr($tokenValues,0,strlen($tokenValues)-2);
+	$tokenValues = substr($tokenValues,0,strlen($tokenValues)-1);
 	$sql = "select atran_value from aem_translation where  atran_step = ".$step." and '".$tokenValues."' rlike atran_match order by atran_sequence limit 1";
 	$result = mysql_query($sql,$aem) or handleError("blackout - getMatch",mysql_error());
 	$return= "false";
