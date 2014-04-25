@@ -39,7 +39,7 @@ function msgProcess($structure) {
 			require_once "functionsNexus.php";
 			nexusProcess($structure);
 			return;
-		case (strstr(strtolower($structure->headers['from']),"einvoices@aptea.com")):
+		case (strstr(strtolower($structure->headers['to']),"einvoices@aptea.com")):
 			logmsg("Received E-Invoice message");
 			require_once "functionsEinvoices.php";
 			einvoiceProcess($structure);
@@ -111,15 +111,10 @@ function msgProcess($structure) {
 			return;
 		case (strstr(strtolower($body),"subject: expired plum batches found")):
 			logmsg("Received Expired PLUM Batches");
-			if (date('H') < 9) {
-				logmsg("Prior to 9am, emailing store");
-				require_once("functionsIsp.php");
-				plumProcess($structure->headers['subject']);
-				return;
-			} else {
-				$body.=",O=PLUM";
-				logmsg("Passing alert to AEM");
-			}
+			require_once("functionsIsp.php");
+			$newbody=plumProcess($structure->headers['subject'],$body);
+			if ($newbody == NULL) return;
+			$body = $newbody;
 			break;
 		case (strstr(strtolower($body),"subject: consecutive backup failures (isp")):
 			logmsg("Received consecutive backup failures message");

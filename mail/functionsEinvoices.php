@@ -1,6 +1,7 @@
 <?php
 function einvoiceProcess($structure) {
 	global $basePath,$debug;
+	$arcdir = $basePath."/data/out/archive";
 	//logmsg(print_r($structure,TRUE));
 	//Save attachments to flat files
 	if($structure->ctype_primary == "multipart") {
@@ -21,6 +22,7 @@ function einvoiceProcess($structure) {
 					if($debug) logmsg("Saving attachment ".$file);
 					file_put_contents($file,$contents);
 					chmod($file,0660);
+					exec("gzip -c ".$file." >".$file.".gz ; mv ".$file.".gz ".$arcdir,$output,$rc);
 				}
 			}
 		}
