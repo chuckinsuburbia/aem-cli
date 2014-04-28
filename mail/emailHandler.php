@@ -128,6 +128,7 @@ function msgProcess($structure) {
 	global $fieldMap, $fieldPem, $defaults;
 	$validAlert=0;
 	foreach(explode("\n",$body) as $line) {
+		unset($tokens);
 		if(!preg_match("/=/",$line)) continue;
 		foreach(explode(",",$line) as $pair) {
 			if(strstr($pair,"=")) {

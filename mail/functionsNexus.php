@@ -12,7 +12,7 @@ function nexusProcess($structure) {
 				if($debug) logmsg("Saving attachment ".$file);
 				file_put_contents($file,$contents);
 				chmod($file,0660);
-				exec("gzip -c ".$file." >".$file.".gz ; mv ".$file.".gz ".$arcdir,$output,$rc);
+				exec("gzip -c \"".$file."\" >\"".$file.".gz\" ; mv \"".$file.".gz\" ".$arcdir,$output,$rc);
 			}
 		}
 	}
