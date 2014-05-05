@@ -17,6 +17,8 @@ do {
 $input = file_get_contents("php://stdin");
 $lines = explode("\n",$input);
 
+if($debug) file_put_contents($snmplog,print_r($lines,TRUE),FILE_APPEND);
+
 //Source Host is the first line of SNMP trap
 $SNMPsourceHost = array_shift($lines);
 file_put_contents($snmplog,"source host = ".$SNMPsourceHost."\n",FILE_APPEND);
