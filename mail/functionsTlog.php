@@ -3,9 +3,8 @@ function tlogProcess($body) {
 	global $emePost,$debug;
 	foreach(explode("\n",$body) as $row) {
 		if($debug) logmsg($row);
-		$s = false;
 		$row = preg_replace("/\s+/","",$row);
-		if($s && strstr($row,",")) {
+		if(isset($s) && strstr($row,",")) {
 			list($store,$time) = explode(",",$row);
 			$url = $emePost."?store=".$store."&timestamp=".$time;
 			if($debug) logmsg($url);
@@ -13,7 +12,7 @@ function tlogProcess($body) {
 		}
 		if(strstr($row,"---START---DATA---")) { 
 			if($debug) logmsg("Start of data found");
-			$s = true; 
+			$s = TRUE; 
 		}
 	}	
 }
