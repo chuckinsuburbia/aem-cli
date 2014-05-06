@@ -1,5 +1,6 @@
 <?php
 function tlogProcess($body) {
+	global $emePost;
 	foreach(explode("\n",$body) as $row) {
 		$s = false;
 		$row = preg_replace("/\s+/","",$row);
