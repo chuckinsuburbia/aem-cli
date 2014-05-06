@@ -2,7 +2,6 @@
 function tlogProcess($body) {
 	global $emePost,$debug;
 	foreach(explode("\n",$body) as $row) {
-		if($debug) logmsg($row);
 		$row = preg_replace("/\s+/","",$row);
 		if(isset($s) && strstr($row,",")) {
 			list($store,$time) = explode(",",$row);
