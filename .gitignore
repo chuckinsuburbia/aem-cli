@@ -18,3 +18,5 @@ snmp/conf/config.php
 APAgent/lib/mule-1.4.3/bin/.apia.pid
 APAgent/.activemq-data/*
 *.swp
+elerts/pending/*
+elerts/emails/*

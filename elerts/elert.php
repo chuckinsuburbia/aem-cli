@@ -1,5 +1,7 @@
 #!/usr/bin/php
 <?php
+date_default_timezone_set('America/New_York');
+
 if(!empty($_REQUEST['scserver'])){
         $scserver=$_REQUEST['scserver'];
 }else{
@@ -27,7 +29,9 @@ function logit($label,$message){
                         logit($label.":".$lbl,$msg);
                 }
         }else{
-                $msg = date("Y-m-d H:i:s")." - ".$_SERVER['REMOTE_ADDR']." - ".$label." - ".$message."\n";
+                $msg = date("Y-m-d H:i:s")." - ";
+		$msg .= isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : "";
+		$msg .= " - ".$label." - ".$message."\n";
                 file_put_contents($log, $msg, FILE_APPEND | LOCK_EX);
         }
 }
@@ -85,7 +89,7 @@ function scSoapVal($name, $val, $type = "String", $attributes = false, $element_
 }
 
 $scSC=scSoapClient("IncidentManagement");
-$scSC->setDebugLevel($soapDebugLevel);
+//$scSC->setDebugLevel($soapDebugLevel);
 $result=scSoapRequest($scSC,"RetrieveIncidentKeysList",'IMTicketStatus~="Closed"& HelpDesk="Emergency"',"");
 if(!$result){
         logit("SC Retrieve Incident Keys List Failed",$result);
@@ -135,7 +139,10 @@ if(sizeof($new) >0 ){
         }
 }
 if(sizeof($alert) >0 ){
-        exec('echo "missing the following emails \n\n'.implode("\n",$alert).'" | mail -s "missing elert emails" collishc@aptea.com');
+	$to = "collishc@aptea.com";
+	$subj = "missing elert emails";
+	$body = "missing the following emails:\n\n".implode("\n",$alert);
+	mail($to,$subj,$body);
         exit(1);
 }
 ?>
