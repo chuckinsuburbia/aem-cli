@@ -20,3 +20,4 @@ APAgent/.activemq-data/*
 *.swp
 elerts/pending/*
 elerts/emails/*
+anp/scMonitor/current_ticket.txt
