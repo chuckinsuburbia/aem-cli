@@ -122,6 +122,11 @@ function msgProcess($structure) {
 			$newbody=backupFailureProcess($body);
 			$body=$newbody;
                         break;
+		case (strstr(strtolower($body),"from: service center")):
+			logmsg("Received Service Center message");
+			require_once "functionsSC.php";
+			SCProcess();
+			return;
 	}
 
 	//Parse Email body into tokens
