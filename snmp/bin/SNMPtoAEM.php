@@ -6,7 +6,20 @@
 $basePath="/in/AEM";
 require_once($basePath."/snmp/conf/config.php");
 
-file_put_contents($snmplog,"Begin Processing...\n",FILE_APPEND);
+//Logging function
+function logmsg($string){
+        global $snmplog;
+        file_put_contents($snmplog,date("Y-m-d H:i:s")." - ".$string."\n",FILE_APPEND);
+}
+
+function mailAlert($subj,$body) {
+	$to="collishc@aptea.com";
+	mail($to,$subj,$body);
+}
+
+
+//Begin Processing
+logmsg("Begin Processing...");
 
 //Output file name
 do {
@@ -17,42 +30,56 @@ do {
 $input = file_get_contents("php://stdin");
 $lines = explode("\n",$input);
 
-if($debug) file_put_contents($snmplog,print_r($lines,TRUE),FILE_APPEND);
+if($debug) logmsg("\n".print_r($lines,TRUE));
 
 //Source Host is the first line of SNMP trap
 $SNMPsourceHost = array_shift($lines);
-file_put_contents($snmplog,"source host = ".$SNMPsourceHost."\n",FILE_APPEND);
+logmsg("source host = ".$SNMPsourceHost);
 $tokens['eventType'] = $SNMPsourceHost;
 
 //take off next 3 lines
-array_shift($lines);array_shift($lines);array_shift($lines);
+//array_shift($lines);array_shift($lines);array_shift($lines);
 
 //Loop through remaining lines and fetch valid messages into array 
 foreach($lines as $line){
-        $firstSpace = strpos($line," ");
-        $oidStart = strpos($line,"enterprises.")+12;
-        if($oidStart>12 && $firstSpace > $oidStart){
-                $oid = substr($line,$oidStart,$firstSpace-$oidStart);
-                $value = substr($line,$firstSpace+1);
-                $oidValues[$oid] = $value;
-        }
+	switch (true) {
+		case preg_match('/^SNMPv2-SMI::enterprises./',$line):
+			$firstSpace = strpos($line," ");
+			$oidStart = strpos($line,"enterprises.")+12;
+			if($oidStart>12 && $firstSpace > $oidStart){
+				$oid = substr($line,$oidStart,$firstSpace-$oidStart);
+				$value = substr($line,$firstSpace+1);
+				$oidValues[$oid] = $value;
+			}
+			break;
+		default:
+			break;
+	}
+
 }
 
 //Loop through array of messages and look up SNMP field mapping in database
-foreach($oidValues as $key=>$val){
-        if($debug) file_put_contents($snmplog,$key." = ".$val."\n",FILE_APPEND);
-        $sql = "select at_name from aem_snmp_mapping, aem_tokens, aem_snmp_objects where at_id = asm_token and asm_object = aso_id and aso_oid = '".$key."'";
-        $result = mysql_query($sql,$aem) or file_put_contents($snmplog,"SNMPtoAEM - getTokenMapping: ".mysql_error(),FILE_APPEND);
-        $tokens[mysql_result($result,0,0)] = str_replace('"',"",$val);
+if(!isset($oidValues)) {
+	logmsg("ERROR: No valid tokens found");
+	mailAlert("Invalid SNMP",$input);
+	die;
 }
-
+foreach($oidValues as $key=>$val){
+	if($debug) logmsg($key." = ".$val);
+	$sql = "select at_name from aem_snmp_mapping, aem_tokens, aem_snmp_objects where at_id = asm_token and asm_object = aso_id and aso_oid = '".$key."'";
+	$result = mysql_query($sql,$aem) or file_put_contents($snmplog,"SNMPtoAEM - getTokenMapping: ".mysql_error(),FILE_APPEND);
+	$tokens[mysql_result($result,0,0)] = str_replace('"',"",$val);
+}
 $tokens['source'] = "SNMP";
 $tokens['enterprise'] = substr($key,0,strpos($key, "."));
 
-if($debug) file_put_contents($snmplog,"TOKENS = ".print_r($tokens,TRUE)."\n",FILE_APPEND);
+if($debug) logmsg("TOKENS = \n".print_r($tokens,TRUE));
+if(isset($tokens[0])) {
+        logmsg("ERROR: SNMP mapping not found for a passed line");
+        mailAlert("Invalid SNMP",$input."\n\n".print_r($tokens,TRUE));
+        die;
+}
 
-//exec($aemopen." SNMP ".$tokens." 2>>$snmplog >>$snmplog");
-//exec($aemopen." source=SNMP ".$tokens." 2>>$snmplog >>$snmplog");
 
 //Create XML output from tokens
 $xml = array('<?xml version="1.0" encoding="UTF-8"?>');
@@ -63,7 +90,7 @@ foreach($tokens as $k => $v) {
 }
 $xml[] = '</alert>';
 $xml[] = '</alerts>';
-if($debug) file_put_contents($snmplog,"XML = ".print_r($xml,TRUE)."\n",FILE_APPEND);
+if($debug) logmsg("XML = \n".print_r($xml,TRUE));
 foreach($xml as $l) file_put_contents($outfile,$l."\n",FILE_APPEND);
 
 ?>
