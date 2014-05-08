@@ -11,6 +11,10 @@ function logmsg($string){
         global $snmplog;
         file_put_contents($snmplog,date("Y-m-d H:i:s")." - ".$string."\n",FILE_APPEND);
 }
+function logerr($string){
+        global $faillog;
+        file_put_contents($faillog,date("Y-m-d H:i:s")." - ".$string."\n",FILE_APPEND);
+}
 
 function mailAlert($subj,$body) {
 	$to="collishc@aptea.com";
@@ -59,7 +63,7 @@ foreach($lines as $line){
 }
 if(!isset($oidValues)) {
 	logmsg("ERROR: No valid tokens found");
-	mailAlert("Invalid SNMP",$input);
+	logerr("Invalid SNMP:\n\n".$input);
 	die;
 }
 
@@ -80,7 +84,7 @@ $tokens['enterprise'] = substr($key,0,strpos($key, "."));
 if($debug) logmsg("TOKENS = \n".print_r($tokens,TRUE));
 if(isset($unmapped)) {
         logmsg("ERROR: SNMP mapping not found for a passed line");
-        mailAlert("Invalid SNMP",$input."\n\n".print_r($unmapped,TRUE));
+        logerr("Invalid SNMP\n\n".$input."\n\n".print_r($unmapped,TRUE));
 }
 
 
