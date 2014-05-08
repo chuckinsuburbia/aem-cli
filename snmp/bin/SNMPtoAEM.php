@@ -57,27 +57,30 @@ foreach($lines as $line){
 	}
 
 }
-
-//Loop through array of messages and look up SNMP field mapping in database
 if(!isset($oidValues)) {
 	logmsg("ERROR: No valid tokens found");
 	mailAlert("Invalid SNMP",$input);
 	die;
 }
+
+//Loop through array of messages and look up SNMP field mapping in database
 foreach($oidValues as $key=>$val){
 	if($debug) logmsg($key." = ".$val);
 	$sql = "select at_name from aem_snmp_mapping, aem_tokens, aem_snmp_objects where at_id = asm_token and asm_object = aso_id and aso_oid = '".$key."'";
 	$result = mysql_query($sql,$aem) or file_put_contents($snmplog,"SNMPtoAEM - getTokenMapping: ".mysql_error(),FILE_APPEND);
-	$tokens[mysql_result($result,0,0)] = str_replace('"',"",$val);
+	if(mysql_num_rows($result) > 0) {
+		$tokens[mysql_result($result,0,0)] = str_replace('"',"",$val);
+	} else {
+		$unmapped[] = $key." = ".$val;
+	}
 }
 $tokens['source'] = "SNMP";
 $tokens['enterprise'] = substr($key,0,strpos($key, "."));
 
 if($debug) logmsg("TOKENS = \n".print_r($tokens,TRUE));
-if(isset($tokens[0])) {
+if(isset($unmapped)) {
         logmsg("ERROR: SNMP mapping not found for a passed line");
-        mailAlert("Invalid SNMP",$input."\n\n".print_r($tokens,TRUE));
-        die;
+        mailAlert("Invalid SNMP",$input."\n\n".print_r($unmapped,TRUE));
 }
 
 
