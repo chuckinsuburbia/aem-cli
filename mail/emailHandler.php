@@ -213,15 +213,15 @@ $mbox->open() or logmsg("Unable to open mailbox ".$mboxPath) && die;
 while ($mbox->size() > 0) {
 	$message = $mbox->get(0);
 
+	//remove message from mailbox
+	$mbox->remove(0);
+
 	//MIME decode the message text
 	$decoder = new Mail_mimeDecode($message);
 	$structure = $decoder->decode($decodeParams);
 	
 	//Pass the message to msgProcess function
 	msgProcess($structure);
-
-	//remove message from mailbox
-	$mbox->remove(0);
 }
 $mbox->close();
 
