@@ -109,12 +109,15 @@ function msgProcess($structure) {
 			require_once "functionsGoogle.php";
 			googleVoiceProcess();
 			return;
-		case (strstr(strtolower($body),"subject: expired plum batches found")):
+		case (strstr(strtolower($structure->headers['subject']),"expired plum batches found")):
 			logmsg("Received Expired PLUM Batches");
-			require_once("functionsIsp.php");
-			$newbody=plumProcess($structure->headers['subject'],$body);
-			if ($newbody == NULL) return;
-			$body = $newbody;
+			sleep(1);
+			if(date('H') > 9) {
+				break;
+			} else {
+				require_once("functionsIsp.php");
+				plumProcess($structure->headers['subject'],$body);
+			}
 			break;
 		case (strstr(strtolower($body),"subject: consecutive backup failures (isp")):
 			logmsg("Received consecutive backup failures message");
@@ -130,7 +133,7 @@ function msgProcess($structure) {
 	}
 
 	//Parse Email body into tokens
-	global $fieldMap, $fieldPem, $defaults;
+	global $debug, $fieldMap, $fieldPem, $defaults;
 	$validAlert=0;
 	foreach(explode("\n",$body) as $line) {
 		unset($tokens);
@@ -202,6 +205,12 @@ function msgProcess($structure) {
 /******************************************************************************\
                 Begin Processing
 \******************************************************************************/
+//Exit if already running
+exec("pgrep ".$_SERVER['PHP_SELF'],$output,$rc);
+if($rc == 0) {
+	logmsg("Already running.");
+	die;
+}
 
 //Open mailbox file & fetch messages
 if(filesize($mboxPath) == 0) {
@@ -211,11 +220,18 @@ logmsg("Opening mailbox ".$mboxPath);
 $mbox = new Mail_Mbox($mboxPath);
 $mbox->open() or logmsg("Unable to open mailbox ".$mboxPath) && die;
 while ($mbox->size() > 0) {
-	$message = $mbox->get(0);
+	if($mbox->hasBeenModified()) {
+		$mbox->open();
+	}
+
+	$messages[] = $mbox->get(0);
 
 	//remove message from mailbox
 	$mbox->remove(0);
+}
+$mbox->close();
 
+foreach($messages as $message){
 	//MIME decode the message text
 	$decoder = new Mail_mimeDecode($message);
 	$structure = $decoder->decode($decodeParams);
@@ -223,7 +239,6 @@ while ($mbox->size() > 0) {
 	//Pass the message to msgProcess function
 	msgProcess($structure);
 }
-$mbox->close();
 
 //Create xml spool file
 if (isset($xml)) {
