@@ -39,7 +39,7 @@ if($debug) logmsg("\n".print_r($lines,TRUE));
 //Source Host is the first line of SNMP trap
 $SNMPsourceHost = array_shift($lines);
 logmsg("source host = ".$SNMPsourceHost);
-$tokens['eventType'] = $SNMPsourceHost;
+$tokens['eventType'] = preg_replace("/[^a-zA-Z0-9\.]/", "", $SNMPsourceHost);
 
 //take off next 3 lines
 //array_shift($lines);array_shift($lines);array_shift($lines);
@@ -47,12 +47,66 @@ $tokens['eventType'] = $SNMPsourceHost;
 //Loop through remaining lines and fetch valid messages into array 
 foreach($lines as $line){
 	switch (true) {
+		case preg_match('/^SNMPv2-MIB::snmpTrapOID.0 /',$line):
+			list($junk,$trapOid) = split(" ",$line);
+			$oid = preg_replace('/^\./','',(strstr($trapOid,'.')));
+			$sql = "SELECT aso_name FROM aem_snmp_objects WHERE aso_oid = '".$oid."'";
+			$result = mysql_query($sql,$aem) or logmsg("SNMPtoAEM - OID name lookup: ".mysql_error());
+			if(mysql_num_rows($result) > 0) {
+				$name = mysql_result($result,0,0);
+				if(strstr($name,'#.')) {
+					$parent_oid = substr($oid,0,strrpos($oid,'.'));
+					$value = preg_replace('/^#\./','',(strstr($name,'#.')));
+					$oidValues[$parent_oid] = $value;
+				}
+			}
+			break;
+		case preg_match('/^SNMP-COMMUNITY-MIB::snmpTrapAddress.0/',$line):
+			list($junk,$source) = split(" ",$line);
+			$tokens['domain'] = $source;
+			break;
+		case preg_match('/^SNMPv2-MIB::snmpTrapEnterprise.0/',$line):
+			list($junk,$ent) = split(" ",$line);
+			$oid = preg_replace('/^\./','',(strstr($ent,'.')));
+			$sql = "SELECT aso_name FROM aem_snmp_objects WHERE aso_oid = '".$oid."'";
+			$result = mysql_query($sql,$aem) or logmsg("SNMPtoAEM - OID name lookup: ".mysql_error());
+			if(mysql_num_rows($result) > 0) {
+				$name = mysql_result($result,0,0);
+				if(strstr($name,'#.')) {
+					$value = preg_replace('/^#\./','',(strstr($name,'#.')));
+				} else {
+					$value = substr($name,strrpos($name,'.')+1);
+				}
+			} else {
+				$value = $ent;
+			}
+			$tokens['objectClass'] = $value;
+			break;
+		case preg_match('/^SNMP-COMMUNITY-MIB::snmpTrapCommunity.0/',$line):
+			list($junk,$comm) = split(" ",$line);
+			$tokens['domainClass'] = $comm;
+			break;
 		case preg_match('/^SNMPv2-SMI::enterprises./',$line):
 			$firstSpace = strpos($line," ");
 			$oidStart = strpos($line,"enterprises.")+12;
 			if($oidStart>12 && $firstSpace > $oidStart){
 				$oid = substr($line,$oidStart,$firstSpace-$oidStart);
 				$value = substr($line,$firstSpace+1);
+				if(preg_match('/^SNMPv2-SMI::enterprises./',$value)) {
+					$oid2 = preg_replace('/^\./','',(strstr($value,'.')));
+					$sql = "SELECT aso_name FROM aem_snmp_objects WHERE aso_oid = '".$oid2."'";
+					$result = mysql_query($sql,$aem) or logmsg("SNMPtoAEM - OID name lookup: ".mysql_error());
+					if(mysql_num_rows($result) > 0) {
+						$name = mysql_result($result,0,0);
+						if(strstr($name,'#.')) {
+							$parent_oid = substr($oid,0,strrpos($oid,'.'));
+							$value = preg_replace('/^#\./','',(strstr($name,'#.')));
+							$oid = $parent_oid;
+						} else {
+							$value = substr($name,strrpos($name,'.')+1);
+						}
+					}
+				}
 				$oidValues[$oid] = $value;
 			}
 			break;
@@ -70,8 +124,9 @@ if(!isset($oidValues)) {
 //Loop through array of messages and look up SNMP field mapping in database
 foreach($oidValues as $key=>$val){
 	if($debug) logmsg($key." = ".$val);
-	$sql = "select at_name from aem_snmp_mapping, aem_tokens, aem_snmp_objects where at_id = asm_token and asm_object = aso_id and aso_oid = '".$key."'";
-	$result = mysql_query($sql,$aem) or file_put_contents($snmplog,"SNMPtoAEM - getTokenMapping: ".mysql_error(),FILE_APPEND);
+//	$sql = "select at_name from aem_snmp_mapping, aem_tokens, aem_snmp_objects where at_id = asm_token and asm_object = aso_id and aso_oid = '".$key."'";
+	$sql = "select at_name from aem_snmp_mapping, aem_tokens, aem_snmp_objects where at_id = asm_token and asm_object = aso_id and '".$key."' rlike aso_oid ORDER BY aso_oid DESC LIMIT 1";
+	$result = mysql_query($sql,$aem) or logmsg("SNMPtoAEM - getTokenMapping: ".mysql_error());
 	if(mysql_num_rows($result) > 0) {
 		$tokens[mysql_result($result,0,0)] = str_replace('"',"",$val);
 	} else {
