@@ -117,6 +117,7 @@ function msgProcess($structure) {
 			} else {
 				require_once("functionsIsp.php");
 				plumProcess($structure->headers['subject'],$body);
+				return;
 			}
 			break;
 		case (strstr(strtolower($body),"subject: consecutive backup failures (isp")):
