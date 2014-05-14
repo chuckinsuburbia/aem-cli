@@ -112,7 +112,7 @@ function msgProcess($structure) {
 		case (strstr(strtolower($structure->headers['subject']),"expired plum batches found")):
 			logmsg("Received Expired PLUM Batches");
 			sleep(1);
-			if(date('H') > 9) {
+			if(date('H') > 8) {
 				break;
 			} else {
 				require_once("functionsIsp.php");
