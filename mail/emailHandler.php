@@ -23,10 +23,27 @@ function logmsg($msg) {
 }
 
 /******************************************************************************\
+		function to find the body in a multipart message
+\******************************************************************************/
+function findBody($structure) {
+	if(isset($structure->body)) {
+		return($structure->body);
+	}
+	if(isset($structure->ctype_primary) && $structure->ctype_primary == "multipart") {
+		foreach($structure->parts as $part) {
+			$body = findBody($part);
+			if(!is_null($body)) return($body);
+		}
+	}
+	return null;
+}
+
+/******************************************************************************\
 		function to process individual mail messages
 \******************************************************************************/
 function msgProcess($structure) {
-	$body = isset($structure->body) ? $structure->body : $structure->parts[0]->body;
+	$body = findBody($structure);
+	logmsg($body);
 
 	switch(true) {
 		case (strstr(strtolower($body),"testtesttesttest")):
@@ -57,7 +74,7 @@ function msgProcess($structure) {
 		case (strstr(strtolower($body),"from: narrowcast administrator")):
 			logmsg("Received Narrowcast Report");
 			require_once "functionsRDW.php";
-			narrowProcess();
+			narrowProcess($structure,$body);
 			return;
 		case (strstr($body,"Subject: EMS Alarm")):
 			logmsg("Received EMS Alarm");
