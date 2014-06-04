@@ -43,7 +43,6 @@ function findBody($structure) {
 \******************************************************************************/
 function msgProcess($structure) {
 	$body = findBody($structure);
-	logmsg($body);
 
 	switch(true) {
 		case (strstr(strtolower($body),"testtesttesttest")):
@@ -72,6 +71,7 @@ function msgProcess($structure) {
 			tlogProcess($body);
 			return;
 		case (strstr(strtolower($body),"from: narrowcast administrator")):
+		case (preg_match("/from: (.*)narrowca@aptea.com/i",$body)):
 			logmsg("Received Narrowcast Report");
 			require_once "functionsRDW.php";
 			narrowProcess($structure,$body);
