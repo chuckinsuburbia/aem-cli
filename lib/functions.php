@@ -253,10 +253,10 @@ function blackout($alertId,$step,$config){
 		if($debug) aemlog("CronParser LastRan: ".$lastRun);
 		if($lastRun <= $receivedTime && $lastRun + $blackout[1] >= $receivedTime){
 			$return = "true";
-			if($debug) aemlog("blackout: ".$receivedTime." is within blackout window from ".$lastRun." to ".$lastRun + $blackout[1]);
+			if($debug) aemlog("blackout: ".date('YmdHis',$receivedTime)." is within blackout window from ".date('YmdHis',$lastRun)." to ".date('YmdHis',$lastRun + $blackout[1]));
 			break;
 		} else {
-			if($debug) aemlog("blackout: ".$receivedTime." is not within blackout window from ".$lastRun." to ".$lastRun + $blackout[1]);
+			if($debug) aemlog("blackout: ".date('YmdHis',$receivedTime)." is NOT within blackout window from ".date('YmdHis',$lastRun)." to ".date('YmdHis',$lastRun + $blackout[1]));
 		}
 		unset($cron);
 	}
