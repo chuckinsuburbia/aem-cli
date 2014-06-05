@@ -37,6 +37,7 @@ function elertProcess($body) {
 	$xml .= "\t<domain>".$fields['store']."</domain>\n";
 	$xml .= "\t<originSeverity>".$fields['severity']."</originSeverity>\n";
 	$xml .= "\t<source>emergency_alert</source>\n";
+	$xml .= "\t<eventType>emergency_alert</eventType>\n";
 	$xml .= "\t<objectClass>".$fields['type']."</objectClass>\n";
 	$xml .= "\t<domainClass>".$fields['type']."</domainClass>\n";
 	$xml .= "\t<object>".$fields['location']."</object>\n";
