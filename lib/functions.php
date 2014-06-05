@@ -230,6 +230,7 @@ function blackout($alertId,$step,$config){
 	$sql = "select unix_timestamp(aa_received_time) from aem_alert where aa_id = $alertId";
 	$result = mysql_query($sql,$aem) or handleError("translate - getReceivdedTime",mysql_error());
 	$receivedTime = mysql_result($result,0,0);
+	if($debug) aemlog("blackout: Received ".$receivedTime);
 	
 	$tokens = getAlertTokens($alertId, 'id');
 	$tokenValues = "";
@@ -252,7 +253,10 @@ function blackout($alertId,$step,$config){
 		if($debug) aemlog("CronParser LastRan: ".$lastRun);
 		if($lastRun <= $receivedTime && $lastRun + $blackout[1] >= $receivedTime){
 			$return = "true";
+			if($debug) aemlog("blackout: ".$receivedTime." is within blackout window from ".$lastRun." to ".$lastRun + $blackout[1]);
 			break;
+		} else {
+			if($debug) aemlog("blackout: ".$receivedTime." is not within blackout window from ".$lastRun." to ".$lastRun + $blackout[1]);
 		}
 		unset($cron);
 	}
