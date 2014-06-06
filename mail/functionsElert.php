@@ -11,6 +11,7 @@ function elertProcess($body) {
 
 	$fields['severity'] = "100";
 	$lines = explode("\n",$body);
+	logmsg(print_r($lines,TRUE));
 	for($i = 0; $i < count($lines); ++$i) {
 		switch(true) {
 			case (trim($lines[$i]) == "Alert Closed:"):
@@ -30,7 +31,6 @@ function elertProcess($body) {
 				break;
 		}
 	}
-	logmsg(print_r($fields,TRUE));
 	$xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 	$xml .= "<alerts><alert>\n";
 	$xml .= "\t<origin>".$fields['store']."</origin>\n";
@@ -44,7 +44,6 @@ function elertProcess($body) {
 	$xml .= "\t<parameterValue>".$fields['description']."</parameterValue>\n";
 	$xml .= "\t<parameterName>".$ticket."</parameterName>\n";
 	$xml .= "</alert></alerts>";
-	logmsg($xml);
 
 	logmsg("Creating XML file.");
 	//Output file - in a loop to ensure unique file name
