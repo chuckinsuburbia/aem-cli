@@ -17,7 +17,7 @@ function elertProcess($body) {
 			case (trim($lines[$i]) == "Alert Closed:"):
 				$fields['severity'] = "10";
 				break;
-			case (trim($lines[$i]) == "Store:"):
+			case (strstr($lines[$i],"Store:")):
 				$fields['store'] = trim(substr($lines[$i],strpos($lines[$i],"Store:")+6));
 				break;
 			case (trim($lines[$i]) == "Type Of Emergency:"):
