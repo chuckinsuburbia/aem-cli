@@ -18,7 +18,7 @@ function elertProcess($body) {
 				$fields['severity'] = "10";
 				break;
 			case (trim($lines[$i]) == "Store:"):
-				$fields['store'] = trim(strstr($lines[$i]," "));
+				$fields['store'] = trim(strstr($lines[$i],"\s"));
 				break;
 			case (trim($lines[$i]) == "Type Of Emergency:"):
 				$fields['type'] = strstr($lines[$i+2]," ",TRUE);
