@@ -17,13 +17,13 @@ function elertProcess($body) {
 				$fields['severity'] = "10";
 				break;
 			case (trim($lines[$i]) == "Store:"):
-				$fields['store'] = $lines[$i+2];
+				$fields['store'] = trim(strstr($lines[$i]," "));
 				break;
 			case (trim($lines[$i]) == "Type Of Emergency:"):
-				$fields['type'] = $lines[$i+2];
+				$fields['type'] = strstr($lines[$i+2]," ",TRUE);
 				break;
 			case (strstr($lines[$i],"Location: ")):
-				$fields['location'] = trim(strstr($lines[$i]," "));
+				$fields['location'] = trim(substr($lines[$i],strpos($lines[$i],"Location: ")+10));
 				break;
 			case (trim($lines[$i]) == "Issue Description:"):
 				$fields['description'] = $lines[$i+2];
