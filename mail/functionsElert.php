@@ -43,6 +43,7 @@ function elertProcess($body) {
 	$xml .= "\t<object>".$fields['location']."</object>\n";
 	$xml .= "\t<parameterValue>".$fields['description']."</parameterValue>\n";
 	$xml .= "\t<parameterName>".$ticket."</parameterName>\n";
+	$xml .= "\t<sc_incident_id>".$ticket."</sc_incident_id>\n";
 	$xml .= "</alert></alerts>";
 
 	logmsg("Creating XML file.");
