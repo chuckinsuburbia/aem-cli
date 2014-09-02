@@ -24,7 +24,7 @@
 proguser='aemuser'
 progpath[0]='/in/AEM/bin/spool_daemon'
 progpath[1]='/in/AEM/mail/mail_daemon'
-progpath[2]='/in/AEM/APAgent/bin/apagent_daemon'
+progpath[2]='/in/AEM/bin/apagent_daemon'
 
 
 eval_cmd() {

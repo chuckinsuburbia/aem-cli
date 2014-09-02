@@ -1,0 +1,23 @@
+#!/bin/bash
+
+INSTALL_DIR=${AEMBASE}/xMatters/integrationagent-current
+export INSTALL_DIR
+MULE_HOME=$INSTALL_DIR/lib/mule-1.4.3
+export MULE_HOME
+MULE_APP=apia
+export MULE_APP
+MULE_APP_LONG=AlarmPoint_Integration_Agent
+export MULE_APP_LONG
+JAVA_HOME=$INSTALL_DIR/jre
+LOG="${AEMBASE}/logs/apagent_daemon.log"
+
+CMD="$MULE_HOME/bin/mule.sh start >>${LOG} 2>&1"
+
+#CMD="${SCRIPTPATH}/start_console.sh"
+
+while : ; do
+	if [ $(ps -eaf | grep -v grep | grep -q mule; echo $?) != 0 ] ; then
+		${CMD}
+	fi
+	sleep 300
+done
