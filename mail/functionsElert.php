@@ -52,7 +52,7 @@ function elertProcess($body) {
 	do {
 		$outfile = $basePath."/spool/elert_".date('YmdHis')."_".rand().".xml";
 	} while (file_exists($outfile));
-	file_put_contents($outfile,$xml."\n",FILE_APPEND);
+	//file_put_contents($outfile,$xml."\n",FILE_APPEND);
 
 }
 ?>
