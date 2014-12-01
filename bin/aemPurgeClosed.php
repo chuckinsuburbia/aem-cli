@@ -1,9 +1,9 @@
 #!/usr/bin/php
 <?php
 $basepath=getenv("AEMBASE");
-require_once($basepath."conf/config.php");
-require_once($basepath."lib/functions.php");
-require_once($basepath.'lib/CronParser.php');
+require_once($basepath."/conf/config.php");
+require_once($basepath."/lib/functions.php");
+require_once($basepath.'/lib/CronParser.php');
 
 $db_tbl_alert="aem_alert";
 $db_tbl_token="aem_alert_tokens";
