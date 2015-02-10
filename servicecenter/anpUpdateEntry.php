@@ -43,13 +43,14 @@ $sc_client->setCredentials('pem', 'Pemspassword');
 // Doc/lit parameters get wrapped
 $IncidentID = new soapval("IncidentID","StringType",$arguments['number'],"http://servicecenter.peregrine.com/PWS/Common");
 $keys = new soapval('keys','IncidentKeysType',array($IncidentID),"http://servicecenter.peregrine.com/PWS");
+$instance = new soapval("instance","IncidentInstanceType",array(),"http://servicecenter.peregrine.com/PWS");
 
-$RetrieveModel = new soapval("model", "IncidentModelType",array($keys),null,"http://servicecenter.peregrine.com/PWS");
+$RetrieveModel = new soapval("model", "IncidentModelType",array($keys,$instance),null,"http://servicecenter.peregrine.com/PWS");
 $RetrieveIncidentRequest = new soapval("RetrieveIncidentRequest","RetrieveIncidentRequestType",$RetrieveModel,"http://servicecenter.peregrine.com/PWS");
 $incident = $sc_client->call('RetrieveIncident',$RetrieveIncidentRequest->serialize('literal'),"http://servicecenter.peregrine.com/PWS");//,
 // Check for a fault
 if ($sc_client->fault) {
-        echo '<h2>Update Fault</h2><pre>';
+        echo '<h2>Retreive Fault</h2><pre>';
         print_r($incident);
         echo '</pre>';
         die();
@@ -58,16 +59,17 @@ if ($sc_client->fault) {
         $err = $sc_client->getError();
         if ($err) {
                 // Display the error
-                echo '<h2>Create Error</h2><pre>' . $err . '</pre>';
+                echo '<h2>Retreive Error</h2><pre>' . $err . '</pre>';
                 die();
         }
 }
 #print_r($incident);
 
-foreach($incident['model']['instance']['JournalUpdates'] as $scdesc)
- {
-  $arguments['update.action'] = str_replace($scdesc,'',$arguments['update.action']);
- }
+if(isset($incident['model']['instance']['JournalUpdates'])) {
+	foreach($incident['model']['instance']['JournalUpdates'] as $scdesc) {
+		$arguments['update.action'] = str_replace($scdesc,'',$arguments['update.action']);
+	}
+}
 $arguments['update.action'] = preg_replace('/\s\s+/', "\n",$arguments['update.action']);
 
 $JournalUpdates = new soapval("JournalUpdates","ArrayType",$arguments['update.action'],"http://servicecenter.peregrine.com/PWS/Common");
@@ -87,7 +89,7 @@ if ($sc_client->fault) {
 	$err = $sc_client->getError();
 	if ($err) {
 		// Display the error
-		echo '<h2>Create Error</h2><pre>' . $err . '</pre>';
+		echo '<h2>Update Error</h2><pre>' . $err . '</pre>';
 	} else {
 		// Display the result
 	#	echo '<h2>Create Result</h2><pre>';
