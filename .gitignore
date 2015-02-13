@@ -17,6 +17,8 @@ snmp/conf/config.php
 # Files that change regularly
 APAgent/lib/mule-1.4.3/bin/.apia.pid
 APAgent/.activemq-data/*
+xMatters/integrationagent-5.0.7/lib/mule-1.4.3/bin/.apia.pid
+xMatters/integrationagent-5.0.7/.activemq-data/*
 *.swp
 elerts/pending/*
 elerts/emails/*

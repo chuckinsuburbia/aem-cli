@@ -148,6 +148,11 @@ function msgProcess($structure) {
 			require_once "functionsSC.php";
 			SCProcess();
 			return;
+		case (preg_match('/subject: .*im[0-9]{6,7}/',strtolower($body))):
+			logmsg("Received IM update");
+			require_once "functionsSC.php";
+			SCUpdateIM($body);
+			return;
 	}
 
 	//Parse Email body into tokens
