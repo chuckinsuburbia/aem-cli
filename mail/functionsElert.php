@@ -9,6 +9,7 @@ function elertProcess($body) {
 	logmsg("Touch ".$file);
 	touch($file);
 
+/*
 	$fields['severity'] = "100";
 	$lines = explode("\n",$body);
 	logmsg(print_r($lines,TRUE));
@@ -53,6 +54,7 @@ function elertProcess($body) {
 		$outfile = $basePath."/spool/elert_".date('YmdHis')."_".rand().".xml";
 	} while (file_exists($outfile));
 	//file_put_contents($outfile,$xml."\n",FILE_APPEND);
+*/
 
 }
 ?>

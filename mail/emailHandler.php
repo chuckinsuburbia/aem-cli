@@ -55,17 +55,17 @@ function msgProcess($structure) {
 			require_once "functionsNexus.php";
 			nexusProcess($structure);
 			return;
-		case (strstr(strtolower($structure->headers['to']),"einvoices@aptea.com")):
+		case (strstr(strtolower($structure->headers['from']),"einvoices@aptea.com")):
 			logmsg("Received E-Invoice message");
 			require_once "functionsEinvoices.php";
 			einvoiceProcess($structure);
 			return;
-		case (strstr(strtolower($body),"from: emergency alert")):
+		case (strstr(strtolower($body),"-------------------------------------------\nfrom: emergency alert")):
 			logmsg("Received ELert");
 			require_once "functionsElert.php";
 			elertProcess($body);
 			return;	
-		case (strstr(strtolower($body),"subject: t-log store transactions")):
+		case (strstr(strtolower($structure->headers['subject']),"t-log store transactions")):
 			logmsg("Received T-Log Store Transactions");
 			require_once "functionsTlog.php";
 			tlogProcess($body);
@@ -76,20 +76,20 @@ function msgProcess($structure) {
 			require_once "functionsRDW.php";
 			narrowProcess($structure,$body);
 			return;
-		case (strstr($body,"Subject: EMS Alarm")):
+		case (strstr($structure->headers['subject'],"EMS Alarm")):
 			logmsg("Received EMS Alarm");
 			require_once "functionsDanfoss.php";
 			$newbody=emsAlarmProcess($body,$structure->headers['subject']);
 			$body = $newbody;
 			break;
-		case (strstr(strtolower($body),"subject: device manager device error")):
+		case (strstr(strtolower($structure->headers['subject']),"device manager device error")):
 			logmsg("Received Kronos Device Error");
 			require_once "functionsKronos.php";
 			$newbody=kronosClockProcess($body);
 			if ($newbody == "") return;
 			$body = $newbody;
 			break;
-		case (strstr(strtolower($body),"subject: alarmpoint message")):
+		case (strstr(strtolower($structure->headers['subject']),"alarmpoint message")):
 			logmsg("Received AlarmPoint Message");
 			//alarmpointProcess($structure);
 			break;
@@ -100,17 +100,17 @@ function msgProcess($structure) {
 			$body=$newbody;
 			break;
 		case (strstr(strtolower($body),"from: rdbf@")):
-		case (strstr(strtolower($body),"subject: isp tbstat")):
+		case (strstr(strtolower($structure->headers['subject']),"isp tbstat")):
 			logmsg("Received TBStat Message");
 			//require_once "functionsIsp.php";
 			//tbstatProcess($body,$structure->headers['from'],$structure->headers['subject']);
 			//return;
 			break;
-		case (strstr(strtolower($body),"subject: ctm_condition")):
+		case (strstr(strtolower($structure->headers['subject']),"ctm_condition")):
 			logmsg("Received CTM_CONDITION");
 			//ctmCondProcess($structure);
 			break;
-		case (strstr(strtolower($body),"subject: ctm_order")):
+		case (strstr(strtolower($structure->headers['subject']),"ctm_order")):
 			logmsg("Received CTM_ORDER");
 			//ctmOrderProcess($structure);
 			break;
@@ -137,7 +137,7 @@ function msgProcess($structure) {
 				return;
 			}
 			break;
-		case (strstr(strtolower($body),"subject: consecutive backup failures (isp")):
+		case (strstr(strtolower($structure->headers['subject']),"consecutive backup failures (isp")):
 			logmsg("Received consecutive backup failures message");
 			require_once("functionsIsp.php");
 			$newbody=backupFailureProcess($body);
@@ -148,10 +148,10 @@ function msgProcess($structure) {
 			require_once "functionsSC.php";
 			SCProcess();
 			return;
-		case (preg_match('/subject: .*im[0-9]{6,7}/',strtolower($body))):
+		case (preg_match('/im[0-9]{6,7}/',strtolower($structure->headers['subject']))):
 			logmsg("Received IM update");
 			require_once "functionsSC.php";
-			SCUpdateIM($body);
+			SCUpdateIM($body,$structure->headers['subject']);
 			return;
 	}
 

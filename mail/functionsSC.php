@@ -6,10 +6,10 @@ function SCProcess() {
 	touch($file);
 }
 
-function SCUpdateIM($body) {
+function SCUpdateIM($body,$subject) {
 	global $aembase;
-	preg_match('/SUBJECT: .*IM[0-9]{6,7}/',strtoupper($body),$matches);
-	$im = array_pop(explode(' ',$matches[0]));
+	preg_match('/IM[0-9]{6,7}/',strtoupper($subject),$matches);
+	$im = $matches[0];
 	$pieces = explode('From:',$body);
 	$updtxt = "From:".addslashes(preg_replace('/\s\s+/', "\n",str_replace("Auto forwarded by a Rule","",$pieces[1])));
 	logmsg("Updating ".$im.":\n".$updtxt);
