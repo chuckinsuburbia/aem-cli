@@ -148,7 +148,7 @@ function msgProcess($structure) {
 			require_once "functionsSC.php";
 			SCProcess();
 			return;
-		case (preg_match('/im[0-9]{6,7}/',strtolower($structure->headers['subject']))):
+		case (preg_match('/im[0-9]{6,7}/',strtolower($structure->headers['subject'])) || preg_match('/im[0-9]{6,7}/',strtolower($body))):
 			logmsg("Received IM update");
 			require_once "functionsSC.php";
 			SCUpdateIM($body,$structure->headers['subject']);
