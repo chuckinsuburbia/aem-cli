@@ -38,27 +38,28 @@ function createAlert($tokens){
 
 function processAlert($alertId){
 	global $aem,$debug;
-	#check Blackout
-	$sql = "select aat_value from aem_alert_tokens where aat_alert = $alertId and aat_token = (select at_id from aem_tokens where at_name = 'blackout')";
-	$result = mysql_query($sql,$aem) or handleError("processAlert - getBlackoutToken",mysql_error());
-	$blackout = mysql_result($result,0,0);
-	if($blackout == "true"){
+
+	#Check Clear
+	$sql = "select aat_value from aem_alert_tokens where aat_alert = $alertId and aat_token = (select at_id from aem_tokens where at_name = 'aem_severity')";
+	$result = mysql_query($sql,$aem) or handleError("processAlert - getAemSeverityToken",mysql_error());
+	$aem_severity = mysql_result($result,0,0);
+	if($aem_severity == "Clear"){
 		$status="closed";
 		$return=false;
+		$match = checkMatch($alertId);
+		if($match != false){
+			$sql = "update aem_alert set aa_status = 'closed' where aa_id = $match";
+			mysql_query($sql,$aem) or handleError("processAlert - updateStatus - $match",mysql_error());
+			$return=array("type" => "close", "alertId" => $match);
+		}
 	}else{	
-		#Check Clear
-		$sql = "select aat_value from aem_alert_tokens where aat_alert = $alertId and aat_token = (select at_id from aem_tokens where at_name = 'aem_severity')";
-		$result = mysql_query($sql,$aem) or handleError("processAlert - getAemSeverityToken",mysql_error());
-		$aem_severity = mysql_result($result,0,0);
-		if($aem_severity == "Clear"){
+		#check Blackout
+		$sql = "select aat_value from aem_alert_tokens where aat_alert = $alertId and aat_token = (select at_id from aem_tokens where at_name = 'blackout')";
+		$result = mysql_query($sql,$aem) or handleError("processAlert - getBlackoutToken",mysql_error());
+		$blackout = mysql_result($result,0,0);
+		if($blackout == "true"){
 			$status="closed";
 			$return=false;
-			$match = checkMatch($alertId);
-			if($match != false){
-				$sql = "update aem_alert set aa_status = 'closed' where aa_id = $match";
-				mysql_query($sql,$aem) or handleError("processAlert - updateStatus - $match",mysql_error());
-				$return=array("type" => "close", "alertId" => $match);
-			}
 		}else{
 			#Check Duplicate
 			$match = checkMatch($alertId);
