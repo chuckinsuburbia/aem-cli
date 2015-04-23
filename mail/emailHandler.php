@@ -60,6 +60,11 @@ function msgProcess($structure) {
 			require_once "functionsEinvoices.php";
 			einvoiceProcess($structure);
 			return;
+		case (strstr(strtolower($structure->headers['from']),"edata@aptea.com")):
+			logmsg("Received eData message");
+			require_once "functionsEdata.php";
+			edataProcess($structure);
+			return;
 		case (strstr(strtolower($body),"-------------------------------------------\nfrom: emergency alert")):
 			logmsg("Received ELert");
 			require_once "functionsElert.php";
@@ -153,6 +158,12 @@ function msgProcess($structure) {
 			require_once "functionsSC.php";
 			SCUpdateIM($body,$structure->headers['subject']);
 			return;
+		case (strstr(strtolower($body),"from: ups.web.card")):
+			logmsg("Received ConnectUPS message");
+			require_once("functionsConnectUPS.php");
+			$newbody = connectUPSProcess($body);
+			$body = $newbody;
+			break;
 	}
 
 	//Parse Email body into tokens
