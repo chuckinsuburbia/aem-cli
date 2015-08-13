@@ -1,0 +1,21 @@
+<?php
+date_default_timezone_set('America/New_York');
+$basePath = "/in/AEM";
+//$basePath = getenv('AEMBASE');
+
+//Log settings
+$logdir = $basePath."/snmp/log";
+$snmplog = $logdir."/aem_snmp.log";
+$faillog = $logdir."/bad_snmp.log";
+
+$debug=true;
+
+//Database connection settings
+$hostname_aem = "localhost";
+$database_aem = "db_name";
+$username_aem = "db_user";
+$password_aem = "db_pass";
+$aem = mysql_pconnect($hostname_aem, $username_aem, $password_aem) or trigger_error(mysql_error(),E_USER_ERROR);
+mysql_select_db($database_aem);
+
+?>
