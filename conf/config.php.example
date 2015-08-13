@@ -1,0 +1,74 @@
+<?php
+date_default_timezone_set('America/New_York');
+//$basePath = "/in/AEM";
+$basePath = getenv('AEMBASE');
+
+//Log settings
+$logdir = $basePath."/logs";
+$mainlog = $logdir."/aem.log";
+$snmplog = $logdir."/aem_snmp.log";
+
+$debug=true;
+
+$aemopen = "/usr/bin/php ".$basePath."/bin/aemopen.php";
+$aemclose = $basePath."/bin/aemclose.php";
+
+//Database connection settings
+$hostname_aem = "localhost";
+$database_aem = "db_name";
+$username_aem = "db_user";
+$password_aem = "db_pass";
+$aem = mysql_pconnect($hostname_aem, $username_aem, $password_aem) or trigger_error(mysql_error(),E_USER_ERROR);
+mysql_select_db($database_aem);
+
+//Add PEAR path to include path
+$pearPath = $basePath.'/lib/pear/share/pear';
+set_include_path(get_include_path().PATH_SEPARATOR.$pearPath);
+
+//email field mapping
+$fieldMap['origin']		= 'OR';
+$fieldMap['eventType']		= 'ET';
+$fieldMap['domainClass']	= 'DC';
+$fieldMap['domain']		= 'D';
+$fieldMap['objectClass']	= 'OC';
+$fieldMap['object']		= 'O';
+$fieldMap['parameterName']	= 'PN';
+$fieldMap['parameterValue']	= 'PV';
+$fieldMap['originSeverity']	= 'S';
+$fieldMap['itMgmtLayer']	= 'FT';
+$fieldMap['originKey']		= 'OK';
+
+//email fields from PEM
+$fieldPem['origin']             = 'ORIGIN';
+$fieldPem['eventType']          = 'EVENT_TYPE';
+$fieldPem['domainClass']        = 'DOMAIN_CLASS';
+$fieldPem['domain']             = 'DOMAIN';
+$fieldPem['objectClass']        = 'OBJECT_CLASS';
+$fieldPem['object']             = 'OBJECT';
+$fieldPem['parameterName']      = 'PARAMETER_NAME';
+$fieldPem['parameterValue']     = 'PARAMETER_VALUE';
+$fieldPem['originSeverity']     = 'SEVERITY';
+$fieldPem['itMgmtLayer']	= 'FREE_TEXT';
+$fieldPem['originKey']          = 'ORIGIN_KEY';
+
+//default token values
+$defaults['origin']		= "UNKNOWN";
+$defaults['eventType']		= 'UNKNOWN';
+$defaults['domainClass']	= '';
+$defaults['domain']		= '';
+$defaults['objectClass']	= '';
+$defaults['object']		= '';
+$defaults['parameterName']	= 'N/A';
+$defaults['parameterValue']	= '';
+$defaults['originSeverity']	= '70';
+$defaults['itMgmtLayer']	= '';
+$defaults['originKey']		= '';
+
+//Mail handler configs
+$fwdInvalid = "user@example.com";
+$emePost = "https://example.com/some/url";
+$plumErrorPost = "https://example.com/some/url";
+
+//Service Center connection
+if(class_exists("nusoap_client")) $sc_client = new nusoap_client('http://servicecenter.example.com:12671/IncidentManagement?wsdl', 'wsdl','','','','');
+?>
